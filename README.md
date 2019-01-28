@@ -86,7 +86,7 @@ The status app manages the reporting system in the club
 1. **Status** - holds status updates posted by members, under different threads, for various subjects. 
 2. **Tasks** -  records and accounts different tasks assigned to the club members 
 
-### :satellite: Integrations
+## :satellite: Integrations
 
 1. **AmFOSS Attendance Module** - the AmFOSS attendance module is a raspberry-pi which live records the attendance of club members when they are in the FOSSLab. The AmFOSS CMS fetches attendance details from it and logs it.
 2. **AmFOSS Telegram Bot** - the AmFOSS Telegram Bot is the bot assistant of the AmFOSS Telegram group. The AmFOSS CMS triggers the bot to send notifications, statistics etc. to the group.
