@@ -1,0 +1,8 @@
+{% extends 'admin/logged_out.html' %}
+{% block content %}
+
+<p>{% trans "You have been successfully logged-out of amFOSS Admin. Have a great day ahead! " %}</p>
+
+<p><a href="{% url 'admin:index' %}">{% trans 'Log in again' %}</a></p>
+
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends 'admin/base_site.html' %}
+{% load staticfiles %}
+{% load static %}
+
+{% block branding %}
+    <style>
+    .dashboard { background: #eee; }
+    #header {
+        padding: 1rem 10%;
+        background-color: #333;
+        min-height: 3.5rem;
+    }
+    #branding { height: 100%; }
+    .head {
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+    .aligned label
+    {
+        float: none;
+    }
+    #changelist
+    {
+        box-shadow: None;
+        background: none;
+    }
+    .help
+    {
+        padding-left: 0!important;
+        margin-left: 0!important;
+        margin-top: 5px!important;
+    }
+    .form-row
+    {
+        padding: 20px
+    }
+    .module, #content-related, #changelist-filter
+    {
+        box-shadow: 2px 1px 1px 1px rgba(0,0,0,0.3);
+    }
+    #recent-actions-module
+    {
+        box-shadow:  none!Important;
+    }
+    div.breadcrumbs
+    {
+        background: #ffc107;
+        color: black!important;
+    }
+    div.breadcrumbs a
+    {
+        color: black!important;
+    }
+    .module h2, .module caption, .module caption a
+    {
+        background: #ffc107;
+        color: black!important;
+        padding: 0.8rem;
+        font-weight: 900;
+    }
+    #user-tools
+    {
+        display: block;
+    }
+    #header
+    {
+        line-height: 1.2;
+    }
+    .submit-row input
+    {
+        background: #ffc107!important;
+        color: black!important;
+        box-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+    }
+    #content
+    {
+        background: #eee;
+        min-height: 80vh;
+    }
+    .module a:link, a:visited
+    {
+        font-size: 1rem;
+    }
+    .dashboard #content
+    {
+        width: auto!Important;
+    }
+    #user-tools
+    {
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+    #user-tools a
+    {
+        border-bottom: 0;
+        padding-right: 0.35rem;
+        padding-left: 0.35rem;
+    }
+    .submit-row { background: none!important; border: none!important; }
+    .aligned label + p, .aligned label + div.help, .aligned label + div.readonly { margin-left: 0!important; }
+    #changelist .actions select { background: white; }
+    #changelist #toolbar, #changelist .actions, #changelist .paginator { background: none!important; }
+    .module table caption a:hover { text-decoration: none; }
+    </style>
+    <div class="head">
+                <img class="brand_img" src="{% static 'images/branding/logo_light.png'%}"  style="height: 2.5rem;" alt="logo">
+                <h1 style="padding: 0 1rem; font-weight: 900;">amFOSS CMS</h1>
+    </div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'admin/base.html' %}
+{% load i18n %}
+ {% block usertools %}
+        {% if has_permission %}
+        <div id="user-tools">
+            <div>
+                {% block welcome-msg %}
+                    <div style="font-size: 150%; padding: 0.3rem; text-transform: none">
+                        {% trans 'Namah Shivayah ' %}
+                        <strong>@{% firstof user.get_short_name user.get_username %}</strong> !
+                    </div>
+                {% endblock %}
+                {% block userlinks %}
+                    {% if site_url %}
+                        <a href="{{ site_url }}">{% trans 'View site' %}</a> /
+                    {% endif %}
+                        <a href="#">{% trans 'Documentation' %}</a> /
+                    {% if user.has_usable_password %}
+                    <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> /
+                    {% endif %}
+                    <a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+                {% endblock %}
+            </div>
+        </div>
+        {% endif %}
+        {% endblock %}
+
+{% block footer %}
+    <style>
+        #footer
+        {
+            text-align: center;
+            padding: 2rem;
+            background: #eee;
+        }
+    </style>
+    <div id="footer">
+        This is amFOSS CMS <br>
+        <span style="font-size: 75%"><< By the Club | Of the Club | For the Club >></span>
+    </div>
+{% endblock %}
