@@ -36,11 +36,15 @@ as to avoid conflicts with other projects.
     ```
 
 You have now successfully set up the project on your environment.
+
+### After Setting Up
 From now when you start your work, run ``workon amfoss`` inside the project repository and you can work with the django application as usual - 
 
 * `python manage.py migrate` - set up database
 * `python manage.py createsuperadmin` - create admin user
 * `python manage.py runserver`  - run the project locally
+
+*Make sure you pull new changes from remote regularly.*
 
 
 ## :rocket: Data Models
@@ -82,6 +86,12 @@ The status app manages the reporting system in the club
 1. **Status** - holds status updates posted by members, under different threads, for various subjects. 
 2. **Tasks** -  records and accounts different tasks assigned to the club members 
 
+### :satellite: Integrations
+
+1. **AmFOSS Attendance Module** - the AmFOSS attendance module is a raspberry-pi which live records the attendance of club members when they are in the FOSSLab. The AmFOSS CMS fetches attendance details from it and logs it.
+2. **AmFOSS Telegram Bot** - the AmFOSS Telegram Bot is the bot assistant of the AmFOSS Telegram group. The AmFOSS CMS triggers the bot to send notifications, statistics etc. to the group.
+3. **AmFOSS Daily Status Updates** - all members of the club are required to send status updates daily ellaborating the work they did to a automatically generated status-update thread in the Google Groups. The AmFOSS CMS fetches the status updates, and logs them.
+4. **GitHub** - Integrates with GitHub to actively track the FOSS contributions made by club members
 
 ## :wrench: Tech Stack
 
