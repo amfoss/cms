@@ -1,5 +1,7 @@
+
+![amfoss-cms-cover](https://user-images.githubusercontent.com/21276922/51844359-12628580-233b-11e9-891a-d4d826bd1d6e.png)
+
 # AmFOSS CMS
-*<< FOR THE CLUB | OF THE CLUB | BY THE CLUB >>*
 
 amFOSS Club Management System (CMS) is django-based web-app which lays framework for the amfoss website, the amfoss webapp, and the amfoss app. 
 
