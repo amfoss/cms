@@ -3,6 +3,7 @@ import graphql_jwt
 import members.schema
 import blog.schema
 import activity.schema
+import status.schema
 from django.contrib.auth.models import User
 from graphene_django.types import DjangoObjectType
 
@@ -23,7 +24,7 @@ class Query(members.schema.Query, activity.schema.Query, blog.schema.Query, grap
 
 
 
-class Mutation(members.schema.Mutation, graphene.ObjectType):
+class Mutation(status.schema.Mutation, members.schema.Mutation, graphene.ObjectType):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()

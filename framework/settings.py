@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'activity',
     'blog',
     'pages',
-    'status'
+    'status',
+    'gsoc'
 ]
 
 MIDDLEWARE = [

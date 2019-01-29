@@ -107,7 +107,7 @@ class Publication(models.Model):
 
 class Talk(models.Model):
     title = models.CharField(max_length=50)
-    members = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Talk', verbose_name='Member')
+    member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Talk', verbose_name='Member')
     date = models.DateField(default=date.today)
     topics = models.ManyToManyField(Skill, related_name='TalkTopics', blank=True)
 

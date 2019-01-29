@@ -1,5 +1,5 @@
 import graphene
-from graphql_jwt.decorators import login_required
+from graphql_jwt.decorators import permission_required, login_required
 from graphene_django.types import DjangoObjectType
 from .models import *
 from graphene_django.filter import DjangoFilterConnectionField
@@ -7,6 +7,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 #
 #       Mutations
 #
+
 class AtObj(graphene.ObjectType):
     id = graphene.String()
 
