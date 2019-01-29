@@ -1,7 +1,17 @@
 
 ![amfoss-cms-cover](https://user-images.githubusercontent.com/21276922/51844359-12628580-233b-11e9-891a-d4d826bd1d6e.png)
-
 # amFOSS CMS
+[![Watchers][watchers-badge]][watchers]
+[![Star Gazers][stars-badge]][stargazers]
+[![Forks][forks-badge]][forks]
+
+![Status](https://img.shields.io/badge/Status-Under_Development-Red.svg) 
+![Version 0.1](https://img.shields.io/badge/Version-0.1_(Alpha)-green.svg) 
+[![GNU][license-badge]][license]
+[![Open Issues][issues-badge]][issues]
+[![PRs][pr-badge]][prs]
+[![Contributors][contributors-badge]][contributors]
+
 
 amFOSS Club Management System (CMS) is django-based web-app which lays framework for the amfoss website, the amfoss webapp, and the amfoss app. 
 
@@ -90,6 +100,12 @@ The status app manages the reporting system in the club
 2. **Tasks** -  records and accounts different tasks assigned to the club members 
 3. **Notifications** - manages notifications
 
+## :dizzy: API
+
+The amFOSS CMS ships with GraphQL-based APIs, which can be accessed at `/graphql`. To help developers, GraphiQL, a tabbed interface (playground) for editing and testing our GraphQL queries/mutations, also has been furnished .
+
+Documentation on the supported APIs has been provided in the [wiki page](https://github.com/amfoss/cms/wiki/APIs).
+
 ## :satellite: Integrations
 
 1. **Attendance Module** - the amFOSS attendance module is a raspberry-pi which live records the attendance of club members when they are in the FOSSLab. The AmFOSS CMS fetches attendance details from it and logs it.
@@ -99,8 +115,9 @@ The status app manages the reporting system in the club
 
 ## :wrench: Tech Stack
 
-* **Framework:** Django 2.1, Python 3
-* **API:** Graphene (GraphQL), Graphene-JWT
+* **Language:**  Python 3
+* **Framework:** Django 2.1
+* **API:** GraphQL (Graphene + JWT)
 
 ## :gem: Contributors
 Developed with :hearts: by the amFOSS WebTeam from 2018.
@@ -111,3 +128,20 @@ Contributors are welcomed :)
 
 ## :black_nib: License
 This repository is licensed under  GNU General Public License V3. Though it was tailor-made for amFOSS, you are welcome to adapt it, make it yours. Just make sure that you credit us too.
+
+
+[contributors-badge]:https://img.shields.io/github/contributors/amfoss/cms.svg
+[contributors]: https://github.com/amfoss/GitLit/graphs/contributors
+[watchers-badge]:https://img.shields.io/github/watchers/amfoss/cms.svg?style=social
+[watchers]: https://github.com/amfoss/cms/watchers
+[stars-badge]:https://img.shields.io/github/stars/amfoss/cms.svg?style=social
+[stargazers]:https://github.com/amfoss/cms/stargazers
+[forks-badge]: https://img.shields.io/github/forks/amfoss/cms.svg?style=social
+[forks]: https://github.com/amfoss/cms/network/members
+[license-badge]: https://img.shields.io/github/license/amfoss/cms.svg
+[license]: https://github.com/amfoss/gitlit/blob/master/LICENSE
+[issues-badge]: https://img.shields.io/github/issues/amfoss/cms.svg
+[issues]: https://github.com/amfoss/cms/issues
+[pr-badge]:https://img.shields.io/github/issues-pr/amfoss/cms.svg
+[prs]: https://github.com/amfoss/cms/pulls
+
