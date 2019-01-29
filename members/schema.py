@@ -1,33 +1,40 @@
 import graphene
+from graphql_jwt.decorators import login_required
 from graphene_django.types import DjangoObjectType
 from .models import *
 from graphene_django.filter import DjangoFilterConnectionField
 
-class LanguageNode(DjangoObjectType):
-    class Meta:
-        model = Language
-        filter_fields = {
-            'name': ['exact',],
-        }
-        interfaces = (graphene.relay.Node,)
-        exclude_fields = ('ID',)
+#
+#       Mutations
+#
+class AtObj(graphene.ObjectType):
+    id = graphene.String()
 
-class LanguageInput(graphene.InputObjectType):
-    name = graphene.String(required=True)
+class RegisterAttendance(graphene.Mutation):
+    class Arguments:
+        session_start = graphene.types.datetime.DateTime(required=True)
+        session_end = graphene.types.datetime.DateTime(required=True)
+        token = graphene.String(required=True)
 
-class CreateLanguage(graphene.relay.ClientIDMutation):
-    class Input:
-        language = graphene.Argument(LanguageInput)
+    Output = AtObj
 
-    language = graphene.Field(LanguageNode)
+    @login_required
+    def mutate(self, info, session_start, session_end, token):
+        user = User.objects.get(username=info.context.user)
+        records = Attendance.objects.filter(session_start__date=session_start.date(), member=user)
+        if not records:
+            a = Attendance.objects.create(member=user, session_start=session_start, session_end=session_end)
+            return AtObj(id=a.id)
+        else:
+            records.all().update(session_start=session_start, session_end=session_end)
+            return AtObj(id=records[0].id)
 
-    @classmethod
-    def mutate_and_get_payload(root, info, **input):
-        language_data = args.get('language')
-        language = Language()
-        new_language = update_create_instance(language, language_data)
+class Mutation(object):
+    RegisterAttendance = RegisterAttendance.Field()
 
-        return cls(language=new_language)
+#
+#       Queries
+#
 
 class PortalObj(DjangoObjectType):
     class Meta:
@@ -72,7 +79,6 @@ class AttendanceObj(DjangoObjectType):
         }
         interfaces = (graphene.relay.Node,)
 
-
 class ResponsibilityObj(DjangoObjectType):
     class Meta:
         model = Responsibility
@@ -87,9 +93,6 @@ class MentorGroupObj(DjangoObjectType):
     class Meta:
         model = MentorGroup
         exclude_fields = ('id')
-
-class Mutation(object):
-    create_language = CreateLanguage.Field()
 
 class Query(object):
     profiles = graphene.List(ProfileObj,token=graphene.String(required=True))

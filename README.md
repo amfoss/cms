@@ -1,7 +1,7 @@
 
 ![amfoss-cms-cover](https://user-images.githubusercontent.com/21276922/51844359-12628580-233b-11e9-891a-d4d826bd1d6e.png)
 
-# AmFOSS CMS
+# amFOSS CMS
 
 amFOSS Club Management System (CMS) is django-based web-app which lays framework for the amfoss website, the amfoss webapp, and the amfoss app. 
 
@@ -90,9 +90,9 @@ The status app manages the reporting system in the club
 
 ## :satellite: Integrations
 
-1. **AmFOSS Attendance Module** - the AmFOSS attendance module is a raspberry-pi which live records the attendance of club members when they are in the FOSSLab. The AmFOSS CMS fetches attendance details from it and logs it.
-2. **AmFOSS Telegram Bot** - the AmFOSS Telegram Bot is the bot assistant of the AmFOSS Telegram group. The AmFOSS CMS triggers the bot to send notifications, statistics etc. to the group.
-3. **AmFOSS Daily Status Updates** - all members of the club are required to send status updates daily ellaborating the work they did to a automatically generated status-update thread in the Google Groups. The AmFOSS CMS fetches the status updates, and logs them.
+1. **Attendance Module** - the amFOSS attendance module is a raspberry-pi which live records the attendance of club members when they are in the FOSSLab. The AmFOSS CMS fetches attendance details from it and logs it.
+2. **Telegram Bot** - the amFOSS Telegram Bot is the bot assistant of the AmFOSS Telegram group. The AmFOSS CMS triggers the bot to send notifications, statistics etc. to the group.
+3. **Daily Status Updates** - all members of the club are required to send status updates daily ellaborating the work they did to a automatically generated status-update thread in the Google Groups. The AmFOSS CMS fetches the status updates, and logs them.
 4. **GitHub** - Integrates with GitHub to actively track the FOSS contributions made by club members
 
 ## :wrench: Tech Stack
@@ -108,4 +108,4 @@ Developed with :hearts: by the amFOSS WebTeam from 2018.
 Contributors are welcomed :)
 
 ## :black_nib: License
-This repository is licensed under MIT. Though it was tailor-made for amFOSS, you are welcome to adapt it, make it yours. Just make sure that you credit us too.
+This repository is licensed under  GNU General Public License V3. Though it was tailor-made for amFOSS, you are welcome to adapt it, make it yours. Just make sure that you credit us too.
