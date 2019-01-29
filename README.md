@@ -88,6 +88,12 @@ The status app manages the reporting system in the club
 1. **Status** - holds status updates posted by members, under different threads, for various subjects. 
 2. **Tasks** -  records and accounts different tasks assigned to the club members 
 
+## :dizzy: API
+
+The amFOSS CMS ships with GraphQL-based APIs, which can be accessed at `/graphql`. To help developers, GraphiQL, a tabbed interface (playground) for editing and testing our GraphQL queries/mutations, also has been furnished .
+
+Documentation on the supported APIs has been provided in the [wiki page](https://github.com/amfoss/cms/wiki/APIs).
+
 ## :satellite: Integrations
 
 1. **Attendance Module** - the amFOSS attendance module is a raspberry-pi which live records the attendance of club members when they are in the FOSSLab. The AmFOSS CMS fetches attendance details from it and logs it.
