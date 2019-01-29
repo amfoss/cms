@@ -34,8 +34,6 @@ class AttendanceAdmin(admin.ModelAdmin):
     select2 = select2_modelform(Attendance, attrs={'width': '250px'})
     form = select2
 
-
-
 @admin.register(LeaveRecord)
 class LeaveRecordAdmin(admin.ModelAdmin):
     fields= (('user','type'),('start_date','end_date'),'reason')
@@ -58,6 +56,15 @@ class TeamAdmin(admin.ModelAdmin):
     list_display = ('name', 'thread')
     list_filter = ('name', 'members')
     select2 = select2_modelform(Team, attrs={'width': '250px'})
+    form = select2
+
+@admin.register(Group)
+class GroupAdmin(admin.ModelAdmin):
+    fields=(('name','description'),'members')
+    search_fields = ['name', 'members']
+    list_display = ('name', 'description')
+    list_filter = ('name', 'members')
+    select2 = select2_modelform(Group, attrs={'width': '250px'})
     form = select2
 
 @admin.register(MentorGroup)

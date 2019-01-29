@@ -76,6 +76,7 @@ The pages app manages the content and templates for the foss-website.
 The members app manages the profile and data of the club members
 
 1. **Attendance** - records and tracks attendance of club members inside FOSSLab
+2. **Groups** - manages groups inside the club
 2. **Leave Records** - records and manages the leave requests of club members
 3. **Mentor Groups** - manages mentor-menteee relationship of club members
 4. **Profiles** - manages the member profile
@@ -87,6 +88,7 @@ The status app manages the reporting system in the club
 
 1. **Status** - holds status updates posted by members, under different threads, for various subjects. 
 2. **Tasks** -  records and accounts different tasks assigned to the club members 
+3. **Notifications** - manages notifications
 
 ## :satellite: Integrations
 

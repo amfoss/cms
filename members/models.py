@@ -168,11 +168,27 @@ class Responsibility(models.Model):
 
 
 class Team(models.Model):
-    name = models.CharField(max_length=25)
+    name = models.CharField(max_length=50)
     image = models.ImageField()
     about = RichTextField(max_length=2000, null=True, blank=True)
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE, null=True)
     members = models.ManyToManyField(User, related_name='Team')
+
+    class Meta:
+        verbose_name_plural = "Teams"
+        verbose_name = "Team"
+
+    def __str__(self):
+        return self.name
+
+class Group(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=150)
+    members = models.ManyToManyField(User, related_name='Groups')
+
+    class Meta:
+        verbose_name_plural = "Groups"
+        verbose_name = "Group"
 
     def __str__(self):
         return self.name

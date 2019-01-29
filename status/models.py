@@ -37,7 +37,8 @@ class Status(models.Model):
         return self.thread.name + ' by @' + self.author.username
 
 class Task(models.Model):
-    name = models.CharField(null=True,max_length=50)
+    title = models.CharField(null=True,max_length=50)
+    description = RichTextField(max_length=300, null=True)
     assignees = models.ManyToManyField(User)
     due_date = models.DateField(default=date.today)
     team = models.ManyToManyField('members.Team', blank=True)
@@ -45,5 +46,22 @@ class Task(models.Model):
     status = models.ForeignKey(TaskStatus, on_delete=models.SET_NULL, null=True)
     updates = models.ManyToManyField(Status, blank=True)
 
+    class Meta:
+        verbose_name_plural = "Tasks"
+        verbose_name = "Task"
+
     def __str__(self):
         return self.name
+
+class Notification(models.Model):
+    title = models.CharField(null=True, max_length=50)
+    groups = models.ManyToManyField('members.group')
+    date = models.DateField(default=date.today)
+    description = RichTextField(max_length=300, null=True)
+
+    class Meta:
+        verbose_name_plural = "Notifications"
+        verbose_name = "Notification"
+
+    def __str__(self):
+        return self.title
