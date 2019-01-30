@@ -60,3 +60,5 @@ class ExternalPost(models.Model):
 
     def __str__(self):
         return self.title
+
+__all__ = ['ExternalPost','Tag','Category','Post']

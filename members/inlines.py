@@ -27,3 +27,5 @@ class eq_inline(admin.StackedInline):
         if db_field.name == "projects":
             kwargs["queryset"] = Project.objects.filter(members=request.user)
         return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+__all__ = ['eq_inline','sp_inline','wexp_inline']

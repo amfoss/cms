@@ -9,7 +9,7 @@ SKILL_TYPES = (('T', 'Technical'), ('A', 'Arts'), ('S', 'Social'), ('P', 'Sports
 LEAVE_TYPE = (('M', 'Health'), ('F', 'Family/Home'), ('T', 'Tiredness'), ('A', 'Academics'), ('D', 'Duty'))
 
 class Skill(models.Model):
-    def get_icon_path(instance, filename):
+    def get_icon_path(self, filename):
         ext = filename.split('.')[-1]
         filename = "%s.%s" % (uuid.uuid4(), ext)
         return 'static/uploads/images/icons/' + filename
@@ -43,7 +43,7 @@ class Portal(models.Model):
 
 
 class Organization(models.Model):
-    def get_icon_path(instance, filename):
+    def get_icon_path(self, filename):
         ext = filename.split('.')[-1]
         filename = "%s.%s" % (uuid.uuid4(), ext)
         return 'static/uploads/images/organizations/' + filename
@@ -55,12 +55,12 @@ class Organization(models.Model):
         return self.name
 
 class Profile(models.Model):
-    def get_dp_path(instance, filename):
+    def get_dp_path(self, filename):
         ext = filename.split('.')[-1]
         filename = "%s.%s" % (uuid.uuid4(), ext)
         return 'static/uploads/images/dp/' + filename
 
-    def get_resume_path(instance, filename):
+    def get_resume_path(self, filename):
         ext = filename.split('.')[-1]
         filename = "%s.%s" % (uuid.uuid4(), ext)
         return 'static/uploads/documents/resume/' + filename
@@ -218,3 +218,21 @@ class LeaveRecord(models.Model):
 
     def __str__(self):
         return self.user.username
+
+__all__ = [
+            'LeaveRecord',
+            'MentorGroup',
+            'Group',
+            'Team',
+            'Responsibility',
+            'Attendance',
+            'EducationalQualification',
+            'WorkExperience',
+            'SocialProfile',
+            'Profile',
+            'Language',
+            'Role',
+            'Skill',
+            'Portal',
+            'Organization'
+]

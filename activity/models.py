@@ -117,3 +117,5 @@ class Talk(models.Model):
 
     def __str__(self):
         return self.title
+
+__all__ = ['Talk','Project','Portal','Course','Certificate','Publication','ProjectLink','Honour']
