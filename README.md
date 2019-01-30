@@ -8,6 +8,7 @@
 [![Travis CI][build-badge]][build]
 ![Version 0.1](https://img.shields.io/badge/Version-0.1_(Alpha)-green.svg) 
 [![GNU][license-badge]][license]
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/amfoss/cms.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/amfoss/cms/alerts/)
 [![Open Issues][issues-badge]][issues]
 [![PRs][pr-badge]][prs]
 [![Contributors][contributors-badge]][contributors]
