@@ -5,7 +5,7 @@
 [![Star Gazers][stars-badge]][stargazers]
 [![Forks][forks-badge]][forks]
 
-![Status](https://img.shields.io/badge/Status-Under_Development-Red.svg) 
+[![Travis CI][build-badge]][build]
 ![Version 0.1](https://img.shields.io/badge/Version-0.1_(Alpha)-green.svg) 
 [![GNU][license-badge]][license]
 [![Open Issues][issues-badge]][issues]
@@ -128,7 +128,8 @@ Contributors are welcomed :)
 ## :black_nib: License
 This repository is licensed under  GNU General Public License V3. Though it was tailor-made for amFOSS, you are welcome to adapt it, make it yours. Just make sure that you credit us too.
 
-
+[build-badge]:https://api.travis-ci.org/amfoss/cms.svg?branch=master
+[build]:https://travis-ci.org/amfoss/cms
 [contributors-badge]:https://img.shields.io/github/contributors/amfoss/cms.svg
 [contributors]: https://github.com/amfoss/cms/graphs/contributors
 [watchers-badge]:https://img.shields.io/github/watchers/amfoss/cms.svg?style=social
