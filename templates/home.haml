@@ -1,0 +1,74 @@
+{% extends 'base.haml' %}
+{% load sass_tags %}
+{% load staticfiles %}
+{% block title %} India's Leading FOSS Club {% endblock %}
+{% block description %}AmFOSS (FOSS@Amrita) is one the leading student FOSS Communities in India, based in Amrita Vishwa Vidyapeetham, Amritapuri. {% endblock %}
+{% block styles %}
+            %link{:rel => "stylesheet", :href =>"{% sass_src 'pages/styles/home.sass' %}" }
+{% endblock %}
+{% block content %}
+%div{:id=>"homepage"}
+  %section#cover
+
+  %section#intro
+    %div{:class=>"row mb-4 mx-0"}
+      %div{:class=>"col-md-8 p-2 mb-3"}
+        %div{:id=>"intro-para"}
+          %h3 Fostering Student Skills to Face the World, For a Better World.
+          %p
+            We are a community of ....
+
+      %div{:class=>"col-md-4 pl-3 py-0 page-links"}
+        %div{:class=>"row my-4 mx-0"}
+          %div{:class=>"col-6 p-2"}
+           %a
+            %img{:src => "{% static 'pages/images/icons/about.png' %}"}
+            %h6 About Us
+          %div{:class=>"col-6 p-2"}
+           %a
+            %img{:src => "{% static 'pages/images/icons/work.png' %}"}
+            %h6  What We Do?
+          %div{:class=>"col-6 p-2"}
+           %a
+            %img{:src => "{% static 'pages/images/icons/crown.png' %}"}
+            %h6 Achievements
+          %div{:class=>"col-6 p-2"}
+           %a
+            %img{:src => "{% static 'pages/images/icons/news.png' %}"}
+            %h6 News & Updates
+
+  %div{:class=>"bg-white section-card"}
+    %div{:class=>"row mb-4 mx-0"}
+        %div{:class=>"col-lg-6 col-md-4 p-4"}
+          %img{:class=>"featured-image", :src => "{% static 'pages/images/club/what_we_do_1.jpg' %}"}
+        %div{:class=>"col-lg-6 col-md-8 p-4 text-left"}
+          %h2 What We Do?
+          %p
+            There are lots of skills you don't get to learn in the classrooms. Here we
+            emphasize starting from basics such as how to type correctly and to gain speed, writing code, ability
+            to read large code base (more than 1000s of lines of code) and debugging, making presentations and
+            many more…
+    %hr
+    %div{:class=>"row my-4 mx-0 features"}
+      %div{:class=>"col-md-4 p-2"}
+        %img{:src => "{% static 'pages/images/icons/mentorship.png' %}"}
+        %h4 Mentor & Train Students
+          %span to take on the world
+        %a{:href=> "#"} Our Vision
+        %a{:href=> "#"} Club Activities
+      %div{:class=>"col-md-4 p-2"}
+        %img{:src => "{% static 'pages/images/icons/open-source.png' %}"}
+        %h4 Promote Open Source
+           %span and Computer Science
+        %a{:href=> "#"} Workshops
+        %a{:href=> "#"} Initiatives
+      %div{:class=>"col-md-4 p-2"}
+        %img{:src => "{% static 'pages/images/icons/contribute.png' %}"}
+        %h4 Contribute to Open Source
+          %span Projects & Communities
+        %a{:href=> "#"} Our Contributions
+
+  %section#location-map
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3939.6704293431408!2d76.4901893152359!3d9.093756993475948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0602dcdfeb8707%3A0xdc224ac2f7bde6dd!2sFOSS%40Amrita!5e0!3m2!1sen!2sin!4v1541607520295" width="600" height="450" frameborder="0" style="border:0" allowfullscreen="">
+    </iframe>
+{% endblock %}

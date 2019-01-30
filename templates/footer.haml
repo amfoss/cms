@@ -1,0 +1,94 @@
+{% load static %}
+        #footer-nav
+            .w-100
+                .row.m-0
+                    .col-lg-2.col-6.d-flex.justify-content-center.p-2
+                        %div
+                            %h4 The Club
+                            %ul
+                                %li
+                                    %a{:href => '#'} Our Story
+                                %li
+                                    %a{:href => "#" } Members
+                                %li
+                                    %a{:href => '#'} Teams
+                                %li
+                                    %a{:href => '#'} Timeline
+                                %li
+                                    %a{:href => '#'} Achievements
+                                %li
+                                    %a{:href => '#'} Gallery
+                            %h4 Resources
+                            %ul
+                                %li
+                                    %a{:href => '#'} amFOSS Blog
+                                %li
+                                    %a{:href => '#'} Social Initiatives
+                                %li
+                                    %a{:href => '#'} Events & Workshops
+                                %li
+                                    %a{:href => '#'} Press & Media
+                    .col-lg-2.col-6.d-flex.justify-content-center.p-2
+                        %div
+                            %h4 For Students
+                            %ul
+                                %li
+                                    %a{:href => '#'} How to Join?
+                                %li
+                                    %a{:href => '#'} Learning Resources
+                                %li
+                                    %a{:href => '#'} Workshops & Events
+                            %h4 For Partners
+                            %ul
+                                %li
+                                    %a{:href => '#'} View Profiles
+                                %li
+                                    %a{:href => '#'} View Projects
+                                %li
+                                    %a{:href => '#'} Our Impact
+                    #contact-details.col-lg-4.col-sm-6.col-10.d-flex.p-2
+                        %div
+                            %h4 Contact Us
+                            .footer-contact
+                                %h5
+                                    %i.fa.fa-comments
+                                    IRC Chat
+                                %p  amfoss@irccloud.com
+                                %h5
+                                    %i.fa.fa-envelope
+                                    Email
+                                %p
+                                    %a{:href => 'mailto:amritapurifoss@gmail.com'} amritapurifoss@gmail.com
+                                %h5
+                                    %i.fa.fa-location-arrow
+                                    Address
+                                %p
+                                    FOSS@Amrita, <br>Amrita Vishwa Vidyapeetham, <br>
+                                    Amritapuri, Clappana P.O., <br>Kollam, Kerala - 690525
+                    .col-lg-4.col-sm-6.p-2
+                        %h4 Send a Message
+                        %form#contact-form
+                            .form-group
+                                %label{:for => 'name' } Name
+                                %input#contact_name.form-control{:type => 'text', :placeholder => 'Enter Name'}
+                            .form-group
+                                %label{:for => 'message' } Message
+                                %textarea#message.form-control{:rows => '5', :placeholder => 'Enter Message'}
+                            %button.btn{:type => 'submit'} Submit
+        #sub-footer
+            .row.m-0
+                #footer-logos.col-lg-3
+                    %a{:href => 'https://amrita.ac.in'}
+                        %img{:src => "{% static 'pages/images/logos/amrita.png' %}" }
+                    %a{:href => 'https://bios.in'}
+                        %img{:src => "{% static 'pages/images/logos/bi0s.png' %}" }
+                .col-lg-5.d-flex.align-items-center
+                    .w-100
+                        &copy;
+                        %a{:href => "{% url 'home_page' %}"} Team AmFOSS
+                        2018-19. <wbr> All Rights Reserved.
+                .col-lg-4.d-flex.align-items-center
+                    .w-100
+                       %a{:href => "{% url 'home_page' %}/privacy" } Privacy
+                       %a{:href => "{% url 'home_page' %}/privacy" } Feedbacks
+                       %a{:href => "{% url 'home_page' %}/privacy" } Terms of Use

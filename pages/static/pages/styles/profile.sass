@@ -1,0 +1,71 @@
+$primary-color: #ffc107
+
+#cover
+    background-color: $primary-color
+
+    #title-block
+        display: flex
+        align-items: center
+        justify-content: center
+        min-height: 50vh
+
+    .row
+        text-align: center
+
+    h1
+        font-size: calc(2rem + 1vw)
+        margin: 0
+
+    #avatar
+        border: 0.3rem solid white
+        box-shadow: 0.2rem 0.3rem rgba(0,0,0,0.3)
+        max-width: 40vw
+        margin: 0.5rem
+
+    .tagline
+        font-size: calc(1rem + 0.5vw)
+
+#social-links
+    padding: 1rem
+    left: 1rem
+    bottom: 1rem
+
+    a
+        height: 3rem
+        width: 3rem
+        border-radius: 100vh
+        font-size: 1.5rem
+        display: flex
+        justify-content: center
+        align-items: center
+        background: white
+        box-shadow: 1px 1px 2px #222222
+        text-decoration: none
+    a:hover
+        text-decoration: none
+
+#section-switcher
+    background: #fff
+    padding: 1rem
+    box-shadow: 1px 1px 2px #222222
+    display: flex
+    justify-content: center
+
+    ul
+        margin: 0
+        padding: 0
+        list-style: none
+
+        li
+            display: inline-block
+            padding: 0 1rem
+            font-weight: 900
+
+#activity-heatmap
+    display: flex
+    justify-content: center
+
+    .graph-label
+        display: none
+    .graph-subdomain-group rect:hover
+        stroke-width: 0.5px
