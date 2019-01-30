@@ -5,7 +5,7 @@
 [![Star Gazers][stars-badge]][stargazers]
 [![Forks][forks-badge]][forks]
 
-![Status](https://img.shields.io/badge/Status-Under_Development-Red.svg) 
+[![Travis CI][build-badge]][build]
 ![Version 0.1](https://img.shields.io/badge/Version-0.1_(Alpha)-green.svg) 
 [![GNU][license-badge]][license]
 [![Open Issues][issues-badge]][issues]
@@ -110,7 +110,6 @@ Documentation on the supported APIs has been provided in the [wiki page](https:/
 
 1. **Attendance Module** - the amFOSS attendance module is a raspberry-pi which live records the attendance of club members when they are in the FOSSLab. The AmFOSS CMS fetches attendance details from it and logs it.
 2. **Telegram Bot** - the amFOSS Telegram Bot is the bot assistant of the AmFOSS Telegram group. The AmFOSS CMS triggers the bot to send notifications, statistics etc. to the group.
-3. **Daily Status Updates** - all members of the club are required to send status updates daily ellaborating the work they did to a automatically generated status-update thread in the Google Groups. The AmFOSS CMS fetches the status updates, and logs them.
 4. **GitHub** - Integrates with GitHub to actively track the FOSS contributions made by club members
 
 ## :wrench: Tech Stack
@@ -129,9 +128,10 @@ Contributors are welcomed :)
 ## :black_nib: License
 This repository is licensed under  GNU General Public License V3. Though it was tailor-made for amFOSS, you are welcome to adapt it, make it yours. Just make sure that you credit us too.
 
-
+[build-badge]:https://api.travis-ci.org/amfoss/cms.svg?branch=master
+[build]:https://travis-ci.org/amfoss/cms
 [contributors-badge]:https://img.shields.io/github/contributors/amfoss/cms.svg
-[contributors]: https://github.com/amfoss/GitLit/graphs/contributors
+[contributors]: https://github.com/amfoss/cms/graphs/contributors
 [watchers-badge]:https://img.shields.io/github/watchers/amfoss/cms.svg?style=social
 [watchers]: https://github.com/amfoss/cms/watchers
 [stars-badge]:https://img.shields.io/github/stars/amfoss/cms.svg?style=social
