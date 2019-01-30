@@ -6,7 +6,7 @@
             <div>
                 {% block welcome-msg %}
                     <div style="font-size: 150%; padding: 0.3rem; text-transform: none">
-                        {% trans 'Namah Shivayah ' %}
+                        {% trans 'Namah Shivaya ' %}
                         <strong>@{% firstof user.get_short_name user.get_username %}</strong> !
                     </div>
                 {% endblock %}
@@ -14,7 +14,7 @@
                     {% if site_url %}
                         <a href="{{ site_url }}">{% trans 'View site' %}</a> /
                     {% endif %}
-                        <a href="#">{% trans 'Documentation' %}</a> /
+                        <a href="https://github.com/amfoss/cms/wiki">{% trans 'Documentation' %}</a> /
                     {% if user.has_usable_password %}
                     <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> /
                     {% endif %}
