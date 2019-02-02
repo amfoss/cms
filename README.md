@@ -37,7 +37,7 @@ as to avoid conflicts with other projects.
    and work on the newly set up environment.
    
     ```
-        $ git clone <repository-url>
+        $ git clone https://github.com/amfoss/cms.git
         $ cd amfoss-portal
         $ mkvirtualenv --python=python3 amfoss
         $ workon amfoss
@@ -96,7 +96,7 @@ The members app manages the profile and data of the club members
 
 ### :incoming_envelope: Status
 The status app manages the reporting system in the club
-
+ 
 1. **Status** - holds status updates posted by members, under different threads, for various subjects. 
 2. **Tasks** -  records and accounts different tasks assigned to the club members 
 3. **Notifications** - manages notifications
@@ -121,10 +121,12 @@ Documentation on the supported APIs has been provided in the [wiki page](https:/
 
 ## :gem: Contributors
 Developed with :hearts: by the amFOSS WebTeam from 2018.
-
 1. [Ashwin S Shenoy](https://github.com/aswinshenoy) - Core Developer, Maintainer
 
-Contributors are welcomed :)
+### How to Contribute?
+1. Fork the repository, clone it locally and run it following the installation instruction above.
+2. Find an issue or feature to work on, and put up an issue.
+3. Work on the patch or feature, test it and send a pull request referencing the issue.
 
 ## :black_nib: License
 This repository is licensed under  GNU General Public License V3. Though it was tailor-made for amFOSS, you are welcome to adapt it, make it yours. Just make sure that you credit us too.
