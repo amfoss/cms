@@ -38,7 +38,7 @@ as to avoid conflicts with other projects.
    
     ```
         $ git clone https://github.com/amfoss/cms.git
-        $ cd amfoss-portal
+        $ cd cms
         $ mkvirtualenv --python=python3 amfoss
         $ workon amfoss
     ```
