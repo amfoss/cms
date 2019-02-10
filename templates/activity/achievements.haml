@@ -1,0 +1,155 @@
+{% extends 'base.haml' %}
+{% load sass_tags %}
+{% load staticfiles %}
+{% block title %} Club Achievements{% endblock %}
+{% block description %}AmFOSS (FOSS@Amrita) is one the leading student FOSS Communities in India, based in Amrita Vishwa Vidyapeetham, Amritapuri. {% endblock %}
+{% block styles %}
+  %link{:rel => "stylesheet", :href =>"{% sass_src 'pages/styles/achievements.sass' %}" }
+{% endblock %}
+{% block content %}
+    %section{:id=>"achievements"}
+      %h1 Achievements
+      %hr
+      %h2
+        %img{:src => "{% static 'pages/images/icons/gsoc.png' %}" } Google Summer of Code
+      %div{:class=>"row p-2 m-0"}
+        %div{:class=>"col-lg-3 col-md-4 col-6 p-2 h-100"}
+          %div{:class=>"achievement-card py-2"}
+            %div{:class=>"num"}
+              %h3 8th
+              %h5 Global Rank
+        %div{:class=>"col-lg-3 col-md-4 col-6 p-2 h-100"}
+          %div{:class=>"achievement-card py-2"}
+            %div{:class=>"num"}
+              %h3  {{gsoc_members|length}}
+              %h5 GSoC Students (Total)
+        %div{:class=>"col-lg-3 col-md-4 col-6 p-2 h-100"}
+          %div{:class=>"achievement-card py-2"}
+            %div{:class=>"num"}
+              %h3 ${{gsoc_stipend}}k
+              %h5 Stipend (Total)
+        %div{:class=>"col-lg-3 col-md-4 col-6 p-2 h-100"}
+          %div{:class=>"achievement-card py-2"}
+            %div{:class=>"num"}
+              %h3 {{current_gsoc|length}}
+              %h5 GSoC this year
+        %div{:class=>"col-md-6 p-2 h-100"}
+          %div{:class=>"achievement-card"}
+            %div{:class=>"w-100"}
+              %h2 {{gsoc_orgs|length}} Organizations Contributed
+              %div{:class=>"icon-list row mx-0 mt-4"}
+                {% for o in gsoc_orgs %}
+                  <div class="col-lg-3 col-md-4 col-6 p-2">
+                    <a href="/organization/{{o.id}}" class="p-3">
+                      <img src="/{{o.icon}}" style="width: 80%">
+                      <span>{{o.count}}</span>
+                    </a>
+                  </div>
+                {% endfor %}
+        %div{:class=>"col-md-6 p-2 h-100"}
+          %div{:class=>"achievement-card"}
+            %div{:class=>"w-100"}
+              %h2 {{gsoc_members|length}} Students Selected
+              %div{:class=>"icon-list row mx-0 mt-4"}
+                {% for m in gsoc_members %}
+                  <div class="col-lg-3 col-md-4 col-6 p-2">
+                    <a href="/@{{m.username}}">
+                      <img src="/{{m.avatar}}" style="width: 100%">
+                      <span>{{m.count}}</span>
+                    </a>
+                  </div>
+                {% endfor %}
+      %hr
+      %h2
+        %img{:src => "{% static 'pages/images/icons/travel.png' %}" } International Achievements
+      %div{:class=>"row m-0"}
+        {% for i in international_events  %}
+          %div{:class=>"col-lg-3 col-md-4 py-2 h-100"}
+            %div{:class=>"achievement-card py-2"}
+              %div{:class=>"px-3 py-2 w-100"}
+                {% if i.attendee.all|length > 1 %}
+                  {% for m in i.attendee.all %}
+                    <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
+                  {% endfor %}
+                {% else %}
+                  {% for m in i.attendee.all %}
+                    <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
+                  {% endfor %}
+                {% endif %}
+                %hr
+                %h4 {{i.title}}
+                <span>{{i.type}}</span>
+                %hr
+                <sub><img src="/{{i.organizer.icon}}"></sub>
+                %h5 {{i.organizer.name}}
+        {% endfor %}
+      %hr
+      %h2
+        %img{:src => "{% static 'pages/images/icons/coworking.png' %}" } Internship
+      %div{:class=>"row m-0"}
+      {% for i in internships  %}
+        %div{:class=>"col-lg-3 col-md-4 py-2 h-100"}
+          %div{:class=>"achievement-card py-2"}
+            %div{:class=>"px-3 py-2 w-100"}
+              {% if i.attendee.all|length > 1 %}
+                {% for m in i.attendee.all %}
+                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
+                {% endfor %}
+              {% else %}
+                {% for m in i.attendee.all %}
+                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
+                {% endfor %}
+              {% endif %}
+              %hr
+              <sub><img src="/{{i.organizer.icon}}"></sub>
+              %h5 {{i.organizer.name}}
+              %h4 {{i.title}}
+      {% endfor %}
+      %hr
+      %h2
+        %img{:src => "{% static 'pages/images/icons/podium.png' %}" } Talks
+      %div{:class=>"row m-0"}
+        {% for t in talks %}
+          %div{:class=>"col-lg-3 col-md-4 p-2 h-100"}
+            %div{:class=>"achievement-card py-2"}
+              %div{:class=>"px-4 py-2"}
+                <a href="/@{{t.member.username}}"><img src="/{{t.member.Profile.avatar}}"> {{t.member.Profile.first_name}} {{t.member.Profile.last_name}}</a>
+                %hr
+                %h4 {{t.title}}
+                <sub><img src="/{{t.organizer.icon}}"></sub>
+                %hr
+                {% if t.event %}
+                %h5 {{t.event}}
+                {% else %}
+                %h5 {{t.organizer.name}}
+                {% endif %}
+                <span>{{t.date}}</span>
+        {% endfor %}
+
+      %hr
+      %h2
+        %img{:src => "{% static 'pages/images/icons/news.png' %}" } Publications
+      %div{:class=>"row m-0"}
+      {% for p in publications  %}
+        %div{:class=>"col-lg-3 col-md-4 py-2 h-100"}
+          %div{:class=>"achievement-card py-2"}
+            %div{:class=>"px-3 py-2"}
+              {% if p.members.all|length > 1 %}
+                {% for m in p.members.all %}
+                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
+                {% endfor %}
+              {% else %}
+                {% for m in p.members.all %}
+                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
+                {% endfor %}
+              {% endif %}
+              %hr
+              %h4 {{p.title}}
+              <sub><img src="/{{p.publisher.icon}}"></sub>
+              %hr
+              %h5 {{p.publisher.name}}
+              <span>{{p.date}}</span>
+      {% endfor %}
+
+
+{% endblock %}

@@ -5,6 +5,8 @@ from members.models import Skill, Portal, Organization
 from datetime import date
 import uuid
 
+EVENT_TYPES = (('C', 'Conference/Summit'), ('H', 'Hackathon'), ('D', 'Developer Meet'), ('I', 'Internship'), ('E','Student Exchange'), ('S','Summer School'), ('O', 'Others'))
+
 class Project(models.Model):
     def get_poster_path(instance, filename):
         ext = filename.split('.')[-1]
@@ -105,11 +107,31 @@ class Publication(models.Model):
     def __str__(self):
         return self.title
 
+class Event(models.Model):
+    title = models.CharField(max_length=150)
+    type = models.CharField(choices=EVENT_TYPES, default='C', max_length=1)
+    attendee = models.ManyToManyField(User, related_name='EventAttendee', blank=True)
+    date = models.DateField(default=date.today)
+    international = models.BooleanField(default=False, blank=True, null=True)
+    topics = models.ManyToManyField(Skill, related_name='EventTopics', blank=True)
+    projects = models.ManyToManyField(Project, related_name='EventProject', blank=True)
+    honours = models.ManyToManyField(Honour, related_name='EventHonours', blank=True)
+    organizer = models.ForeignKey(Organization,on_delete=models.PROTECT, blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Events"
+        verbose_name = "Event"
+
+    def __str__(self):
+        return self.title
+
 class Talk(models.Model):
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=150)
     member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Talk', verbose_name='Member')
     date = models.DateField(default=date.today)
     topics = models.ManyToManyField(Skill, related_name='TalkTopics', blank=True)
+    organizer = models.ForeignKey(Organization,on_delete=models.PROTECT,blank=True, null=True)
+    event = models.ForeignKey(Event, on_delete=models.PROTECT, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Talks"
@@ -118,4 +140,4 @@ class Talk(models.Model):
     def __str__(self):
         return self.title
 
-__all__ = ['Talk','Project','Portal','Course','Certificate','Publication','ProjectLink','Honour']
+__all__ = ['Event', 'Talk','Project','Portal','Course','Certificate','Publication','ProjectLink','Honour']

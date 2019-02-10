@@ -2,6 +2,10 @@ $primary-color: #ffc107
 
 #cover
     background-color: $primary-color
+    display: flex
+    align-items: center
+    justify-content: center
+    min-height: 60vh
 
     #title-block
         display: flex
@@ -9,18 +13,17 @@ $primary-color: #ffc107
         justify-content: center
         min-height: 50vh
 
-    .row
-        text-align: center
+    .name
+        max-width: 720px
+        img
+            max-width: 150px
+            border: 0.3rem solid white
+            box-shadow: 0.2rem 0.3rem rgba(0,0,0,0.3)
+            margin: 0.5rem
 
     h1
         font-size: calc(2rem + 1vw)
         margin: 0
-
-    #avatar
-        border: 0.3rem solid white
-        box-shadow: 0.2rem 0.3rem rgba(0,0,0,0.3)
-        max-width: 40vw
-        margin: 0.5rem
 
     .tagline
         font-size: calc(1rem + 0.5vw)
@@ -35,31 +38,35 @@ $primary-color: #ffc107
         width: 3rem
         border-radius: 100vh
         font-size: 1.5rem
-        display: flex
+        display: inline-flex
         justify-content: center
         align-items: center
         background: white
         box-shadow: 1px 1px 2px #222222
         text-decoration: none
+        margin: 0.3rem
     a:hover
         text-decoration: none
+        font-size: 1.8rem
 
 #section-switcher
     background: #fff
-    padding: 1rem
     box-shadow: 1px 1px 2px #222222
     display: flex
+    text-align: center
     justify-content: center
 
-    ul
-        margin: 0
-        padding: 0
-        list-style: none
-
-        li
-            display: inline-block
-            padding: 0 1rem
-            font-weight: 900
+    a
+        display: inline-block
+        padding: 1rem
+        font-weight: 900
+        border-left: 1px solid
+        border-right: 1px solid
+        border-color: #ddd
+        img
+            max-width: 32px
+    a:hover
+        background-color: #eeee
 
 #activity-heatmap
     display: flex

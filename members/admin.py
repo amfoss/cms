@@ -90,6 +90,11 @@ class SkillAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):
         return False
 
+@admin.register(Role)
+class RolesAdmin(admin.ModelAdmin):
+    def has_module_permission(self, request):
+        return False
+
 @admin.register(Language)
 class LanguageAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):

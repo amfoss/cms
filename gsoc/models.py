@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from members.models import Skill, Portal, Organization
 
-GSoC_Status = (('C', 'Completed'), ('S', 'Selected'), ('A', 'Applied'), ('T', 'Trying'))
+GSoC_Status = (('C', 'Completed (3rd Evaluation)'), ('2','Second Evaluation'), ('1','First Evaluation'), ('S', 'Selected'), ('A', 'Applied'), ('T', 'Trying'), ('M','Mentored'))
 
 class GSoC(models.Model):
     def get_proposal_link(instance, filename):
@@ -25,5 +25,5 @@ class GSoC(models.Model):
         verbose_name = "GSoC"
 
     def __str__(self):
-        return self.member.name + ' - ' + self.organisation.name
+        return self.member.username + ' - ' + self.organisation.name
 

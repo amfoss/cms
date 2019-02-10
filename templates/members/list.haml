@@ -1,0 +1,10 @@
+{% extends 'base.haml' %}
+{% load sass_tags %}
+{% load staticfiles %}
+{% block title %} Club Members {% endblock %}
+{% block description %}AmFOSS (FOSS@Amrita) is one the leading student FOSS Communities in India, based in Amrita Vishwa Vidyapeetham, Amritapuri. {% endblock %}
+{% block styles %}
+  %link{:rel => "stylesheet", :href =>"{% sass_src 'pages/styles/members.sass' %}" }
+{% endblock %}
+{% block content %}
+{% endblock %}

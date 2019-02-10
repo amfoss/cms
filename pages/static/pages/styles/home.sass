@@ -1,11 +1,5 @@
 $primary-color: #ffc107
 
-
-#homepage h2
-    font-size: calc(1.5rem + 1.5vw)!important
-    text-shadow: 2px 3px rgba(237,177,0,0.5)
-
-
 section
     min-height: 30vh
     display: flex!important
@@ -58,6 +52,10 @@ section
     box-shadow: 8px 10px 20px 0 rgba(46,61,73,.15)
     margin: 1vw
 
+    h2
+        font-size: calc(1.5rem + 1.5vw)!important
+        text-shadow: 2px 3px rgba(237,177,0,0.5)
+
     hr
         border-top: 2px solid rgba(0,0,0,.1)
 
@@ -67,12 +65,41 @@ section
 
     .featured-image
         width: 100%
-        box-shadow: 8px 10px 20px 0 rgba(46,61,73,.35)
 
+    .card-icon
+        max-width: 90px
+
+    .point
+        padding: 0.5rem 1rem
+        text-align: left!important
+        p
+            font-size: 100%
+        img
+            max-width: 64px
+        .col-2
+            text-align: center
+    .cta
+        background-color: $primary-color
+        h3
+            margin-bottom: 0
+            margin-top: 0.5rem
+        a
+            text-decoration: none
+            background: black
+            padding: 0.5rem 1rem
+            margin: 0.3rem
+            color: white
 .features
     img
         width: 5rem
         padding: 0.3rem
+
+    .num
+        font-size: calc(1.5rem + 1.8vmax)!important
+        span
+            display: block
+            font-size: 50%
+
     h4
         font-size: 1.5rem!important
         line-height: 1.3
@@ -86,7 +113,7 @@ section
         padding: 0.3rem 0.8rem
         display: inline-block
         font-weight: 600
-        margin: 0 0.3rem
+        margin: 0.3rem
         text-decoration: none
         color: #444
         background: #FDD835
@@ -106,5 +133,5 @@ section
     height: 35vh
 
     iframe
-        height: 35vh;
-        width: 100%;
+        height: 35vh
+        width: 100%

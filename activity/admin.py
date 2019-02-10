@@ -33,8 +33,15 @@ class PublicationAdmin(admin.ModelAdmin):
     form = select2
 
 class TalkAdmin(admin.ModelAdmin):
-    fields = (('title'),('members','date'),'topics')
+    list_display = ('title', 'event', 'organizer', 'member')
+    fields = (('title','organizer', 'event'),('member','date'),'topics')
     select2 = select2_modelform(Talk, attrs={'width': '250px'})
+    form = select2
+
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('title',  'date', 'organizer', 'type')
+    fields = (('title','organizer','type'),('international','projects','honours'),('attendee','date'),'topics')
+    select2 = select2_modelform(Event, attrs={'width': '250px'})
     form = select2
 
 admin.site.register(Project, ProjectAdmin)
@@ -43,3 +50,4 @@ admin.site.register(Course, CourseAdmin)
 admin.site.register(Honour, HonourAdmin)
 admin.site.register(Publication, PublicationAdmin)
 admin.site.register(Talk, TalkAdmin)
+admin.site.register(Event, EventAdmin)
