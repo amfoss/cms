@@ -17,14 +17,14 @@
 amFOSS Club Management System (CMS) is django-based web-app which lays framework for the amfoss website, the amfoss webapp, and the amfoss app. 
 
 
-## :minidisc: Installation Instructions
+## :minidisc: [Installation Instructions](https://github.com/amfoss/cms/wiki/Installation)
 The portal is primarily a django based application, and to set it up we require to have 
 python environment with django and other project dependencies installed. Though one can
 work with the project without an virtual environment,  it is recommended to use one so 
 as to avoid conflicts with other projects.
 
 1. Make sure that you have `Python 3` and `pip` installed. 
-   Install `virtualenvwrapper`, and add it to your terminal path.
+   Install `virtualenvwrapper`, and add it to your terminal path. Restart your terminal, to make the changes live.
    
     ```
        $ sudo pip install virtualenvwrapper
@@ -38,7 +38,7 @@ as to avoid conflicts with other projects.
    
     ```
         $ git clone https://github.com/amfoss/cms.git
-        $ cd amfoss-portal
+        $ cd cms
         $ mkvirtualenv --python=python3 amfoss
         $ workon amfoss
     ```
@@ -48,7 +48,7 @@ as to avoid conflicts with other projects.
         $ pip install -r requirements.txt
     ```
 
-You have now successfully set up the project on your environment.
+You have now successfully set up the project on your environment. If you encounter any problems during installation, you can refer to [installation page on our wiki](https://github.com/amfoss/cms/wiki/Installation).
 
 ### After Setting Up
 From now when you start your work, run ``workon amfoss`` inside the project repository and you can work with the django application as usual - 
