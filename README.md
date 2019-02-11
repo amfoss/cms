@@ -67,10 +67,11 @@ The activity app tracks the activities of the club members.
 
 1. **Certificates** - carries certificates recieved by club members, also allows to upload them as attachments.
 2. **Courses** - records courses completed by club members, includes link to certificate.
-3. **Honours** - records achievements and honours recieved by club members, includes link to project, certificate.
-4. **Projects** - holds projects of the club, club teams and club members
-5. **Publications** - records publications made by club members
-6. **Talks** - records talks given by club members
+3. **Events** - logs events attended by student members such as Conference, Hackathons, Internships, Exchange Programmes etc.
+4. **Honours** - records achievements and honours recieved by club members, includes link to project, certificate.
+5. **Projects** - holds projects of the club, club teams and club members
+6. **Publications** - records publications made by club members
+7. **Talks** - records talks given by club members
 
 ### :postbox: Blog
 The blog app manages the blog of the club
