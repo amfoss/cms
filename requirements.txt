@@ -1,5 +1,5 @@
 aniso8601==3.0.2
-Django==2.1.5
+django==2.1.7
 django-appconf==1.0.2
 django-ckeditor==5.6.1
 django-compressor==2.2
