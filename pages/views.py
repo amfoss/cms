@@ -70,5 +70,16 @@ class Achievements(ListView):
         context['gsoc_stipend'] = self.get_gsoc_stipend()
         return context
 
-class HomePageView(TemplateView):
+class Members(ListView):
+    model = User
+    template_name = 'members/list.haml'
+
+class Blog(ListView):
+    model = User
+    template_name = 'blog/blog.haml'
+
+class HomePage(TemplateView):
     template_name = "home.haml"
+
+class AboutPage(TemplateView):
+    template_name = "about/about.haml"

@@ -11,33 +11,29 @@
   %section#cover
 
   %section#intro
-    %div{:class=>"row mb-4 mx-0"}
-      %div{:class=>"col-md-8 p-2 mb-3"}
-        %div{:id=>"intro-para"}
-          %h3 Fostering Student Skills to Face the World, For a Better World.
+    %div{:class=>"row mt-0 mb-4 mx-0 section-card"}
+      %div{:class=>"col-md-3 col-6 p-2 mb-3"}
+        %a{:class=>"intro-card",:href=>"#about"}
+          %img{:src => "{% static 'pages/images/icons/about.png' %}"}
+          %h4 About Us
           %p
-            We are a community of ....
 
-      %div{:class=>"col-md-4 pl-3 py-0 page-links"}
-        %div{:class=>"row my-4 mx-0"}
-          %div{:class=>"col-6 p-2"}
-           %a
-            %img{:src => "{% static 'pages/images/icons/about.png' %}"}
-            %h6 About Us
-          %div{:class=>"col-6 p-2"}
-           %a
-            %img{:src => "{% static 'pages/images/icons/work.png' %}"}
-            %h6  What We Do?
-          %div{:class=>"col-6 p-2"}
-           %a
-            %img{:src => "{% static 'pages/images/icons/crown.png' %}"}
-            %h6 Achievements
-          %div{:class=>"col-6 p-2"}
-           %a
-            %img{:src => "{% static 'pages/images/icons/news.png' %}"}
-            %h6 News & Updates
+      %div{:class=>"col-md-3 col-6 p-2 mb-3"}
+        %a{:class=>"intro-card",:href=>"#what-we-do"}
+          %img{:src => "{% static 'pages/images/icons/work.png' %}"}
+          %h4  What We Do?
 
-  %div{:class=>"bg-white section-card"}
+      %div{:class=>"col-md-3 col-6 p-2 mb-3"}
+        %a{:class=>"intro-card",:href=>"#achievements"}
+          %img{:src => "{% static 'pages/images/icons/crown.png' %}"}
+          %h4 Achievements
+
+      %div{:class=>"col-md-3 col-6 p-2 mb-3"}
+       %a{:class=>"intro-card",:href=>"/news"}
+         %img{:src => "{% static 'pages/images/icons/news.png' %}"}
+          %h4 News & Updates
+
+  %div{:id=>"what-we-do",:class=>"bg-white section-card"}
     %div{:class=>"row mb-4 mx-0"}
         %div{:class=>"col-lg-6 col-md-4 p-4"}
           %img{:class=>"featured-image", :src => "{% static 'pages/images/club/what_we_do.png' %}"}
@@ -68,7 +64,7 @@
           %span Projects & Communities
         %a{:href=> "#"} Our Contributions
 
-  %div{:class=>"bg-white section-card"}
+  %div{:id=>"achievements",:class=>"bg-white section-card"}
     %div{:class=>"row mb-4 mx-0"}
       %div{:class=>"col-lg-6 col-md-8 p-4 text-left"}
         %h2 What We have Achieved?
@@ -85,19 +81,25 @@
     %div{:class=>"row my-4 mx-0 features"}
       %div{:class=>"col-md-3 p-2"}
 
-        %h4{:class=>"num"} 33
+        %h4{:class=>"num"} 33+
           %span Google Summer of Code
         %a{:href=> "#"} GSoC Ranking
-        %a{:href=> "#"} GSoC Projects
-      %div{:class=>"col-md-3 p-2"}
-        %h4{:class=>"num"} 33
-          %span Internships
-        %a{:href=> "#"} Internships
-        %a{:href=> "#"} Placement Records
+        %a{:href=> "/achievements#GSOC"} GSoC Projects
       %div{:class=>"col-md-3 p-2"}
         %h4{:class=>"num"} 835+
           %span Students Trained
         %a{:href=> "#"} Our Alumni
+        %a{:href=> "#"} Alumini Blog
+      %div{:class=>"col-md-3 p-2"}
+        %h4{:class=>"num"} 50+
+          %span Organizations Contributed
+        %a{:href=> "/projects"} Projects
+        %a{:href=> "/stats"} Statistics
+      %div{:class=>"col-md-3 p-2"}
+        %h4{:class=>"num"} 15+
+          %span Workshops Conducted
+        %a{:href=> "#"} Workshops & Events
+
 
   %div{:class=>"row mb-4 mx-0"}
     %div{:class=>"col-lg-6 col-md-8 p-2 text-left"}

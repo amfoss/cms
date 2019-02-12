@@ -1,6 +1,38 @@
 {% load staticfiles %}
-        #topbar
-            %img{:src => "{% static 'pages/images/logos/logo_alt_light.png' %}"}
-        #sidebar
-            .text-center
-                %img{:src => "{% static 'pages/images/logos/logo_light.png' %}"}
+#topbar
+    %img{:src => "{% static 'pages/images/logos/logo_alt_light.png' %}"}
+#sidebar
+    .text-center
+        %img{:src => "{% static 'pages/images/logos/logo_light.png' %}"}
+
+    %nav
+
+        <a href="/" class="{% if request.get_full_path == "/" %}active{% endif %}">
+            %img{:src => "{% static 'pages/images/icons/home.png' %}"}
+            %span Home
+        </a>
+
+        <a href="/about" class="{% if request.get_full_path == "/about/" %}active{% endif %}">
+            %img{:src => "{% static 'pages/images/icons/about.png' %}"}
+            %span About
+        </a>
+
+        <a href="/achievements" class="{% if request.get_full_path == "/achievements/" %}active{% endif %}">
+            %img{:src => "{% static 'pages/images/icons/crown.png' %}"}
+            %span Achievements
+        </a>
+
+        <a href="/members" class="{% if request.get_full_path == "/members/" %}active{% endif %}">
+            %img{:src => "{% static 'pages/images/icons/coworking.png' %}"}
+            %span Members
+        </a>
+
+        <a href="/blog" class="{% if request.get_full_path == "/blog/" %}active{% endif %}">
+            %img{:src => "{% static 'pages/images/icons/blog.png' %}"}
+            %span Blog
+        </a>
+
+        %a{:href=>"#contact"}
+            %img{:src => "{% static 'pages/images/icons/contact.png' %}"}
+            %span Contact
+

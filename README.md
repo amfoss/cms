@@ -132,6 +132,8 @@ Developed with :hearts: by the amFOSS WebTeam from 2018.
 ## :black_nib: License
 This repository is licensed under  GNU General Public License V3. Though it was tailor-made for amFOSS, you are welcome to adapt it, make it yours. Just make sure that you credit us too.
 
+Icons in the app by <a href="https://icons8.com/">Icons8</a> are licensed under Creative Commons Attribution-NoDerivs 3.0.
+
 [build-badge]:https://api.travis-ci.org/amfoss/cms.svg?branch=master
 [build]:https://travis-ci.org/amfoss/cms
 [contributors-badge]:https://img.shields.io/github/contributors/amfoss/cms.svg

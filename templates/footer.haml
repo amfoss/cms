@@ -7,47 +7,47 @@
                             %h4 The Club
                             %ul
                                 %li
-                                    %a{:href => '#'} Our Story
+                                    %a{:href => '/about#story'} Our Story
                                 %li
-                                    %a{:href => "#" } Members
+                                    %a{:href => "/members" } Members
                                 %li
-                                    %a{:href => '#'} Teams
+                                    %a{:href => '/teams'} Teams
                                 %li
-                                    %a{:href => '#'} Timeline
+                                    %a{:href => '/about#timeline'} Timeline
                                 %li
-                                    %a{:href => '#'} Achievements
+                                    %a{:href => '/achievements'} Achievements
                                 %li
-                                    %a{:href => '#'} Gallery
+                                    %a{:href => '/gallery'} Gallery
                             %h4 Resources
                             %ul
                                 %li
-                                    %a{:href => '#'} amFOSS Blog
+                                    %a{:href => '/blog'} amFOSS Blog
                                 %li
-                                    %a{:href => '#'} Social Initiatives
+                                    %a{:href => '/about#social-initiatives'} Social Initiatives
                                 %li
-                                    %a{:href => '#'} Events & Workshops
+                                    %a{:href => '/events'} Events & Workshops
                                 %li
-                                    %a{:href => '#'} Press & Media
+                                    %a{:href => '/blog?type="press"'} Press & Media
                     .col-lg-2.col-6.d-flex.justify-content-center.p-2
                         %div
                             %h4 For Students
                             %ul
                                 %li
-                                    %a{:href => '#'} How to Join?
+                                    %a{:href => '/blog?type="joining"'} How to Join?
                                 %li
-                                    %a{:href => '#'} Learning Resources
+                                    %a{:href => '/blog?type="resources"'} Learning Resources
                                 %li
-                                    %a{:href => '#'} Workshops & Events
+                                    %a{:href => '/events'} Workshops & Events
                             %h4 For Partners
                             %ul
                                 %li
-                                    %a{:href => '#'} View Profiles
+                                    %a{:href => '/members'} View Profiles
                                 %li
-                                    %a{:href => '#'} View Projects
+                                    %a{:href => '/projects'} View Projects
                                 %li
-                                    %a{:href => '#'} Our Impact
+                                    %a{:href => '/about#impact'} Our Impact
                     #contact-details.col-lg-4.col-sm-6.col-10.d-flex.p-2
-                        %div
+                        #contact
                             %h4 Contact Us
                             .footer-contact
                                 %h5
@@ -90,5 +90,5 @@
                 .col-lg-4.d-flex.align-items-center
                     .w-100
                        %a{:href => "{% url 'home_page' %}/privacy" } Privacy
-                       %a{:href => "{% url 'home_page' %}/privacy" } Feedbacks
-                       %a{:href => "{% url 'home_page' %}/privacy" } Terms of Use
+                       %a{:href => "{% url 'home_page' %}/feedback" } Feedbacks
+                       %a{:href => "{% url 'home_page' %}/terms" } Terms of Use

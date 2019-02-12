@@ -6,7 +6,10 @@ from .views import *
 
 
 urlpatterns = [
-    path('', HomePageView.as_view(), name='home_page'),
-    path('achievements/', Achievements.as_view(), name='home_page'),
-    url(r'^@(?P<username>[\w.@+-]+)/$', UserProfile.as_view(), name="user")
+    path('', HomePage.as_view(), name='home_page'),
+    path('about/', AboutPage.as_view(), name='about_page'),
+    path('achievements/', Achievements.as_view(), name='achievements'),
+    path('members/', Members.as_view(), name='members'),
+    path('blog/', Blog.as_view(), name='blog'),
+    url(r'^@(?P<username>[\w.@+-]+)/$', UserProfile.as_view(), name="profile")
 ]
