@@ -167,6 +167,8 @@ STATICFILES_FINDERS = [
     'sass_processor.finders.CssFinder',
 ]
 
-# Uncomment the following lines to deploy to heroku
-import django_heroku
-django_heroku.settings(locals())
+try:
+    import django_heroku
+    django_heroku.settings(locals())
+except ImportError:
+    found = False

@@ -1,7 +1,9 @@
 language: python
 python:
   - "3.6"
+before_install:
+  - sed '/django-heroku==/d' requirements.txt > requirements-build.txt
 install:
-  - pip install -r requirements.txt
+  - pip install -r requirements-build.txt
 script:
   - python manage.py test
