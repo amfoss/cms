@@ -168,5 +168,5 @@ STATICFILES_FINDERS = [
 ]
 
 # Uncomment the following lines to deploy to heroku
-#import django_heroku
-#django_heroku.settings(locals())
+import django_heroku
+django_heroku.settings(locals())
