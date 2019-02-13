@@ -27,6 +27,17 @@ img
     background: $primary-color!important
 
 
+.page-cover
+    height: 25vh
+    background: $primary-color
+    display: flex
+    align-items: center
+    padding: 5vw
+    color: #333
+    box-shadow: 5px 3px 3px 4px rgba(0,0,0,0.2)
+    h1
+        font-size: calc(2rem + 1.5vw)
+
 %flex-center
     display: flex
     align-items: center
@@ -36,7 +47,7 @@ img
     @extend %flex-center
     background-color: $primary-color
     color: #000
-    padding: 3vw
+    padding: 2rem
     min-height: 70vh
     font-size: 1.2rem
 
@@ -68,9 +79,8 @@ img
 
     form
         %form-border-black
-            border: 1px solid #666;
-            box-shadow: 2px 3px 2px rgba(0,0,0,0.1)
-            border-radius: 0.3rem
+            box-shadow: 2px 3px 2px rgba(0,0,0,0.3)
+            border-radius: 0
 
         input, textarea
             font-size: 1rem;
@@ -81,6 +91,7 @@ img
             background: white
             margin: 0
             @extend %form-border-black
+
 #sub-footer
     background-color: #333
     color: #999
@@ -122,23 +133,36 @@ img
     #page-container
         margin-left: 18rem
         min-height: 100vh
+        margin-top: 0!important
     #sidebar
         display: block!important
+        padding-top: 1.8vw!important
+        .text-center
+            display: block!important
     #topbar
         display: none!important
 
 #page-container
     position: relative
+    margin-top: 5rem
 
 #topbar
     @extend %flex-center
     background: #333
-    min-height: 4rem
+    height: 5rem
     width: 100%
     position: fixed
     padding: 1.2rem 2rem
     top: 0
-    z-index: 5000
+    z-index: 3000
+    box-shadow: 10px 0px 15px
+
+    #top-bar-button
+        color: white
+        position: absolute
+        left: 10vw
+        font-size: 1.5rem
+        font-weight: 300
 
     img
         height: 2rem
@@ -152,9 +176,16 @@ img
     position: fixed
     padding: 1.8vw
     top: 0
+    z-index: 2000
+    overflow-y: auto
+    padding-top: 5rem
+    box-shadow: 5px 3px 3px 1px rgba(0,0,0,0.2)
 
     img
         height: 15rem
+
+    .text-center
+        display: none
 
     nav
         padding: 1rem 0.5rem
@@ -176,3 +207,19 @@ img
             color: #222222
             text-decoration: none
             box-shadow: 4px 4px 3px 3px rgba(100, 100, 100, 0.3)
+
+    #social-links
+        margin-top: 8vh
+        text-align: center
+        margin-bottom: 3vh
+        a
+            padding: 0.3rem 0.2rem
+            text-decoration: none
+            display: inline-flex
+            align-items: center
+        a:hover
+            text-decoration: none
+            background: #fff
+        img
+            width: 32px
+            height: auto

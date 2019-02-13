@@ -15,24 +15,54 @@
       %div{:class=>"col-md-3 col-6 p-2 mb-3"}
         %a{:class=>"intro-card",:href=>"#about"}
           %img{:src => "{% static 'pages/images/icons/about.png' %}"}
-          %h4 About Us
+          %h5 About Us
           %p
 
       %div{:class=>"col-md-3 col-6 p-2 mb-3"}
         %a{:class=>"intro-card",:href=>"#what-we-do"}
           %img{:src => "{% static 'pages/images/icons/work.png' %}"}
-          %h4  What We Do?
+          %h5  What We Do?
 
       %div{:class=>"col-md-3 col-6 p-2 mb-3"}
         %a{:class=>"intro-card",:href=>"#achievements"}
           %img{:src => "{% static 'pages/images/icons/crown.png' %}"}
-          %h4 Achievements
+          %h5 Achievements
 
       %div{:class=>"col-md-3 col-6 p-2 mb-3"}
        %a{:class=>"intro-card",:href=>"/news"}
          %img{:src => "{% static 'pages/images/icons/news.png' %}"}
-          %h4 News & Updates
+          %h5 News & Updates
+  %div{:id=>"what-we-do",:class=>"bg-white section-card"}
+    %div{:class=>"row mb-4 mx-0"}
+       %div{:class=>"col-lg-6 col-md-8 p-4 text-left"}
+          %h2 Who are We?
+          %p
+            There are lots of skills you don't get to learn in the classrooms. Here we
+            emphasize starting from basics such as how to type correctly and to gain speed, writing code, ability
+            to read large code base (more than 1000s of lines of code) and debugging, making presentations and
+            many more…
+      %div{:class=>"col-lg-6 col-md-4 p-4"}
+        %img{:class=>"featured-image", :src => "{% static 'pages/images/club/what_we_do.png' %}"}
 
+    %hr
+    %div{:class=>"row my-4 mx-0 features"}
+      %div{:class=>"col-md-4 p-2"}
+        %img{:src => "{% static 'pages/images/icons/mentorship.png' %}"}
+        %h4 Mentor & Train Students
+          %span to take on the world
+        %a{:href=> "#"} Our Vision
+        %a{:href=> "#"} Club Activities
+      %div{:class=>"col-md-4 p-2"}
+        %img{:src => "{% static 'pages/images/icons/open-source.png' %}"}
+        %h4 Promote Open Source
+           %span and Computer Science
+        %a{:href=> "#"} Workshops
+        %a{:href=> "#"} Initiatives
+      %div{:class=>"col-md-4 p-2"}
+        %img{:src => "{% static 'pages/images/icons/contribute.png' %}"}
+        %h4 Contribute to Open Source
+          %span Projects & Communities
+        %a{:href=> "#"} Our Contributions
   %div{:id=>"what-we-do",:class=>"bg-white section-card"}
     %div{:class=>"row mb-4 mx-0"}
         %div{:class=>"col-lg-6 col-md-4 p-4"}

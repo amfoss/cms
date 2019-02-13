@@ -7,9 +7,9 @@
   %link{:rel => "stylesheet", :href =>"{% sass_src 'pages/styles/achievements.sass' %}" }
 {% endblock %}
 {% block content %}
-    %section{:id=>"achievements"}
+    %section{:class=>"page-cover"}
       %h1 Achievements
-      %hr
+    %section{:id=>"achievements"}
       %h2
         %img{:src => "{% static 'pages/images/icons/gsoc.png' %}" } Google Summer of Code
       %div{:class=>"row p-2 m-0"}

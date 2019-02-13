@@ -1,7 +1,9 @@
 {% load staticfiles %}
 #topbar
+    #top-bar-button{:class=>"fa fa-bars"}
     %img{:src => "{% static 'pages/images/logos/logo_alt_light.png' %}"}
-#sidebar
+
+#sidebar{:class=>"animated"}
     .text-center
         %img{:src => "{% static 'pages/images/logos/logo_light.png' %}"}
 
@@ -36,3 +38,18 @@
             %img{:src => "{% static 'pages/images/icons/contact.png' %}"}
             %span Contact
 
+    #social-links
+        %a{:href=>"https://github.com/amfoss"}
+            %img{:src => "{% static 'pages/images/icons/github.png' %}"}
+
+        %a{:href=>"https://facebook.com/amfoss.in"}
+            %img{:src => "{% static 'pages/images/icons/facebook.png' %}"}
+
+        %a{:href=>"https://twitter.com/amfoss_in"}
+            %img{:src => "{% static 'pages/images/icons/twitter.png' %}"}
+
+        %a{:href=>"https://instagram.com/amfoss.in"}
+            %img{:src => "{% static 'pages/images/icons/instagram.png' %}"}
+
+        %a{:href=>"https://linkedin.com/amfoss"}
+            %img{:src => "{% static 'pages/images/icons/linkedin.png' %}"}

@@ -10,7 +10,7 @@
         %meta{:name => 'language', :content => "EN"}
         %meta{:name => 'description', :content => "{% block description %}{% endblock %}"}
         %meta{:name => 'keywords', :content => "FOSS, Open Source, Community, Amrita, Club, College, GSOC, FOSS@Amrita"}
-        %meta{:name => 'author', :content => "AmFOSS, amritapurifoss@gmail.com"}
+        %meta{:name => 'author', :content => "amFOSS, amritapurifoss@gmail.com"}
         %meta{:name => 'copyright', :content => "AmFOSS"}
         %meta{:name => 'reply-to', :content => "amritapurifoss@gmail.com"}
 
@@ -20,6 +20,7 @@
 
         {% block styles %}{% endblock %}
         %link{:rel => "stylesheet", :href =>"{% sass_src 'pages/styles/styles.sass' %}" }
+        %link{:rel => "stylesheet", :href =>"https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"}
         %script{:src => "https://code.jquery.com/jquery-3.3.1.slim.min.js"}
         {% block scripts %}{% endblock %}
 
@@ -31,3 +32,18 @@
 
             %footer
                 {% include './footer.haml' %}
+        <script>
+            $("#top-bar-button").click(function() {
+
+                if($("#sidebar").hasClass("slideOutLeft")){
+                    $("#sidebar").css("display","block").removeClass("slideOutLeft").addClass("slideInLeft");
+                    $("#top-bar-button").removeClass("fa-bars").addClass("fa-times");
+                }
+                else
+                {
+                    $("#sidebar").removeClass("slideInLeft").addClass("slideOutLeft");
+                    $("#top-bar-button").addClass("fa-bars").removeClass("fa-times");
+                }
+
+            });
+        </script>
