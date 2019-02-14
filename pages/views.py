@@ -4,10 +4,12 @@ from .models import *
 from members.models import *
 from activity.models import *
 from gsoc.models import *
+from blog.models import *
 from django.contrib.auth.models import User
 from django.views.generic import View, ListView, DetailView, UpdateView, DeleteView, CreateView, TemplateView
 from django.shortcuts import render, redirect, get_list_or_404, get_object_or_404
-
+import json
+from datetime import datetime
 
 class UserProfile(DetailView):
     model = User
@@ -15,12 +17,47 @@ class UserProfile(DetailView):
     slug_field = 'username'
     slug_url_kwarg = 'username'
 
+    def get_interests(self, profile):
+        interests = []
+        for i in profile.interests.all():
+            interests.append(i)
+        return interests
+
+    def get_expertise(self, profile):
+        expertise = []
+        for i in profile.expertise.all():
+            expertise.append(i)
+        return expertise
+
+    def get_activity(self, member):
+        att = Attendance.objects.filter(member=member)
+
+        a = {}
+
+        for i in att:
+            a[str(int(i.session_start.timestamp()))] = int(i.duration.seconds/(60*60))
+        return a
+
+
     def get_context_data(self, **kwargs):
         context = super(UserProfile, self).get_context_data(**kwargs)
         try:
-            profile = get_object_or_404(Profile, user=self.get_object())
+            profile = Profile.objects.get(user=self.get_object())
             context['profile'] = profile
+            context['activity'] = self.get_activity(member=self.get_object())
             context['socialProfiles'] = SocialProfile.objects.filter(profile=profile)
+            context['certificates'] = Certificate.objects.filter(member=self.get_object())
+            context['publications'] = Publication.objects.filter(members=self.get_object())
+            context['honours'] = Honour.objects.filter(member=self.get_object())
+            context['courses'] = Course.objects.filter(member=self.get_object())
+            context['talks'] = Talk.objects.filter(member=self.get_object())
+            context['workExperience'] = WorkExperience.objects.filter(profile=profile)
+            context['interests'] = self.get_interests(profile)
+            context['expertise'] = self.get_expertise(profile)
+            context['posts'] = Post.objects.filter(author=self.get_object())
+            context['projects'] = Project.objects.filter(members=self.get_object())
+            context['educationalQualification'] = EducationalQualification.objects.filter(profile=profile)
+
         except Profile.DoesNotExist:
             context['error'] = 'No data found for this user!'
         return context
@@ -74,9 +111,20 @@ class Members(ListView):
     model = User
     template_name = 'members/list.haml'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profiles'] = Profile.objects.all()
+        return context
+
+
 class Blog(ListView):
     model = User
     template_name = 'blog/blog.haml'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['posts'] = Post.objects.all()
+        return context
 
 class HomePage(TemplateView):
     template_name = "home.haml"

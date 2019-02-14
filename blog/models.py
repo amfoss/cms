@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
-
+import uuid
+from datetime import date
 
 class Tag(models.Model):
     name = models.CharField(null=True, max_length=25)
@@ -18,7 +19,7 @@ class Tag(models.Model):
 class Category(models.Model):
     name = models.CharField(null=True,max_length=25)
     slug = models.SlugField()
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, verbose_name='Parent')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, verbose_name='Parent', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Categories"
@@ -29,11 +30,17 @@ class Category(models.Model):
 
 
 class Post(models.Model):
+    def get_featured_image_path(self, filename):
+        ext = filename.split('.')[-1]
+        filename = "%s.%s" % (uuid.uuid4(), ext)
+        return 'static/uploads/blog/cover/' + filename
+
     title = models.CharField(null=True,max_length=50)
     slug =  models.SlugField()
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Post', verbose_name='Author')
     content = RichTextField()
-    featured_image = models.ImageField(default='', verbose_name='Featured Image')
+    date = models.DateField(default=date.today)
+    featured_image = models.ImageField(default='', verbose_name='Featured Image',upload_to=get_featured_image_path)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Category', blank=True)
     tags = models.ManyToManyField(Tag,verbose_name='Tag', blank=True)
 

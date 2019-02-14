@@ -12,7 +12,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):
-    fields = ('title','author',('category', 'tags'),'content')
+    fields = ('title',('author','slug'),('date','featured_image'),('category', 'tags'),'content')
     list_display = ('title', 'author', 'category')
     list_filter = ('author','category','tags')
     search_fields = ['title', 'author', 'category', 'tags']
