@@ -6,7 +6,7 @@ before_install:
 install:
   - pip install -r requirements-build.txt
 script:
-  - python manage.py migrate --noinput
-  - python manage.py makemigrations --noinput
-  - python manage.py migrate --noinput
+  - python manage.py migrate
+  - python manage.py makemigrations activity blog gsoc members status
+  - python manage.py migrate
   - python manage.py test
