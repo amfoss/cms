@@ -9,10 +9,15 @@
 {% block content %}
     %section{:class=>"page-cover"}
       %h1 Club Members
+    #filter-bar.row.m-0
+      .col-6#search-icon.justify-content-center.align-items-center.fa.fa-search
+      .col-md-4.col-10#search-container.align-items-center.justify-content-center
+          <input id="search-box" type="text" onkeyup="searchFunction()" class="form-control" placeholder="Search Here">
+
     %section.my-4
       .row.m-0#members
         {% for p in profiles %}
-          .col-lg-3.col-md-4.col-6.p-2
+          <div member class="col-lg-3 col-md-4 p-2"  tags="{{p.first_name.lower }} {{ p.last_name.lower }} {{p.user.username.lower}}">
             <a href="/@{{p.user.username}}">
               .section-card.bg-white
                 <img src="/{{p.avatar}}">
@@ -20,5 +25,34 @@
                   %h6 {{p.first_name}} {{p.last_name}}
                   %div {{p.tagline}}
             </a>
+          </div>
         {% endfor %}
+<script>
+  $(document).ready(function() {
+    $('.js-example-basic-multiple').select2(
+    {
+      placeholder: "Select a Team",
+      allowClear: true
+    });
+  });
+  $("#search-icon").click(function() {
+      if( $("#search-container").css('display') == 'flex' )
+      {
+        $("#search-container").css("display","none");
+        $("#search-icon").addClass("col-6 fa-search").removeClass("col-2 fa-times");
+      }
+      else { $("#search-container").css("display","flex"); $("#search-icon").removeClass("col-6 fa-search").addClass("col-2 fa-times"); }
+  });
+  function searchFunction()
+  {
+      query = document.getElementById('search-box').value;
+      var filterItems = $('[member]');
+      if ( query != '' ) {
+          filterItems.hide();
+          $('[member][tags*="' + query.toLowerCase() + '"]').show();
+      } else {
+          filterItems.show();
+      }
+  }
+</script>
 {% endblock %}

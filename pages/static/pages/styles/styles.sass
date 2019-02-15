@@ -48,7 +48,7 @@ img
     background-color: $primary-color
     color: #000
     padding: 2rem
-    min-height: 70vh
+    min-height: 50vh
     font-size: 1.2rem
 
     a
@@ -134,6 +134,7 @@ img
         margin-left: 18rem
         min-height: 100vh
         margin-top: 0!important
+        margin-bottom: 0!important
     #sidebar
         display: block!important
         padding-top: 1.8vw!important
@@ -144,17 +145,18 @@ img
 
 #page-container
     position: relative
-    margin-top: 5rem
+    margin-top: 4rem
+    margin-bottom: 4rem
 
 #topbar
     @extend %flex-center
     background: #333
-    height: 5rem
+    height: 4rem
     width: 100%
     position: fixed
     padding: 1.2rem 2rem
     top: 0
-    z-index: 3000
+    z-index: 4000
     box-shadow: 10px 0px 15px
 
     #top-bar-button
@@ -165,7 +167,7 @@ img
         font-weight: 300
 
     img
-        height: 2rem
+        height: 1.8rem
 
 #sidebar
     @extend %flex-center
@@ -176,7 +178,7 @@ img
     position: fixed
     padding: 1vw 1.5vw
     top: 0
-    z-index: 2000
+    z-index: 3000
     overflow-y: auto
     padding-top: 5rem
     box-shadow: 5px 3px 3px 1px rgba(0,0,0,0.2)

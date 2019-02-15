@@ -8,8 +8,46 @@
     margin: 1.5vw 1vw
     text-align: left
     h6
-      font-size: calc(1rem + 0.8vw)
+      font-size: calc(1rem + 1vw)
       margin-bottom: 0.3rem
     .content
-      padding: 2vw
-      font-size: 130%
+      padding: 1rem
+      font-size: calc(0.8rem + 0.5vw)
+
+@media (max-width: 720px)
+    #filter-bar
+        position: fixed!important
+        bottom: 0
+        right: 0
+        left: 0
+        top: unset!important
+    #search-container
+        display: none
+    #search-icon
+        display: flex!important
+
+
+@media (min-width: 721px)
+    #search-container
+      display: flex
+    #filter-bar
+      padding: 1rem!important
+
+#filter-bar
+  background: #333
+  color: white
+  padding: 0.3rem
+  box-shadow: 1px 1px 2px #222222
+  display: flex
+  text-align: center
+  z-index: 2000
+
+#search-box
+  border: none;
+  border-radius: 0;
+  box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+
+#search-icon
+  display: none
+  font-size: 130%
+  padding: 0.8rem

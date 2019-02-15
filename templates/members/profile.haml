@@ -20,7 +20,7 @@
           {% for l in socialProfiles %}
             <a href="{{l.link}}" style="color: {{l.portal.color}}"  class="{{l.portal.icon}}"></a>
           {% endfor %}
-    %nav#section-switcher.sticky-top
+    %nav#section-switcher
       %a#activity-tab-button
         %img{:src => "{% static 'pages/images/icons/calendar.png' %}"}
         %span Activity
@@ -286,5 +286,6 @@
     data: vals,
     displayLegend: false
   });
+
 </script>
 {% endblock %}

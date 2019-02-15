@@ -18,16 +18,6 @@
                                     %a{:href => '/achievements'} Achievements
                                 %li
                                     %a{:href => '/gallery'} Gallery
-                            %h4 Resources
-                            %ul
-                                %li
-                                    %a{:href => '/blog'} amFOSS Blog
-                                %li
-                                    %a{:href => '/about#social-initiatives'} Social Initiatives
-                                %li
-                                    %a{:href => '/events'} Events & Workshops
-                                %li
-                                    %a{:href => '/blog?type="press"'} Press & Media
                     .col-lg-2.col-6.d-flex.justify-content-center.p-2
                         %div
                             %h4 For Students
@@ -38,6 +28,9 @@
                                     %a{:href => '/blog?type="resources"'} Learning Resources
                                 %li
                                     %a{:href => '/events'} Workshops & Events
+
+                    .col-lg-2.col-6.d-flex.p-2
+                        %div
                             %h4 For Partners
                             %ul
                                 %li
@@ -46,35 +39,19 @@
                                     %a{:href => '/projects'} View Projects
                                 %li
                                     %a{:href => '/about#impact'} Our Impact
-                    #contact-details.col-lg-4.col-sm-6.col-10.d-flex.p-2
-                        #contact
-                            %h4 Contact Us
-                            .footer-contact
-                                %h5
-                                    %i.fa.fa-comments
-                                    IRC Chat
-                                %p  amfoss@irccloud.com
-                                %h5
-                                    %i.fa.fa-envelope
-                                    Email
-                                %p
-                                    %a{:href => 'mailto:amritapurifoss@gmail.com'} amritapurifoss@gmail.com
-                                %h5
-                                    %i.fa.fa-location-arrow
-                                    Address
-                                %p
-                                    FOSS@Amrita, <br>Amrita Vishwa Vidyapeetham, <br>
-                                    Amritapuri, Clappana P.O., <br>Kollam, Kerala - 690525
-                    .col-lg-4.col-sm-6.p-2
-                        %h4 Send a Message
-                        %form#contact-form
-                            .form-group
-                                %label{:for => 'name' } Name
-                                %input#contact_name.form-control{:type => 'text', :placeholder => 'Enter Name'}
-                            .form-group
-                                %label{:for => 'message' } Message
-                                %textarea#message.form-control{:rows => '5', :placeholder => 'Enter Message'}
-                            %button.btn{:type => 'submit'} Submit
+                    .col-lg-2.col-6.p-2
+                        %div
+                            %h4 Resources
+                            %ul
+                                %li
+                                    %a{:href => '/blog'} amFOSS Blog
+                                %li
+                                    %a{:href => '/about#social-initiatives'} Social Initiatives
+                                %li
+                                    %a{:href => '/events'} Events & Workshops
+                                %li
+                                    %a{:href => '/blog?type="press"'} Press & Media
+
         #sub-footer
             .row.m-0
                 #footer-logos.col-lg-3

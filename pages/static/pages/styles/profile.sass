@@ -66,12 +66,24 @@ $primary-color: #ffc107
         text-decoration: none
         font-size: 1.8rem
 
+
+@media (max-width: 720px)
+    #section-switcher
+        position: fixed!important
+        bottom: 0
+        right: 0
+        left: 0
+        top: unset!important
+
 #section-switcher
     background: #fff
     box-shadow: 1px 1px 2px #222222
     display: flex
     text-align: center
     justify-content: center
+    z-index: 3000
+    position: sticky
+    top: 0
 
     a
         display: inline-block
