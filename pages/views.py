@@ -31,9 +31,7 @@ class UserProfile(DetailView):
 
     def get_activity(self, member):
         att = Attendance.objects.filter(member=member)
-
         a = {}
-
         for i in att:
             a[str(int(i.session_start.timestamp()))] = int(i.duration.seconds/(60*60))
         return a
@@ -118,13 +116,27 @@ class Members(ListView):
 
 
 class Blog(ListView):
-    model = User
-    template_name = 'blog/blog.haml'
+    model = Post
+    template_name = 'blog/list.haml'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['posts'] = Post.objects.all()
         return context
+
+class BlogPost(DetailView):
+    model = Post
+    template_name = 'blog/single.haml'
+
+    def get_context_data(self, **kwargs):
+        context = super(BlogPost, self).get_context_data(**kwargs)
+        user = User.objects.get(username=self.kwargs['username'])
+        try:
+            context['post'] = Post.objects.get(author=user,slug=self.kwargs['slug'])
+        except Profile.DoesNotExist:
+            context['error'] = 'No data found for this post!'
+        return context
+
 
 class HomePage(TemplateView):
     template_name = "home.haml"

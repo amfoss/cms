@@ -17,13 +17,17 @@
     %section.my-4
       .row.m-0#members
         {% for p in profiles %}
-          <div member class="col-lg-3 col-md-4 p-2"  tags="{{p.first_name.lower }} {{ p.last_name.lower }} {{p.user.username.lower}}">
+          <div member class="col-lg-3 col-md-4 col-6 p-2"  tags="{{p.first_name.lower }} {{ p.last_name.lower }} {{p.user.username.lower}}">
             <a href="/@{{p.user.username}}">
               .section-card.bg-white
                 <img src="/{{p.avatar}}">
                 .content
                   %h6 {{p.first_name}} {{p.last_name}}
+                  {% if p.tagline %}
                   %div {{p.tagline}}
+                  {% else %}
+                  %div {{p.role}}
+                  {% endif %}
             </a>
           </div>
         {% endfor %}
