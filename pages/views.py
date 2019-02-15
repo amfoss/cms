@@ -13,7 +13,7 @@ from datetime import datetime
 
 class UserProfile(DetailView):
     model = User
-    template_name = 'members/profile.haml'
+    template_name = 'member/profile.haml'
     slug_field = 'username'
     slug_url_kwarg = 'username'
 
@@ -107,7 +107,7 @@ class Achievements(ListView):
 
 class Members(ListView):
     model = User
-    template_name = 'members/list.haml'
+    template_name = 'member/list.haml'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -121,7 +121,7 @@ class Blog(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['posts'] = Post.objects.all()
+        context['posts'] = Post.objects.filter(featured=True)
         return context
 
 class BlogPost(DetailView):
@@ -137,6 +137,26 @@ class BlogPost(DetailView):
             context['error'] = 'No data found for this post!'
         return context
 
+class Projects(ListView):
+    model = Project
+    template_name = 'project/list.haml'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['projects'] = Project.objects.filter(featured=True)
+        return context
+
+class ProjectDetail(DetailView):
+    model = Project
+    template_name = 'project/project.haml'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectDetail, self).get_context_data(**kwargs)
+        try:
+            context['project'] = Project.objects.get(slug=self.kwargs['slug'])
+        except Profile.DoesNotExist:
+            context['error'] = 'No data found for this project!'
+        return context
 
 class HomePage(TemplateView):
     template_name = "home.haml"

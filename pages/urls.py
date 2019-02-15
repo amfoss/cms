@@ -11,6 +11,8 @@ urlpatterns = [
     path('achievements/', Achievements.as_view(), name='achievements'),
     path('members/', Members.as_view(), name='members'),
     path('blog/', Blog.as_view(), name='blog'),
+    path('projects/', Projects.as_view(), name='projects'),
+    url(r'^project/(?P<slug>[\w.@+-]+)/$', ProjectDetail.as_view(), name="project"),
     url(r'^@(?P<username>[\w.@+-]+)/$', UserProfile.as_view(), name="profile"),
     url(r'^@(?P<username>[\w.@+-]+)/(?P<slug>[\w.@+-]+)$', BlogPost.as_view(), name="post"),
 ]

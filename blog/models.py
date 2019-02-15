@@ -35,8 +35,9 @@ class Post(models.Model):
         filename = "%s.%s" % (uuid.uuid4(), ext)
         return 'static/uploads/blog/cover/' + filename
 
-    title = models.CharField(null=True,max_length=50)
+    title = models.CharField(null=True,max_length=200)
     slug =  models.SlugField()
+    featured = models.BooleanField(default=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Post', verbose_name='Author')
     content = RichTextField()
     date = models.DateField(default=date.today)

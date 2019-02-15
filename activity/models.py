@@ -14,6 +14,8 @@ class Project(models.Model):
         return 'static/uploads/images/projects/' + filename
 
     name = models.CharField(max_length=200, null=True)
+    slug =  models.SlugField()
+    featured = models.BooleanField(default=False)
     tagline = models.CharField(max_length=100, null=True)
     members = models.ManyToManyField(User,related_name='Project')
     published = models.DateField(default=date.today)

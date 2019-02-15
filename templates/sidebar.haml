@@ -29,14 +29,15 @@
             %span Members
         </a>
 
+        <a href="/projects" class="{% if request.get_full_path == "/projects/" %}active{% endif %}">
+            %img{:src => "{% static 'pages/images/icons/project.png' %}"}
+            %span Projects
+        </a>
+
         <a href="/blog" class="{% if request.get_full_path == "/blog/" %}active{% endif %}">
             %img{:src => "{% static 'pages/images/icons/blog.png' %}"}
             %span Blog
         </a>
-
-        %a{:href=>"#contact"}
-            %img{:src => "{% static 'pages/images/icons/contact.png' %}"}
-            %span Contact
 
     #social-links
         %a{:href=>"https://github.com/amfoss"}

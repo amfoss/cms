@@ -7,7 +7,7 @@ class ProjectLinkInline(admin.TabularInline):
     extra = 0
 
 class ProjectAdmin(admin.ModelAdmin):
-    fields = (('name','members'),('tagline','topics'),('published','cover'),'detail')
+    fields = (('name','slug'),'members',('tagline','topics'),('published','cover'),'detail', 'featured')
     inlines = (ProjectLinkInline,)
     select2 = select2_modelform(Project, attrs={'width': '250px'})
     form = select2
