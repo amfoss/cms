@@ -15,7 +15,9 @@
       %div.name.text-center
         <img src="/{{profile.avatar}}" id="avatar" class="w-100 rounded-circle">
         %h1 {{profile.first_name}} {{profile.last_name}}
+        {% if profile.tagline %}
         %div.tagline {{profile.tagline}}
+        {% endif %}
         %div#social-links
           {% for l in socialProfiles %}
             <a href="{{l.link}}" style="color: {{l.portal.color}}"  class="{{l.portal.icon}}"></a>
@@ -46,12 +48,15 @@
     %section.tab#profile-tab
       .row.m-0
         .col
+          {% if profile.about %}
           .section-card.bg-white
             .desc {{profile.about|safe}}
-
+          {% endif %}
+          {% if interests or expertise %}
           %h2
             %img{:src => "{% static 'pages/images/icons/skill.png' %}" } Skills
           .row.m-0
+            {% if interests %}
             .col-md-6
               .section-card.bg-white.mx-0.p-4
                 %h4
@@ -62,6 +67,8 @@
                       <img src="/{{i.icon}}">
                       {{i.name}}
                   {% endfor %}
+            {% endif %}
+            {% if expertise %}
             .col-md-6
               .section-card.bg-white.mx-0.p-4
                 %h4
@@ -72,6 +79,9 @@
                       <img src="/{{i.icon}}">
                       {{i.name}}
                   {% endfor %}
+            {% endif %}
+          {% endif %}
+          {% if workExperience %}
           %h2
             %img{:src => "{% static 'pages/images/icons/job.png' %}" } Work Experience
           {% for e in workExperience %}
@@ -83,15 +93,19 @@
                   %h4 {{e.position}}
                   %h5 {{e.organization}}
                   %div
+                    {% if e.location %}
                     %span
                       %i.fa.fa-map-marker
                       {{e.location}}
+                    {% endif %}
                     %span
                       %i.fa.fa-calendar
-                      {{e.start}} - {{e.end}}
+                      {{e.start}} - {% if e.end %} %{{e.end}}{% else %} Present {% endif %}
               .desc
                 {{e.description|safe}}
           {% endfor %}
+          {% endif %}
+          {% if educationalQualification %}
           %h2
             %img{:src => "{% static 'pages/images/icons/education.png' %}" } Educational Qualifications
           {% for e in educationalQualification %}
@@ -103,20 +117,25 @@
                   %h4 {{e.title}}
                   %h5 {{e.institution}}
                   %div
+                    {% if e.percentage %}
                     %span
                       %i.fa.fa-star
                       {{e.percentage}}
+                    {% endif %}
+                    {% if e.location %}
                     %span
                       %i.fa.fa-map-marker
                       {{e.location}}
-
+                    {% endif %}
                     %span
                       %i.fa.fa-calendar
                       {{e.start}} - {% if e.end %} %{{e.end}}{% else %} Present {% endif %}
               .desc
                 {{e.description|safe}}
           {% endfor %}
+          {% endif %}
         .col-md-5#profile-sidebar
+          {% if honours %}
           .section-card.bg-white
             %h4
               %img{:src => "{% static 'pages/images/icons/prize.png' %}" } Honors & Awards
@@ -133,7 +152,8 @@
                   %span
                     <a href="{{h.url}}">View</a>
             {% endfor %}
-
+          {% endif%}
+          {% if publications %}
           .section-card.bg-white
             %h4
               %img{:src => "{% static 'pages/images/icons/news.png' %}" } Publications
@@ -150,7 +170,8 @@
                   %span
                     <a href="{{p.url}}">View</a>
             {% endfor %}
-
+          {% endif%}
+          {% if certificates %}
           .section-card.bg-white
             %h4
               %img{:src => "{% static 'pages/images/icons/certificate.png' %}" } Certifications
@@ -167,7 +188,8 @@
                   %span
                     <a href="/{{c.attachment}}">View Certificate</a>
             {% endfor %}
-
+          {% endif%}
+          {% if talks %}
           .section-card.bg-white
             %h4
               %img{:src => "{% static 'pages/images/icons/podium.png' %}" } Talks
@@ -181,7 +203,8 @@
                     {{t.organizer.name}}
 
             {% endfor %}
-
+          {% endif%}
+          {% if languages %}
           .section-card.bg-white
             %h4
               %img{:src => "{% static 'pages/images/icons/language.png' %}" } Languages
@@ -189,6 +212,7 @@
               {% for l in profile.languages.all %}
                 %span {{l.name}}
               {% endfor %}
+          {% endif %}
     %section.tab#portfolio-tab
       .row.m-0
         {% for p in projects %}
