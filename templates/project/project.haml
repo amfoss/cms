@@ -8,9 +8,29 @@
 {% endblock %}
 {% block content %}
     %section{:class=>"page-cover"}
-      %h1 {{project.name}}
-    %section.my-4.container
-      <img src="/{{project.cover}}">
-      .post-card.bg-white
-        {{project.detail|safe}}
+      %div
+        %h1 {{project.name}}
+        .tagline {{project.tagline}}
+    %section.row.m-0
+      .col-md-9.py-4
+        <img src="/{{project.cover}}">
+        .post-card.bg-white
+          {{project.detail|safe}}
+      .col
+        .section-card.list.p-2
+          %hr
+          %div{:class=>"point row m-0"}
+            {% for m in team %}
+              %div{:class=>"col-sm-3 col-4 p-2"}
+                <img src="/{{m.avatar}}">
+              %div{:class=>"col p-2"}
+                %h3 {{m.first_name}} {{m.last_name}}
+            {% endfor %}
+        .section-card.bg-primary.p-3
+          {% if socialProfiles %}
+            .social-links
+              {% for l in socialProfiles %}
+                <a href="{{l.link}}" style="color: {{l.portal.color}}"  class="{{l.portal.icon}}"></a>
+              {% endfor %}
+          {% endif %}
 {% endblock %}

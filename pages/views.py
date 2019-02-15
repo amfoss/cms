@@ -150,10 +150,19 @@ class ProjectDetail(DetailView):
     model = Project
     template_name = 'project/project.haml'
 
+    def get_team(self,project):
+        team = []
+        for m in project.members.all():
+            team.append(Profile.objects.get(user=m))
+        return team
+
     def get_context_data(self, **kwargs):
         context = super(ProjectDetail, self).get_context_data(**kwargs)
         try:
-            context['project'] = Project.objects.get(slug=self.kwargs['slug'])
+            project = Project.objects.get(slug=self.kwargs['slug'])
+            context['project'] = project
+            context['team'] = self.get_team(project)
+            context['socialProfiles'] = ProjectLink.objects.filter(project=project)
         except Profile.DoesNotExist:
             context['error'] = 'No data found for this project!'
         return context

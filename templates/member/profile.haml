@@ -18,7 +18,7 @@
         {% if profile.tagline %}
         %div.tagline {{profile.tagline}}
         {% endif %}
-        %div#social-links
+        %div.social-links
           {% for l in socialProfiles %}
             <a href="{{l.link}}" style="color: {{l.portal.color}}"  class="{{l.portal.icon}}"></a>
           {% endfor %}
