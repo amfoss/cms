@@ -112,7 +112,7 @@
         {% for t in talks %}
           %div{:class=>"col-lg-3 col-md-4 p-2 h-100"}
             %div{:class=>"achievement-card py-2"}
-              %div{:class=>"px-4 py-2"}
+              %div{:class=>"px-4 py-2 w-100"}
                 <a href="/@{{t.member.username}}"><img src="/{{t.member.Profile.avatar}}"> {{t.member.Profile.first_name}} {{t.member.Profile.last_name}}</a>
                 %hr
                 %h4 {{t.title}}
@@ -133,7 +133,7 @@
       {% for p in publications  %}
         %div{:class=>"col-lg-3 col-md-4 py-2 h-100"}
           %div{:class=>"achievement-card py-2"}
-            %div{:class=>"px-3 py-2"}
+            %div{:class=>"px-3 py-2 w-100"}
               {% if p.members.all|length > 1 %}
                 {% for m in p.members.all %}
                   <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
