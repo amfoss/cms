@@ -17,14 +17,18 @@
         .post-card.bg-white
           {{project.detail|safe}}
       .col
-        .section-card.list.p-2
-          %hr
-          %div{:class=>"point row m-0"}
+        .section-card.list.p-0.bg-white
+          .bg-primary.p-2
+            %h3.m-2 Team Members
+          %div{:class=>"point px-2"}
             {% for m in team %}
-              %div{:class=>"col-sm-3 col-4 p-2"}
-                <img src="/{{m.avatar}}">
-              %div{:class=>"col p-2"}
-                %h3 {{m.first_name}} {{m.last_name}}
+              <a href="/@{{m.user.username}}">
+                .row.m-0
+                  .col-3.p-0
+                    <img src="/{{m.avatar}}" class="rounded-circle">
+                  .col.p-2.d-flex.align-items-center
+                    %h5 {{m.first_name}} {{m.last_name}}
+              </a>
             {% endfor %}
         .section-card.bg-primary.p-3
           {% if socialProfiles %}

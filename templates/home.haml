@@ -4,14 +4,14 @@
 {% block title %} India's Leading FOSS Club {% endblock %}
 {% block description %}AmFOSS (FOSS@Amrita) is one the leading student FOSS Communities in India, based in Amrita Vishwa Vidyapeetham, Amritapuri. {% endblock %}
 {% block styles %}
-            %link{:rel => "stylesheet", :href =>"{% sass_src 'pages/styles/home.sass' %}" }
+    %link{:rel => "stylesheet", :href =>"{% sass_src 'pages/styles/home.sass' %}" }
 {% endblock %}
 {% block content %}
 %div{:id=>"homepage"}
   %section#cover
 
   %section#intro
-    %div{:class=>"row mt-0 mb-4 mx-0 section-card"}
+    %div{:class=>"row mt-0 mb-4 mx-0 section-card icon-row"}
       %div{:class=>"col-md-3 col-6 p-2 mb-3"}
         %a{:class=>"intro-card",:href=>"#about"}
           %img{:src => "{% static 'pages/images/icons/about.png' %}"}
@@ -48,19 +48,19 @@
     %div{:class=>"row my-4 mx-0 features"}
       %div{:class=>"col-md-4 p-2"}
         %img{:src => "{% static 'pages/images/icons/mentorship.png' %}"}
-        %h4 Mentor & Train Students
+        %h5 Mentor & Train Students
           %span to take on the world
         %a{:href=> "#"} Our Vision
         %a{:href=> "#"} Club Activities
       %div{:class=>"col-md-4 p-2"}
         %img{:src => "{% static 'pages/images/icons/open-source.png' %}"}
-        %h4 Promote Open Source
+        %h5 Promote Open Source
            %span and Computer Science
         %a{:href=> "#"} Workshops
         %a{:href=> "#"} Initiatives
       %div{:class=>"col-md-4 p-2"}
         %img{:src => "{% static 'pages/images/icons/contribute.png' %}"}
-        %h4 Contribute to Open Source
+        %h5 Contribute to Open Source
           %span Projects & Communities
         %a{:href=> "#"} Our Contributions
   %div{:id=>"what-we-do",:class=>"bg-white section-card"}
@@ -78,19 +78,19 @@
     %div{:class=>"row my-4 mx-0 features"}
       %div{:class=>"col-md-4 p-2"}
         %img{:src => "{% static 'pages/images/icons/mentorship.png' %}"}
-        %h4 Mentor & Train Students
+        %h5 Mentor & Train Students
           %span to take on the world
         %a{:href=> "#"} Our Vision
         %a{:href=> "#"} Club Activities
       %div{:class=>"col-md-4 p-2"}
         %img{:src => "{% static 'pages/images/icons/open-source.png' %}"}
-        %h4 Promote Open Source
+        %h5 Promote Open Source
            %span and Computer Science
         %a{:href=> "#"} Workshops
         %a{:href=> "#"} Initiatives
       %div{:class=>"col-md-4 p-2"}
         %img{:src => "{% static 'pages/images/icons/contribute.png' %}"}
-        %h4 Contribute to Open Source
+        %h5 Contribute to Open Source
           %span Projects & Communities
         %a{:href=> "#"} Our Contributions
 
@@ -134,8 +134,9 @@
   %div{:class=>"row mb-4 mx-0"}
     %div{:class=>"col-lg-6 col-md-8 p-2 text-left"}
       %div{:class=>"bg-white section-card p-0"}
-        %img{:class=>"card-icon pb-2 pt-4",:src => "{% static 'pages/images/icons/diamond.png' %}" }
-        %h2{:class=>"py-2 px-4"} Why should you join club?
+        .text-center
+          %img{:class=>"card-icon pb-2 pt-4",:src => "{% static 'pages/images/icons/diamond.png' %}" }
+          %h2{:class=>"py-2 px-4"} Why should you join club?
         %hr
         %div{:class=>"point row m-0"}
           %div{:class=>"col-sm-2 col-3 p-2"}

@@ -8,7 +8,7 @@
 {% endblock %}
 {% block content %}
     %section{:class=>"page-cover"}
-      %h1 Club Members
+      %h1 Members
     #filter-bar.row.m-0
       .col-6#search-icon.justify-content-center.align-items-center.fa.fa-search
       .col-md-4.col-10#search-container.align-items-center.justify-content-center
@@ -19,14 +19,14 @@
         {% for p in profiles %}
           <div member class="col-lg-3 col-md-4 col-6 p-2"  tags="{{p.first_name.lower }} {{ p.last_name.lower }} {{p.user.username.lower}}">
             <a href="/@{{p.user.username}}">
-              .section-card.bg-white
-                <img src="/{{p.avatar}}">
+              .section-card.bg-white.p-0
+                <img src="/{{p.avatar}}" class="cover">
                 .content
-                  %h6 {{p.first_name}} {{p.last_name}}
+                  %h4 {{p.first_name}} {{p.last_name}}
                   {% if p.tagline %}
-                  %div {{p.tagline}}
+                  .tagline {{p.tagline}}
                   {% else %}
-                  %div {{p.role}}
+                  .tagline {{p.role}}
                   {% endif %}
             </a>
           </div>

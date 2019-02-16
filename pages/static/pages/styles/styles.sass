@@ -8,6 +8,8 @@ $primary-color: #ffc107
 
 h1,h2,h3,h4,h5,h6
     font-family: $title-font
+    img
+        margin-right: 0.5rem
 
 body
     font-family: $text-font
@@ -250,16 +252,35 @@ img
     box-shadow: 8px 10px 20px 0 rgba(46,61,73,.15)
     margin: 1.5vw 1vw
     text-align: left
+
+    .content
+      padding: 1rem
+      font-size: calc(0.5rem + 0.5vw)
+
+    .cover
+      height: 300px
+      max-height: 50vmin
+      width: 100%
+      object-fit: cover
+
     h4
-        font-size: calc(1rem + 0.8vw)
+        font-size: calc(1.2rem + 0.8vw)
         line-height: 1
         margin: 0.5rem 0
+        display: flex
+        align-items: center
         img
             height: 45px
+            margin-right: 0.5rem
     h5
-        font-size: calc(0.8rem + 0.6vw)
+        font-size: calc(1rem + 0.6vw)
         line-height: 1
         margin: 0.3rem 0
+
+    h6
+      font-size: calc(0.8rem + 0.4vw)
+      margin-bottom: 0.3rem
+
     span
         color: #666
         display: inline-block
@@ -267,9 +288,9 @@ img
         font-weight: 600
         i
             margin-right: 0.3rem
-    .desc
-        margin: 1rem 0.5rem
-        font-size: 120%
+
+    .desc, .tagline
+        font-size: calc(0.8rem + 0.5vw)
 
     .tag-list
         span
@@ -282,3 +303,43 @@ img
             img
                 height: 24px
                 width: auto
+
+    .item
+        margin: 1rem
+        img
+            height: 24px
+            width: auto
+            margin-right: 0.3rem
+        div
+            span
+                margin: 0.5rem 0.3rem
+
+    .point
+        padding: 0.5rem 1rem
+        text-align: left!important
+        p
+            font-size: 100%
+        img
+            width: 64px
+            height: 64px
+            object-fit: cover
+            margin-right: 0.5rem
+
+        a
+            color: inherit
+        a:hover
+            text-decoration: none
+
+        .col-3
+            text-align: center
+    .cta
+        background-color: $primary-color
+        h3
+            margin-bottom: 0
+            margin-top: 0.5rem
+        a
+            text-decoration: none
+            background: black
+            padding: 0.5rem 1rem
+            margin: 0.3rem
+            color: white

@@ -8,17 +8,17 @@
 {% endblock %}
 {% block content %}
     %section{:class=>"page-cover"}
-      %h1 amFOSS Blog
+      %h1 Blog
     %section.my-4
       .row.m-0#members
         {% for p in posts %}
           .col-lg-3.col-md-4.col-6.p-2
             <a href="/@{{p.author.username}}/{{p.slug}}">
-              .section-card.bg-white
+              .section-card.bg-white.p-0
                 <img src="/{{p.featured_image}}">
                 .content
                   @{{p.author.username}}
-                  %h6 {{p.title}}
+                  %h4 {{p.title}}
                   %div
                     %span
                       .fa.fa-calendar

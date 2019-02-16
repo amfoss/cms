@@ -92,15 +92,15 @@
                 .col
                   %h4 {{e.position}}
                   %h5 {{e.organization}}
-                  %div
-                    {% if e.location %}
-                    %span
-                      %i.fa.fa-map-marker
-                      {{e.location}}
-                    {% endif %}
-                    %span
-                      %i.fa.fa-calendar
-                      {{e.start}} - {% if e.end %} %{{e.end}}{% else %} Present {% endif %}
+              %div.mt-2.ml-3
+                {% if e.location %}
+                %span
+                  %i.fa.fa-map-marker
+                  {{e.location}}
+                {% endif %}
+                %span
+                  %i.fa.fa-calendar
+                  {{e.start}} - {% if e.end %} {{e.end}}{% else %} Present {% endif %}
               .desc
                 {{e.description|safe}}
           {% endfor %}
@@ -111,32 +111,32 @@
           {% for e in educationalQualification %}
             .section-card.bg-white
               .row.m-0
-                .col-sm-1.col-2.p-1
+                .col-sm-1.col-2.p-1.d-flex.align-items-center
                   <img src="/{{e.institution.icon}}">
                 .col
                   %h4 {{e.title}}
                   %h5 {{e.institution}}
-                  %div
-                    {% if e.percentage %}
-                    %span
-                      %i.fa.fa-star
-                      {{e.percentage}}
-                    {% endif %}
-                    {% if e.location %}
-                    %span
-                      %i.fa.fa-map-marker
-                      {{e.location}}
-                    {% endif %}
-                    %span
-                      %i.fa.fa-calendar
-                      {{e.start}} - {% if e.end %} %{{e.end}}{% else %} Present {% endif %}
+              %div.mt-2.ml-3
+                {% if e.percentage %}
+                %span
+                  %i.fa.fa-star
+                  {{e.percentage}}
+                {% endif %}
+                {% if e.location %}
+                %span
+                  %i.fa.fa-map-marker
+                  {{e.location}}
+                {% endif %}
+                %span
+                  %i.fa.fa-calendar
+                  {{e.start}} - {% if e.end %} %{{e.end}}{% else %} Present {% endif %}
               .desc
                 {{e.description|safe}}
           {% endfor %}
           {% endif %}
         .col-md-5#profile-sidebar
           {% if honours %}
-          .section-card.bg-white
+          .section-card.bg-white.p-4
             %h4
               %img{:src => "{% static 'pages/images/icons/prize.png' %}" } Honors & Awards
             {% for h in honours %}
@@ -154,7 +154,7 @@
             {% endfor %}
           {% endif%}
           {% if publications %}
-          .section-card.bg-white
+          .section-card.bg-white.p-4
             %h4
               %img{:src => "{% static 'pages/images/icons/news.png' %}" } Publications
             {% for p in publications %}
@@ -172,7 +172,7 @@
             {% endfor %}
           {% endif%}
           {% if certificates %}
-          .section-card.bg-white
+          .section-card.bg-white.p-4
             %h4
               %img{:src => "{% static 'pages/images/icons/certificate.png' %}" } Certifications
             {% for c in certificates %}
@@ -190,7 +190,7 @@
             {% endfor %}
           {% endif%}
           {% if talks %}
-          .section-card.bg-white
+          .section-card.bg-white.p-4
             %h4
               %img{:src => "{% static 'pages/images/icons/podium.png' %}" } Talks
             {% for t in talks %}
@@ -205,7 +205,7 @@
             {% endfor %}
           {% endif%}
           {% if languages %}
-          .section-card.bg-white
+          .section-card.bg-white.p-4
             %h4
               %img{:src => "{% static 'pages/images/icons/language.png' %}" } Languages
             .tag-list
@@ -222,12 +222,7 @@
               <img src="/{{p.cover}}">
               .content
                 %h3 {{p.name}}
-                %p {{p.tagline}}
-                %div
-                  %span
-                    {% for c in p.ProjectLink_set.all %}
-                      {{c.link}}
-                    {% endfor %}
+                .tagline {{p.tagline}}
           </a>
         {% endfor %}
     %section.tab#blog-tab
