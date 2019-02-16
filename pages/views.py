@@ -1,6 +1,5 @@
 from django.http import HttpResponse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import *
 from members.models import *
 from activity.models import *
 from gsoc.models import *
