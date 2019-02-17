@@ -19,6 +19,11 @@
             %span About
         </a>
 
+        <a href="/life" class="{% if request.get_full_path == "/life/" %}active{% endif %}">
+            %img{:src => "{% static 'pages/images/icons/mentorship.png' %}"}
+            %span Life in Club
+        </a>
+
         <a href="/achievements" class="{% if request.get_full_path == "/achievements/" %}active{% endif %}">
             %img{:src => "{% static 'pages/images/icons/crown.png' %}"}
             %span Achievements

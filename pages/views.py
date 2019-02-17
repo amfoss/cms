@@ -171,3 +171,6 @@ class HomePage(TemplateView):
 
 class AboutPage(TemplateView):
     template_name = "about/about.haml"
+
+class ClubLifePage(TemplateView):
+    template_name = "about/life.haml"
