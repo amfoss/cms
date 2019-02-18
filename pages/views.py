@@ -10,6 +10,7 @@ from django.views.generic import View, ListView, DetailView, UpdateView, DeleteV
 from django.shortcuts import render, redirect, get_list_or_404, get_object_or_404
 import json
 from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
 
 class UserProfile(DetailView):
     model = User
@@ -174,8 +175,11 @@ class HomePage(TemplateView):
         context = super(HomePage, self).get_context_data(**kwargs)
         try:
             context['testimonials'] = Testimonial.objects.all()
-            cat = get_object_or_404(Category, slug="news")
-            context['news'] = Post.objects.filter(category = cat)
+            try:
+                cat = Category.objects.get(slug="news")
+                context['news'] = Post.objects.filter(category = cat)
+            except ObjectDoesNotExist:
+                context['news'] = None
         except Profile.DoesNotExist:
             context['error'] = 'No data found for this project!'
         return context
