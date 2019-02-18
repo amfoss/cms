@@ -212,12 +212,13 @@
 
           {% for i in news %}
             %hr
-              <a href="/@{{i.author}}/{{i.slug}}">
-                .row.m-0
+            .point
+              <a href="/@{{i.author}}/{{i.slug}}" >
+                .row.m-0.py-2
                   .col-2
                       <img src="/{{i.featured_image}}">
                   .col-10.text-left
-                      %h3 {{i.title}}
+                      %h3.m-0 {{i.title}}
                       %div
                         .span
                           .fa.fa-calendar.mr-2

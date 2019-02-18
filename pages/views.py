@@ -174,7 +174,7 @@ class HomePage(TemplateView):
         context = super(HomePage, self).get_context_data(**kwargs)
         try:
             context['testimonials'] = Testimonial.objects.all()
-            cat = Category.objects.get(slug="news")
+            cat = get_object_or_404(Category, slug="news")
             context['news'] = Post.objects.filter(category = cat)
         except Profile.DoesNotExist:
             context['error'] = 'No data found for this project!'
