@@ -189,17 +189,36 @@
             %p
               Enjoyyy lyf
         %div{:class=>"point cta row m-0 anime flipInX"}
-          %div{:class=>"col-9 p-2 d-flex"}
+          %div{:class=>"col-8 p-2 d-flex"}
             %h3 Interested in joining in the club?
-          %div{:class=>"col p-2 d-flex", :style=>"justify-content: flex-end"}
+          %div{:class=>"col p-2 d-flex"}
             %a{:href=> "#"} Apply Now
 
   %div{:class=>"p-0 section-card"}
       .bg-primary.p-4.text-center
         %h2 What are People Talking About Us?
-      .bg-white.p-4
-
+      #testimonials.bg-white.p-4
+        {% for t in testimonials %}
+            .testimonial.text-center.w-100
+              .message "{{t.message}}"
+              %div
+                <img src="/{{t.avatar}}">
+                %div.d-block
+                  %span.d-block.text-left {{t.author}}
+                  .sub {{t.credential}}
+        {% endfor %}
   %section#location-map
     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3939.6704293431408!2d76.4901893152359!3d9.093756993475948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0602dcdfeb8707%3A0xdc224ac2f7bde6dd!2sFOSS%40Amrita!5e0!3m2!1sen!2sin!4v1541607520295" width="600" height="450" frameborder="0" style="border:0" allowfullscreen="">
     </iframe>
+
+<script>
+
+$('#testimonials').slick({
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 3000,
+});
+
+</script>
 {% endblock %}

@@ -4,6 +4,7 @@ from members.models import *
 from activity.models import *
 from gsoc.models import *
 from blog.models import *
+from .models import *
 from django.contrib.auth.models import User
 from django.views.generic import View, ListView, DetailView, UpdateView, DeleteView, CreateView, TemplateView
 from django.shortcuts import render, redirect, get_list_or_404, get_object_or_404
@@ -168,6 +169,14 @@ class ProjectDetail(DetailView):
 
 class HomePage(TemplateView):
     template_name = "home.haml"
+
+    def get_context_data(self, **kwargs):
+        context = super(HomePage, self).get_context_data(**kwargs)
+        try:
+            context['testimonials'] = Testimonial.objects.all()
+        except Profile.DoesNotExist:
+            context['error'] = 'No data found for this project!'
+        return context
 
 class AboutPage(TemplateView):
     template_name = "about/about.haml"
