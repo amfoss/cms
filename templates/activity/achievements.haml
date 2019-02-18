@@ -71,11 +71,11 @@
                 %div{:class=>"px-3 py-2 w-100"}
                   {% if i.attendee.all|length > 1 %}
                     {% for m in i.attendee.all %}
-                      <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
+                      <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
                     {% endfor %}
                   {% else %}
                     {% for m in i.attendee.all %}
-                      <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
+                      <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
                     {% endfor %}
                   {% endif %}
                   %hr
@@ -97,7 +97,7 @@
               %div{:class=>"px-3 py-2 w-100"}
                 {% if i.attendee.all|length > 1 %}
                   {% for m in i.attendee.all %}
-                    <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
+                    <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
                   {% endfor %}
                 {% else %}
                   {% for m in i.attendee.all %}
@@ -119,7 +119,7 @@
           %div{:class=>"col-lg-3 col-md-4 p-2 h-100"}
             %div{:class=>"achievement-card py-2"}
               %div{:class=>"px-4 py-2 w-100"}
-                <a href="/@{{t.member.username}}"><img src="/{{t.member.Profile.avatar}}"> {{t.member.Profile.first_name}} {{t.member.Profile.last_name}}</a>
+                <a href="/@{{t.member.username}}"><img src="/{{t.member.Profile.avatar}}" class="avatar"> {{t.member.Profile.first_name}} {{t.member.Profile.last_name}}</a>
                 %hr
                 %h4 {{t.title}}
                 <sub><img src="/{{t.organizer.icon}}"></sub>
@@ -143,11 +143,11 @@
             %div{:class=>"px-3 py-2 w-100"}
               {% if p.members.all|length > 1 %}
                 {% for m in p.members.all %}
-                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
+                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
                 {% endfor %}
               {% else %}
                 {% for m in p.members.all %}
-                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
+                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
                 {% endfor %}
               {% endif %}
               %hr

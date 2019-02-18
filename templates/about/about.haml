@@ -6,9 +6,112 @@
 {% block styles %}
 {% endblock %}
 {% block content %}
-    %section{:class=>"page-cover"}
-      %h1 About
+%section{:class=>"page-cover"}
+  %h1 About
 
-    %div{:class=>"bg-white section-card"}
-      %h2 What are People Talking About Us?
+#story.my-4.mx-3.py-1
+  %h2.p-4
+    %img{:src => "{% static 'pages/images/icons/shooting-stars.png' %}" } Our Story
+  #story-slider
+    %div.p-2
+      .row.bg-primary.p-4.section-card
+        .col-md-7
+          %h4 The Spark
+          %p
+             The club’s story starts when its founder, Mr. Vipin Pavithran, who worked in the US,
+             for over 10 years experienced in software engineering joined Amrita University in 2006.
+          .quote
+             “One of the vivid memories that I have of my bachelors was lack of support from the institution. I
+             know the value of right guidance at the right time and how it can make a huge impact. This
+             made me want to help any one who needed guidance.”
+          %p
+            He quickly realised that the students here had little focus, confidence and exposure to
+            take on the real world, due to the absence of proper mentoring and support.
+        .col.d-flex.align-items-center.justify-content-center
+          %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/vipin_sir.jpg' %}"}
+    %div
+      .row.bg-primary.p-4.section-card
+        .col-md-7
+          %h4 IBM Great Mind Challenge 2006
+          %p.anime.fadeInUp
+             In the summer of 2006, he was approached by Abhilash T G seeking mentoring to participate in the
+             IBM Great Mind Challenge 2006. Soon a team of enthusiasts was formed, and rigorous preparation had
+             started. Initially, the students were not really confident of getting selected let alone winning.
+             However, they were highly motivated and enthusiastic about it. While at the same time, Vipin was however,
+             very confident in his students, and having prior experience in software development was certain
+             that his students would come on top.
+          %p.anime.fadeInDown
+             Months went past, with them working day and night under intense preparation focusing only their goal.
+             They missed out on academics and the usual college life, and were often mocked by their classmates.
+             Infact, there were instances when nothing went there way and they thought of giving up, but however
+             were pushed forward by Vipin.
+          %p.anime.fadeInUp
+             In the end, they ended up among the Top 5 teams from India, and were invited to Mumbai for the
+             prize distribution ceremony. This was the first national level prize to be won by Amritapuri students.
+          .quote
+             "This was a great confidence booster for not only them but also inspired other students who now
+             thought they too can, if they try. Prior to this most Amrita students believed that to win in a
+             national contest they needed to be from IITs."
+        .col-md-5.d-flex.align-items-center.justify-content-center
+          %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/ibm-great-mind.png' %}"}
+    %div
+      .row.bg-primary.p-4.section-card
+        .col-md-6
+          %h4 Moving to Open Source with Sun Code For Freedom
+          %p
+            Motivated by the success, Vipin started searching for more contests at national and international level.
+            He then came across the Sun Code For Freedom 200X, conducted  by Sun Microsystems, which was about making
+            contributions to their open source projects.
+          %p
+            It had already been 2 months since the contest started, and Avinash Joshi, a third-year student was
+            put on to work on making contribution to Open Solaris, the open sourced version of Solaris operating system
+            from Sun Microsystems. Avinash who had just completed his course on Operating System was now expected to
+            contribute to one with over 9 million lines of code. However, the engineers from Sun were really helpful
+            throughout the contest, and infact even came to the campus to give training.
+          %p
+            After two months of intense effort Avinash finally figured out how to contribute, and started contributing
+            to it. He also wrote documentation of the whole process, so that his peers could also get started with it.
+            Soon many students started contributing to it.
+          .quote
+            "I had a set a target that our students will make 108 contributions before the deadline.
+            However, the engineers from Sun were really skeptical about the count."
+
+          %p
+            Every day students would stayback in the lab till late and work on making contributions to various open source
+            software from Sun. On the last day of the contest, i.e.14th February, special permission was granted for the
+            girls too to stayback in the lab till midnight.
+
+          %p
+            When the contest was judged, Amrita Vishwa Vidyapeetham emerged as the champion university, with 105
+            contributions. The college that came second had only 10 contributions in total. The team were invited to
+            Hyderabad for the Sun Tech Days 2008 during which the prizes were awarded. After this students started
+            regularly contributing to Sun Open Source products with the active support of Sun Microsystems.
+        .col.d-flex.align-items-center.justify-content-center
+          %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/sun-code-for-freedom.png' %}"}
+    %div
+      .row.bg-primary.p-4.section-card
+        .col-md-6
+          %h4 Gaining Global Recognition through GSoC
+          %p
+            In 2010, Vipin chanced upon Google Summer of Code, and 3 members of the club got selections the very first
+            time. Over the years, through the experiences shared by the seniors, more and more students started
+            participating in GSoC. Having started with a strength of 10 members, the club now has about 100 active
+            members, and several alumni actively developing the club.
+          .quote
+            "They learn valuable skills that is not normally learned in the classrooms such as reading large code base,
+            coding using a certain coding standards, using VCS, communicating effectively via IRC & email.
+            They also practically learn about the software development life cycle."
+        .col.d-flex.align-items-center.justify-content-center
+<script>
+$('#story-slider').slick({
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplay: true,
+  pauseOnHover: true,
+  autoplaySpeed: 2000,
+  dots: true,
+  infinite: true,
+  adaptiveHeight: true
+});
+</script>
 {% endblock %}

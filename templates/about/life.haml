@@ -6,7 +6,108 @@
 {% block styles %}
 {% endblock %}
 {% block content %}
-    %section{:class=>"page-cover"}
-      %h1 Life in Club
+  %section{:class=>"page-cover"}
+    %h1 Life in Club
 
+  %section.p-3
+    .bg-white.section-card.row.m-2.anime.slideInUp
+      .col-md-6
+        %h2.anime.fadeInRight Mentorship
+        %p.anime.fadeInUp
+          Here at FOSS@Amrita, seniors guide juniors on their way in the club. It is a learning and development
+          partnership between someone with vast experience and someone who wants to learn. Mentoring others is one
+          of the most important parts of being in a community. This is an experience and a skill which cannot be
+          gained in a classroom. In FOSS@Amrita when you get enough experience, you will be assigned mentees -
+          people whom you have to train. You will be responsible for tracking their progress, ensuring that they
+          are doing what is best suited for them.
+      .col-md-6
+          <div id="mentorship-slider" data-slick='{"slidesToShow": 1, "autoplay": true, "adaptiveHeight": true }'>
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_mentor_1.jpg' %}"}
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_mentor_2.jpg' %}"}
+          </div>
+    .bg-white.section-card.row.m-2.anime.slideInUp
+      .col-md-6
+          <div id="world-slider" data-slick='{"slidesToShow": 1, "autoplay": true, "adaptiveHeight": true }'>
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_world_1.jpg' %}"}
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_world_2.jpg' %}"}
+          </div>
+      .col-md-6
+        %h2.anime.fadeInLeft World of Opportunities
+        %p.anime.fadeInUp
+          FOSS@Amrttia provides you with a range of opportunities if you do well. You get several opportunities for
+          internships (sometimes even after the first semester itself), going to hackathons, getting funding for
+          travelling to conferences of various Open Source Organization to places like Paris, Singapore etc.
+          If you are interested in higher studies or applying for summer programs abroad, FOSS@Amrita helps
+          you build up a spectacular resume for all these applications.
+    .bg-white.section-card.row.m-2.anime.slideInUp
+      .col-md-6
+        %h2.anime.fadeInRight GSoC Training
+        %p.anime.fadeInUp
+          Every year, Google conducts the Google Summer of Code, an international event which provides a platform
+          for students to contribute to Open Source Projects and each year here at FOSS@Amrita, we train students
+          and participate and have been quite successful so far, with over 35+ GSoCs. Students receive expert
+          mentorship from students who are experienced in the Open source world, right from basic E-mail and
+          IRC chatting ethics to helping with writing the GSoC project proposal.
+      .col-md-6
+          <div id="gsoc-slider" data-slick='{"slidesToShow": 1, "autoplay": true, "adaptiveHeight": true }'>
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_gsoc_1.jpg' %}"}
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_gsoc_2.jpg' %}"}
+          </div>
+    .bg-white.section-card.row.m-2.anime.slideInUp
+      .col-md-6
+          <div id="talk-slider" data-slick='{"slidesToShow": 1, "autoplay": true, "adaptiveHeight": true }'>
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_talk_1.jpg' %}"}
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_talk_2.jpg' %}"}
+          </div>
+      .col-md-6
+        %h2.anime.fadeInLeft FOSS Talks
+        %p.anime.fadeInUp
+          FOSS Talks is a regular club event with the aim of getting students used to public speaking and getting
+          rid of stage fear. Each week, 3 students are chosen to talk on the topic they choose for 7 minutes.
+    .bg-white.section-card.row.m-2.anime.slideInUp
+      .col-md-6
+        %h2.anime.fadeInRight FOSS Nights
+        %p.anime.fadeInUp
+          FOSS Nights is a once-in-an-even-semester cultural event hosted all by the students themselves.
+          This is an event where members get to show off their non-technical skills. Right from the food which
+          is cooked that day to making all the necessary arrangements are all done by the members themselves.
+          This is a great opportunity for learning to work as a team. The members orchestrate the cultural
+          events with performances in dancing, singing, playing musical instruments etc.
+      .col
+    .bg-white.section-card.row.m-2.anime.slideInUp
+      .col-md-6
+          <div id="play-slider" data-slick='{"slidesToShow": 1, "autoplay": true, "adaptiveHeight": true }'>
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_play_1.jpg' %}"}
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_play_2.jpg' %}"}
+          </div>
+      .col-md-6
+        %h2.anime.fadeInLeft FOSS Play
+        %p.anime.fadeInUp
+           FOSS Play is a regular sports event in which the members go out and play. Physical exercise
+           is an essential component of any student’s life and we here at FOSS@Amrita make sure
+           we don’t miss out on that. Football, cricket, badminton - you name it, we play it!
+    .bg-white.section-card.row.m-2.anime.slideInUp
+      .col-md-6
+        %h2.anime.fadeInRight Social Commitments
+        %p.anime.fadeInUp
+           Being part of the Amrita University (under the Mata Amritanandamayi Math(an NGO with Special
+           Consultative Status to the UN) we get opportunities to lend hands in noble causes in times of dire
+           adversities. During the Kerala floods (2018) which shook the entire state, Amrita University under the
+           guidance of Mata Amritanandamayi set up a 24x7 Hour helpline for providing victim relief. We took part,
+           along with students of the college, running shifts day in and day out. Under the ABC (Amala Bharatam Campaign)
+           program by MAM, FOSS@Amrita recently also took part of a Clean Up drive conducted in the nearby area.
+      .col-md-6
+          <div id="social-slider" data-slick='{"slidesToShow": 1, "autoplay": true, "adaptiveHeight": true }'>
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_social_1.jpg' %}"}
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_social_2.jpg' %}"}
+          </div>
+
+<script>
+ $("#mentorship-slider").slick();
+$("#world-slider").slick();
+$("#gsoc-slider").slick();
+$("#talk-slider").slick();
+$("#play-slider").slick();
+$("#social-slider").slick();
+</script>
 {% endblock %}

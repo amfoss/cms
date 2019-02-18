@@ -10,7 +10,7 @@
     %section{:class=>"page-cover"}
       %h1 {{post.title}}
     %section.my-4.container
-      <img src="/{{post.featured_image}}">
+      <img src="/{{post.featured_image}}" class="featured_image">
       .post-card.bg-white
         {{post.content|safe}}
 {% endblock %}

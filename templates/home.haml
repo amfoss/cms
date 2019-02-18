@@ -56,6 +56,16 @@
       %div{:class=>"col-lg-6 col-md-4 p-4"}
         %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/who_are_we.jpg' %}"}
     %hr
+    #testimonials.bg-white.p-4
+      {% for t in testimonials %}
+          .testimonial.text-center.w-100
+            .message "{{t.message}}"
+            %div
+              <img src="/{{t.avatar}}">
+              %div.d-block
+                %span.d-block.text-left {{t.author}}
+                .sub {{t.credential}}
+      {% endfor %}
 
   %div{:id=>"what-we-do",:class=>"bg-white section-card anime fadeInRight"}
     %div{:class=>"row mb-4 mx-0"}
@@ -194,42 +204,32 @@
           %div{:class=>"col p-2 d-flex"}
             %a{:href=> "#"} Apply Now
 
-    %div{:class=>"col-lg-6 col-md-8 p-2 text-left"}
-      %div{:class=>"bg-white section-card p-0 anime slideInRight"}
+    .col-lg-6.col-md-8.p-2.text-left
+      #news.bg-white.section-card.p-0.anime.slideInRight
         .text-center
           %img{:class=>"card-icon pb-2 pt-4 anime bounceInDown",:src => "{% static 'pages/images/icons/news.png' %}" }
           %h2{:class=>"py-2 px-4 anime bounceInUp"} News about the Club
-        %hr
-        %div{:class=>"point row m-0 anime d-block flipInX"}
-          .row.m-0
-            .col-9
-              %h3
-                FOSSNights CHilled!
-              %div
-                .span
-                  .fa.fa-calendar.mr-2
-                  10/05/2000
-            .col-3
 
-        %div{:class=>"point cta row m-0 anime flipInX"}
-          %div{:class=>"col-8 p-2 d-flex"}
-            %h3 Want to get updated about the club?
-          %div{:class=>"col p-2 d-flex"}
-            %a{:href=> "#"} Subscribe to Newsletter
+          {% for i in news %}
+            %hr
+              <a href="/@{{i.author}}/{{i.slug}}">
+                .row.m-0
+                  .col-2
+                      <img src="/{{i.featured_image}}">
+                  .col-10.text-left
+                      %h3 {{i.title}}
+                      %div
+                        .span
+                          .fa.fa-calendar.mr-2
+                          {{i.date}}
+              </a>
+          {% endfor %}
+          %div{:class=>"point cta row m-0 anime flipInX"}
+            %div{:class=>"col-8 p-2 d-flex"}
+              %h3 Want to get updated about the club?
+            %div{:class=>"col p-2 d-flex"}
+              %a{:href=> "#"} Subscribe to Newsletter
 
-  %div{:class=>"p-0 section-card"}
-      .bg-primary.p-4.text-center
-        %h2 What are People Talking About Us?
-      #testimonials.bg-white.p-4
-        {% for t in testimonials %}
-            .testimonial.text-center.w-100
-              .message "{{t.message}}"
-              %div
-                <img src="/{{t.avatar}}">
-                %div.d-block
-                  %span.d-block.text-left {{t.author}}
-                  .sub {{t.credential}}
-        {% endfor %}
   %section#location-map
     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3939.6704293431408!2d76.4901893152359!3d9.093756993475948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0602dcdfeb8707%3A0xdc224ac2f7bde6dd!2sFOSS%40Amrita!5e0!3m2!1sen!2sin!4v1541607520295" width="600" height="450" frameborder="0" style="border:0" allowfullscreen="">
     </iframe>
@@ -240,7 +240,8 @@ $('#testimonials').slick({
   slidesToShow: 1,
   slidesToScroll: 1,
   autoplay: true,
-  autoplaySpeed: 3000,
+  pauseOnHover: true,
+  autoplaySpeed: 2000,
 });
 
 </script>
