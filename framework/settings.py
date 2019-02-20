@@ -25,8 +25,7 @@ SECRET_KEY = 'k@8#g3)#=vnth3_jbee7ck3r)d810z1s=3611-20c#w(8p74##'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [".herokuapp.com","127.0.0.1","amfoss.in"]
 
 # Application definition
 
@@ -67,7 +66,7 @@ ROOT_URLCONF = 'framework.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'),os.path.join(BASE_DIR, 'static')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'static')],
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -154,7 +153,7 @@ GRAPHQL_JWT = {
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-  os.path.join(BASE_DIR, 'static/'),
+    os.path.join(BASE_DIR, 'static/'),
 )
 
 SASS_PROCESSOR_ENABLED = True
