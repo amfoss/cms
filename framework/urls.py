@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 from graphene_django.views import GraphQLView
 from django.contrib.auth import views as auth_views
+from django.conf.urls import handler404, handler500
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -46,3 +47,6 @@ urlpatterns = [
 
 admin.site.index_title = 'Club Administration'
 admin.site.site_title = 'amFOSS CMS'
+
+handler404 = 'pages.views.error_404_view'
+handler500 = 'pages.views.error_500_view'

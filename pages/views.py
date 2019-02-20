@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from members.models import *
@@ -11,6 +12,7 @@ from django.shortcuts import render, redirect, get_list_or_404, get_object_or_40
 import json
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
+
 
 class UserProfile(DetailView):
     model = User
@@ -34,9 +36,9 @@ class UserProfile(DetailView):
         att = Attendance.objects.filter(member=member)
         a = {}
         for i in att:
-            a[str(int(i.session_start.timestamp()))] = int(i.duration.seconds/(60*60))
+            a[str(int(i.session_start.timestamp()))] = int(
+                i.duration.seconds/(60*60))
         return a
-
 
     def get_context_data(self, **kwargs):
         context = super(UserProfile, self).get_context_data(**kwargs)
@@ -44,43 +46,54 @@ class UserProfile(DetailView):
             profile = Profile.objects.get(user=self.get_object())
             context['profile'] = profile
             context['activity'] = self.get_activity(member=self.get_object())
-            context['socialProfiles'] = SocialProfile.objects.filter(profile=profile)
-            context['certificates'] = Certificate.objects.filter(member=self.get_object())
-            context['publications'] = Publication.objects.filter(members=self.get_object())
-            context['honours'] = Honour.objects.filter(member=self.get_object())
-            context['courses'] = Course.objects.filter(member=self.get_object())
+            context['socialProfiles'] = SocialProfile.objects.filter(
+                profile=profile)
+            context['certificates'] = Certificate.objects.filter(
+                member=self.get_object())
+            context['publications'] = Publication.objects.filter(
+                members=self.get_object())
+            context['honours'] = Honour.objects.filter(
+                member=self.get_object())
+            context['courses'] = Course.objects.filter(
+                member=self.get_object())
             context['talks'] = Talk.objects.filter(member=self.get_object())
-            context['workExperience'] = WorkExperience.objects.filter(profile=profile)
+            context['workExperience'] = WorkExperience.objects.filter(
+                profile=profile)
             context['interests'] = self.get_interests(profile)
             context['expertise'] = self.get_expertise(profile)
             context['posts'] = Post.objects.filter(author=self.get_object())
-            context['projects'] = Project.objects.filter(members=self.get_object())
-            context['educationalQualification'] = EducationalQualification.objects.filter(profile=profile)
+            context['projects'] = Project.objects.filter(
+                members=self.get_object())
+            context['educationalQualification'] = EducationalQualification.objects.filter(
+                profile=profile)
 
         except Profile.DoesNotExist:
             context['error'] = 'No data found for this user!'
         return context
 
+
 class Achievements(ListView):
     model = User
     template_name = 'activity/achievements.haml'
 
-    def get_gsoc_members(self,gsocs):
+    def get_gsoc_members(self, gsocs):
         members = []
         for i in gsocs:
             if not any(d['username'] == i.member.username for d in members):
-                members.append(dict(username=i.member.username,avatar=i.member.Profile.avatar,count=1))
+                members.append(dict(username=i.member.username,
+                                    avatar=i.member.Profile.avatar, count=1))
             else:
                 for m in members:
                     if m['username'] == i.member.username:
                         m.update(count=m['count']+1)
         return members
 
-    def get_gsoc_orgs(self,gsocs):
+    def get_gsoc_orgs(self, gsocs):
         orgs = []
         for i in gsocs:
             if not any(d['id'] == i.organisation.id for d in orgs):
-                orgs.append(dict(name=i.organisation.name,icon=i.organisation.icon,id=i.organisation.id,count=1))
+                orgs.append(dict(name=i.organisation.name,
+                                 icon=i.organisation.icon, id=i.organisation.id, count=1))
             else:
                 for m in orgs:
                     if m['name'] == i.organisation.name:
@@ -88,23 +101,26 @@ class Achievements(ListView):
         return orgs
 
     def get_gsoc_stipend(self):
-         c = GSoC.objects.filter(status='C').count()
-         s = GSoC.objects.filter(status='2').count()
-         f = GSoC.objects.filter(status='1').count()
-         return int((f*0.3*3) + (s*0.6*3) + (c*3))
+        c = GSoC.objects.filter(status='C').count()
+        s = GSoC.objects.filter(status='2').count()
+        f = GSoC.objects.filter(status='1').count()
+        return int((f*0.3*3) + (s*0.6*3) + (c*3))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['internships'] = Event.objects.filter(type='I')
-        context['international_events'] = Event.objects.filter(international=True)
+        context['international_events'] = Event.objects.filter(
+            international=True)
         context['talks'] = Talk.objects.all()
         context['publications'] = Publication.objects.all()
-        gsocs = GSoC.objects.filter(status__in=['C','S','1','2','3'])
+        gsocs = GSoC.objects.filter(status__in=['C', 'S', '1', '2', '3'])
         context['gsoc_members'] = self.get_gsoc_members(gsocs)
-        context['current_gsoc'] = GSoC.objects.filter(status__in=['C','S','1','2','3'], year=2018)
+        context['current_gsoc'] = GSoC.objects.filter(
+            status__in=['C', 'S', '1', '2', '3'], year=2018)
         context['gsoc_orgs'] = self.get_gsoc_orgs(gsocs)
         context['gsoc_stipend'] = self.get_gsoc_stipend()
         return context
+
 
 class Members(ListView):
     model = User
@@ -125,6 +141,7 @@ class Blog(ListView):
         context['posts'] = Post.objects.filter(featured=True)
         return context
 
+
 class BlogPost(DetailView):
     model = Post
     template_name = 'blog/single.haml'
@@ -133,10 +150,12 @@ class BlogPost(DetailView):
         context = super(BlogPost, self).get_context_data(**kwargs)
         user = User.objects.get(username=self.kwargs['username'])
         try:
-            context['post'] = Post.objects.get(author=user,slug=self.kwargs['slug'])
+            context['post'] = Post.objects.get(
+                author=user, slug=self.kwargs['slug'])
         except Profile.DoesNotExist:
             context['error'] = 'No data found for this post!'
         return context
+
 
 class Projects(ListView):
     model = Project
@@ -147,11 +166,12 @@ class Projects(ListView):
         context['projects'] = Project.objects.filter(featured=True)
         return context
 
+
 class ProjectDetail(DetailView):
     model = Project
     template_name = 'project/project.haml'
 
-    def get_team(self,project):
+    def get_team(self, project):
         team = []
         for m in project.members.all():
             team.append(Profile.objects.get(user=m))
@@ -163,10 +183,12 @@ class ProjectDetail(DetailView):
             project = Project.objects.get(slug=self.kwargs['slug'])
             context['project'] = project
             context['team'] = self.get_team(project)
-            context['socialProfiles'] = ProjectLink.objects.filter(project=project)
+            context['socialProfiles'] = ProjectLink.objects.filter(
+                project=project)
         except Profile.DoesNotExist:
             context['error'] = 'No data found for this project!'
         return context
+
 
 class HomePage(TemplateView):
     template_name = "home.haml"
@@ -177,15 +199,27 @@ class HomePage(TemplateView):
             context['testimonials'] = Testimonial.objects.all()
             try:
                 cat = Category.objects.get(slug="news")
-                context['news'] = Post.objects.filter(category = cat)
+                context['news'] = Post.objects.filter(category=cat)
             except ObjectDoesNotExist:
                 context['news'] = None
         except Profile.DoesNotExist:
             context['error'] = 'No data found for this project!'
         return context
 
+
 class AboutPage(TemplateView):
     template_name = "about/about.haml"
 
+
 class ClubLifePage(TemplateView):
     template_name = "about/life.haml"
+
+
+def error_404_view(request, exception):
+    data = {}
+    return render(request, 'error_404.haml', data)
+
+
+def error_500_view(request, exception):
+    data = {}
+    return render(request, 'error_500.haml', data)
