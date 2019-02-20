@@ -54,7 +54,7 @@ You have now successfully set up the project on your environment. If you encount
 From now when you start your work, run ``workon amfoss`` inside the project repository and you can work with the django application as usual - 
 
 * `python manage.py migrate` - set up database
-* `python manage.py createsuperadmin` - create admin user
+* `python manage.py createsuperuser` - create admin user
 * `python manage.py runserver`  - run the project locally
 
 *Make sure you pull new changes from remote regularly.*
