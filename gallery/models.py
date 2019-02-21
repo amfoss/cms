@@ -25,7 +25,7 @@ class Photo(models.Model) :
 
 
 class Album(models.Model) :
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, unique=True)
     uploader = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField(default=date.today)
     description = models.TextField(null=True, blank=True)
