@@ -136,6 +136,12 @@ class EducationalQualification(models.Model):
         verbose_name_plural = "Educational Qualifications"
         verbose_name = "Educational Qualification"
 
+class AttendanceLog(models.Model):
+    member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='AttendanceLog')
+    timestamp = models.DateTimeField()
+    ssids = models.TextField()
+    ip = models.CharField(max_length=200)
+
 class Attendance(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Attendance')
     session_start = models.DateTimeField()
@@ -226,6 +232,7 @@ __all__ = [
             'Team',
             'Responsibility',
             'Attendance',
+            'AttendanceLog',
             'EducationalQualification',
             'WorkExperience',
             'SocialProfile',

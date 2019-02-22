@@ -9,6 +9,9 @@
 {% block content %}
 %div{:id=>"homepage"}
   %section#cover
+    <video autoplay loop poster="img/index-image.jpg" id="index-video">
+     <source src="{% static 'pages/videos/cover.mp4' %}" type="video/mp4">
+    </video>
 
   %section#intro
     %div{:class=>"row mt-0 mb-4 mx-0 section-card icon-row"}
@@ -170,16 +173,21 @@
             %h3
               Advance Technically to New Heights
             %p
-              Coding is of course gonna improve :P
+              Web, Android, Data Science, Desktop Application Development, Networks, IoT- learn and prosper
+              under great mentorship and community support, and use your skills to help making real time
+              software in Open Source. Make an impact!
         %hr
         %div{:class=>"point row m-0 anime flipInY"}
           %div{:class=>"col-sm-2 col-3 p-2"}
             %img{:src => "{% static 'pages/images/icons/care.png' %}" }
           %div{:class=>"col p-2"}
             %h3
-             Recieve Care & Support through Mentorship
+             Receive Care & Support through Mentorship
             %p
-              You will be helped.
+              Receive care and support from our rich mentorship environment.
+              With the help of experienced folks  - solve your issues, be it technical or non technical,
+              set goals and achieve them all.
+
         %hr
         %div{:class=>"point row m-0 anime flipInX"}
           %div{:class=>"col-sm-2 col-3 p-2"}
@@ -188,7 +196,9 @@
             %h3
               Become Competent to Face the Real World
             %p
-              Be tougher and better
+              Sharpen your skills, get exposed to collaborative product making, be a part and lead developer
+              teams and contribute to real time Open Source software - all the while developing a
+              world class working style. Grow!
         %hr
         %div{:class=>"point row m-0 anime flipInY"}
           %div{:class=>"col-sm-2 col-3 p-2"}
@@ -197,7 +207,9 @@
             %h3
               Surf in an Ocean of Opportunities
             %p
-              Enjoyyy lyf
+              Internships, Student Exchange Programs, Summer Schools, Conferences, Talks, Hackathons - be it GSoC, SoK,
+              RGSoC, Outreachy, FOSDEM etc - get exposed to the best of opportunities out there and
+              prove your metal in the real world. Carpe diem!
         %div{:class=>"point cta row m-0 anime flipInX"}
           %div{:class=>"col-8 p-2 d-flex"}
             %h3 Interested in joining in the club?

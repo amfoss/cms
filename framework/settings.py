@@ -25,7 +25,7 @@ SECRET_KEY = 'k@8#g3)#=vnth3_jbee7ck3r)d810z1s=3611-20c#w(8p74##'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.herokuapp.com', 'amfoss.in']
 
 
 # Application definition

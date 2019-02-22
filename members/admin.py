@@ -26,19 +26,27 @@ class ProfileAdmin(admin.ModelAdmin):
     select2 = select2_modelform(Profile, attrs={'width': '250px'})
     form = select2
 
+@admin.register(AttendanceLog)
+class AttendanceLogAdmin(admin.ModelAdmin):
+    fields  = (('member', 'timestamp','ip'), 'ssids')
+    list_display = ('member', 'timestamp', 'ssids', 'ip')
+    list_filter = ('member', 'timestamp')
+    select2 = select2_modelform(AttendanceLog, attrs={'width': '250px'})
+    form = select2
+
 @admin.register(Attendance)
 class AttendanceAdmin(admin.ModelAdmin):
-    fields  = ('member',('session_start', 'session_end'),)
+    fields  = ('member', ('session_start', 'session_end'),)
     list_display = ('member', 'session_start', 'session_end', 'duration')
-    list_filter = ('member','session_start')
+    list_filter = ('member', 'session_start')
     select2 = select2_modelform(Attendance, attrs={'width': '250px'})
     form = select2
 
 @admin.register(LeaveRecord)
 class LeaveRecordAdmin(admin.ModelAdmin):
-    fields= (('user','type'),('start_date','end_date'),'reason')
+    fields= (('user', 'type'), ('start_date', 'end_date'), 'reason')
     list_display = ('user', 'type', 'start_date', 'end_date')
-    list_filter = ('user','type')
+    list_filter = ('user', 'type')
     select2 = select2_modelform(LeaveRecord, attrs={'width': '250px'})
     form = select2
 
@@ -99,3 +107,4 @@ class RolesAdmin(admin.ModelAdmin):
 class LanguageAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):
         return False
+

@@ -189,3 +189,9 @@ class AboutPage(TemplateView):
 
 class ClubLifePage(TemplateView):
     template_name = "about/life.haml"
+
+def handler404(request):
+    return render(request, 'error/404.haml', status=404)
+
+def handler500(request):
+    return render(request, 'error/500.haml', status=500)

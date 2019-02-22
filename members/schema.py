@@ -2,6 +2,8 @@ import graphene
 from graphql_jwt.decorators import permission_required, login_required
 from graphene_django.types import DjangoObjectType
 from .models import *
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import check_password
 from graphene_django.filter import DjangoFilterConnectionField
 
 #
@@ -11,27 +13,26 @@ from graphene_django.filter import DjangoFilterConnectionField
 class AtObj(graphene.ObjectType):
     id = graphene.String()
 
-class RegisterAttendance(graphene.Mutation):
+class LogAttendance(graphene.Mutation):
     class Arguments:
-        session_start = graphene.types.datetime.DateTime(required=True)
-        session_end = graphene.types.datetime.DateTime(required=True)
-        token = graphene.String(required=True)
+        username = graphene.String(required=True)
+        password = graphene.String(required=True)
+        timestamp = graphene.types.datetime.DateTime(required=True)
+        ssids = graphene.String(required=True)
+        ip = graphene.String(required=True)
+
 
     Output = AtObj
 
-    @login_required
-    def mutate(self, info, session_start, session_end, token):
-        user = User.objects.get(username=info.context.user)
-        records = Attendance.objects.filter(session_start__date=session_start.date(), member=user)
-        if not records:
-            a = Attendance.objects.create(member=user, session_start=session_start, session_end=session_end)
-            return AtObj(id=a.id)
-        else:
-            records.all().update(session_start=session_start, session_end=session_end)
-            return AtObj(id=records[0].id)
+    def mutate(self, info, username, password, timestamp, ssids, ip):
+        user = User.objects.get(username=username)
+        if check_password(password,user.password):
+            al = AttendanceLog.objects.create(member=user, timestamp=timestamp, ssids=ssids, ip=ip)
+            return AtObj(id=al.id)
+
 
 class Mutation(object):
-    RegisterAttendance = RegisterAttendance.Field()
+    LogAttendance = LogAttendance.Field()
 
 #
 #       Queries
@@ -95,8 +96,9 @@ class MentorGroupObj(DjangoObjectType):
         model = MentorGroup
         exclude_fields = ('id')
 
+
 class Query(object):
-    profiles = graphene.List(ProfileObj,token=graphene.String(required=True))
+    profiles = graphene.List(ProfileObj, token=graphene.String(required=True))
     profile = graphene.Field(ProfileObj, username=graphene.String(required=True), token=graphene.String(required=True))
 
     attendance = DjangoFilterConnectionField(AttendanceObj)

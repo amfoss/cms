@@ -17,10 +17,11 @@ from django.contrib import admin
 from django.urls import include, path
 from graphene_django.views import GraphQLView
 from django.contrib.auth import views as auth_views
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('graphql/', GraphQLView.as_view(graphiql=True)),
+    path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
     path('', include('pages.urls')),
     path(
         'admin/password_reset/',
@@ -46,3 +47,6 @@ urlpatterns = [
 
 admin.site.index_title = 'Club Administration'
 admin.site.site_title = 'amFOSS CMS'
+
+handler404 = 'pages.views.handler404'
+handler500 = 'pages.views.handler500'
