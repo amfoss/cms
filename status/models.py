@@ -45,7 +45,7 @@ class Task(models.Model):
     assignees = models.ManyToManyField(User)
     due_date = models.DateField(default=date.today)
     team = models.ManyToManyField('members.Team', blank=True)
-    tags = models.ManyToManyField(TaskTag, blank=True, null=True)
+    tags = models.ManyToManyField(TaskTag, blank=True)
     status = models.ForeignKey(TaskStatus, on_delete=models.SET_NULL, null=True)
     updates = models.ManyToManyField(Status, blank=True)
 
