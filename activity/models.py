@@ -24,7 +24,7 @@ class Project(models.Model):
     topics = models.ManyToManyField(Skill, related_name='ProjectTopics', blank=True)
     detail = RichTextField(verbose_name='Details', max_length=10000, null=True)
     links = models.ManyToManyField(Portal, related_name='ProjectLinks', through='ProjectLink')
-    album = models.ForeignKey(Album, on_delete=models.CASCADE, null=True, blank=True, to_field='title')
+    album = models.ForeignKey(Album, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Projects"
@@ -121,7 +121,7 @@ class Event(models.Model):
     projects = models.ManyToManyField(Project, related_name='EventProject', blank=True)
     honours = models.ManyToManyField(Honour, related_name='EventHonours', blank=True)
     organizer = models.ForeignKey(Organization,on_delete=models.PROTECT, blank=True, null=True)
-    album = models.ForeignKey(Album, on_delete=models.SET_NULL, null=True, blank=True, to_field='title')
+    album = models.ForeignKey(Album, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Events"
