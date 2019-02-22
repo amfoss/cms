@@ -44,7 +44,7 @@ class Post(models.Model):
     featured_image = models.ImageField(default='', verbose_name='Featured Image',upload_to=get_featured_image_path)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Category', null=True, blank=True)
     tags = models.ManyToManyField(Tag,verbose_name='Tag', blank=True)
-    album = models.ForeignKey('gallery.Album', on_delete=models.SET_NULL, null=True, blank=True, to_field='title')
+    album = models.ForeignKey('gallery.Album', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Posts"
