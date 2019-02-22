@@ -7,7 +7,7 @@ class ProjectLinkInline(admin.TabularInline):
     extra = 0
 
 class ProjectAdmin(admin.ModelAdmin):
-    fields = (('name','slug'),'members',('tagline','topics'),('published','cover'),'detail', 'featured')
+    fields = (('name','slug'),'members',('tagline','topics'),('published','cover'),'detail', 'featured','album')
     inlines = (ProjectLinkInline,)
     select2 = select2_modelform(Project, attrs={'width': '250px'})
     form = select2
@@ -40,7 +40,7 @@ class TalkAdmin(admin.ModelAdmin):
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ('title',  'date', 'organizer', 'type')
-    fields = (('title','organizer','type'),('international','projects','honours'),('attendee','date'),'topics')
+    fields = (('title','organizer','type'),('international','projects','honours'),('attendee','date'),'topics','album')
     select2 = select2_modelform(Event, attrs={'width': '250px'})
     form = select2
 
