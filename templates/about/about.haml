@@ -1,7 +1,7 @@
 {% extends 'base.haml' %}
 {% load sass_tags %}
 {% load staticfiles %}
-{% block title %} About FOSS@Amrita {% endblock %}
+{% block title %} About {% endblock %}
 {% block description %}amFOSS (FOSS@Amrita) is one the leading student FOSS Communities in India, based in Amrita Vishwa Vidyapeetham, Amritapuri. {% endblock %}
 {% block styles %}
 {% endblock %}
@@ -10,7 +10,7 @@
   %h1 About
 
 #story.my-4.mx-3.py-1
-  %h2.p-4
+  %h2.px-4.pt-4.pb-0
     %img{:src => "{% static 'pages/images/icons/shooting-stars.png' %}" } Our Story
   #story-slider
     %div.p-2

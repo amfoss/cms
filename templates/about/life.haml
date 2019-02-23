@@ -1,13 +1,13 @@
 {% extends 'base.haml' %}
 {% load sass_tags %}
 {% load staticfiles %}
-{% block title %} About FOSS@Amrita {% endblock %}
+{% block title %} Life in the Club {% endblock %}
 {% block description %}amFOSS (FOSS@Amrita) is one the leading student FOSS Communities in India, based in Amrita Vishwa Vidyapeetham, Amritapuri. {% endblock %}
 {% block styles %}
 {% endblock %}
 {% block content %}
   %section{:class=>"page-cover"}
-    %h1 Life in Club
+    %h1 Life in the Club
 
   %section.p-3
     .bg-white.section-card.row.m-2.anime.slideInUp
@@ -24,12 +24,14 @@
           <div id="mentorship-slider" data-slick='{"slidesToShow": 1, "autoplay": true, "adaptiveHeight": true }'>
             %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_mentor_1.jpg' %}"}
             %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_mentor_2.jpg' %}"}
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_mentor_3.jpg' %}"}
           </div>
     .bg-white.section-card.row.m-2.anime.slideInUp
       .col-md-6
           <div id="world-slider" data-slick='{"slidesToShow": 1, "autoplay": true, "adaptiveHeight": true }'>
             %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_world_1.jpg' %}"}
             %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_world_2.jpg' %}"}
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_world_3.jpg' %}"}
           </div>
       .col-md-6
         %h2.anime.fadeInLeft World of Opportunities
@@ -73,12 +75,18 @@
           is cooked that day to making all the necessary arrangements are all done by the members themselves.
           This is a great opportunity for learning to work as a team. The members orchestrate the cultural
           events with performances in dancing, singing, playing musical instruments etc.
-      .col
+      .col-md-6
+          <div id="night-slider" data-slick='{"slidesToShow": 1, "autoplay": true, "adaptiveHeight": true }'>
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_night_1.jpg' %}"}
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_night_2.jpg' %}"}
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_night_3.jpg' %}"}
+          </div>
     .bg-white.section-card.row.m-2.anime.slideInUp
       .col-md-6
           <div id="play-slider" data-slick='{"slidesToShow": 1, "autoplay": true, "adaptiveHeight": true }'>
             %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_play_1.jpg' %}"}
             %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_play_2.jpg' %}"}
+            %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/about/foss_play_3.jpg' %}"}
           </div>
       .col-md-6
         %h2.anime.fadeInLeft FOSS Play
@@ -103,10 +111,11 @@
           </div>
 
 <script>
- $("#mentorship-slider").slick();
+$("#mentorship-slider").slick();
 $("#world-slider").slick();
 $("#gsoc-slider").slick();
 $("#talk-slider").slick();
+$("#night-slider").slick();
 $("#play-slider").slick();
 $("#social-slider").slick();
 </script>
