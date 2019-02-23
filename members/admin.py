@@ -26,6 +26,16 @@ class ProfileAdmin(admin.ModelAdmin):
     select2 = select2_modelform(Profile, attrs={'width': '250px'})
     form = select2
 
+    def has_change_permission(self, request, obj=None):
+        if obj is not None and obj.created_by != request.user:
+            return False
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        if obj is not None and obj.created_by != request.user:
+            return False
+        return True
+
 @admin.register(AttendanceLog)
 class AttendanceLogAdmin(admin.ModelAdmin):
     fields  = (('member', 'timestamp','ip'), 'ssids')

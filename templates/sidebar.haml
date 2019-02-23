@@ -1,8 +1,9 @@
 {% load staticfiles %}
 #topbar
     #top-bar-button{:class=>"fa fa-bars"}
-    %img{:src => "{% static 'pages/images/logos/logo_alt_light.png' %}"}
-
+    <a href="/">
+        %img{:src => "{% static 'pages/images/logos/logo_alt_light.png' %}"}
+    </a>
 #sidebar{:class=>"animated"}
     .text-center
         %img{:src => "{% static 'pages/images/logos/logo_light.png' %}"}

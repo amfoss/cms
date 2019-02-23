@@ -8,7 +8,11 @@
 {% endblock %}
 {% block content %}
     %section{:class=>"page-cover"}
-      %h1 {{post.title}}
+      %div
+        %h1 {{post.title}}
+        %div.author-title
+          <img src="/{{author.avatar}}">
+          {{author.first_name}} {{author.last_name}}
     %section.my-4.container
       <img src="/{{post.featured_image}}" class="featured_image">
       .post-card.bg-white

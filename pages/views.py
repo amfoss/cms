@@ -134,6 +134,7 @@ class BlogPost(DetailView):
         user = User.objects.get(username=self.kwargs['username'])
         try:
             context['post'] = Post.objects.get(author=user,slug=self.kwargs['slug'])
+            context['author'] = Profile.objects.get(user=user)
         except Profile.DoesNotExist:
             context['error'] = 'No data found for this post!'
         return context
