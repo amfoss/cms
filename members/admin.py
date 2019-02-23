@@ -27,12 +27,12 @@ class ProfileAdmin(admin.ModelAdmin):
     form = select2
 
     def has_change_permission(self, request, obj=None):
-        if obj is not None and obj.created_by != request.user:
+        if obj is not None and obj.user != request.user:
             return False
         return True
 
     def has_delete_permission(self, request, obj=None):
-        if obj is not None and obj.created_by != request.user:
+        if obj is not None and obj.user != request.user:
             return False
         return True
 
