@@ -50,17 +50,19 @@
         .col
 
           .section-card.bg-white
-          {% if profile.about %}
-            .desc {{profile.about|safe}}
-          {% endif %}
-            .row.m-0
-              .col-md-6.p-2
-              {% if profile.location %}
-                <b>Location</b> : {{profile.location}}
-              {% endif %}
-              {% if profile.location %}
-                <b>Location</b> : {{profile.location}}
-              {% endif %}
+            {% if profile.about %}
+              .desc {{profile.about|safe}}
+            {% endif %}
+              .row.m-0
+                .col-md-6.p-2
+                  {% if profile.location %}
+                    %div
+                      <b>Location</b> : {{profile.location}}
+                  {% endif %}
+                  {% if profile.location %}
+                    %div
+                      <b>Birthday</b> : {{profile.birthday}}
+                  {% endif %}
           {% if interests or expertise %}
           %h2
             %img{:src => "{% static 'pages/images/icons/skill.png' %}" } Skills

@@ -134,30 +134,30 @@
       %hr
       {% endif %}
       {% if publications %}
-      %h2
-        %img{:src => "{% static 'pages/images/icons/news.png' %}" } Publications
-      %div{:class=>"row m-0"}
-      {% for p in publications  %}
-        %div{:class=>"col-lg-3 col-md-4 py-2 h-100"}
-          %div{:class=>"achievement-card py-2"}
-            %div{:class=>"px-3 py-2 w-100"}
-              {% if p.members.all|length > 1 %}
-                {% for m in p.members.all %}
-                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
-                {% endfor %}
-              {% else %}
-                {% for m in p.members.all %}
-                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
-                {% endfor %}
-              {% endif %}
-              %hr
-              %h4 {{p.title}}
-              <sub><img src="/{{p.publisher.icon}}"></sub>
-              %hr
-              %h5 {{p.publisher.name}}
-              <span>{{p.date}}</span>
-      %hr
-      {% endfor %}
-    {% endif %}
+        %h2
+          %img{:src => "{% static 'pages/images/icons/news.png' %}" } Publications
+        %div{:class=>"row m-0"}
+        {% for p in publications  %}
+          %div{:class=>"col-lg-3 col-md-4 py-2 h-100"}
+            %div{:class=>"achievement-card py-2"}
+              %div{:class=>"px-3 py-2 w-100"}
+                {% if p.members.all|length > 1 %}
+                  {% for m in p.members.all %}
+                    <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
+                  {% endfor %}
+                {% else %}
+                  {% for m in p.members.all %}
+                    <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
+                  {% endfor %}
+                {% endif %}
+                %hr
+                %h4 {{p.title}}
+                <sub><img src="/{{p.publisher.icon}}"></sub>
+                %hr
+                %h5 {{p.publisher.name}}
+                <span>{{p.date}}</span>
+          %hr
+          {% endfor %}
+        {% endif %}
 
 {% endblock %}
