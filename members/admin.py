@@ -27,11 +27,15 @@ class ProfileAdmin(admin.ModelAdmin):
     form = select2
 
     def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
         if obj is not None and obj.user != request.user:
             return False
         return True
 
     def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
         if obj is not None and obj.user != request.user:
             return False
         return True
@@ -117,4 +121,3 @@ class RolesAdmin(admin.ModelAdmin):
 class LanguageAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):
         return False
-

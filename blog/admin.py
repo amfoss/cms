@@ -19,6 +19,26 @@ class PostAdmin(admin.ModelAdmin):
     select2 = select2_modelform(Post, attrs={'width': '250px'})
     form = select2
 
+    def get_queryset(self, request):
+        qs = super(PostAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(author=request.user)
+
+    def has_view_permission(self, request, obj=None):
+        if obj is not None and obj.author != request.user:
+            return False
+        return True
+
+    def has_change_permission(self, request, obj=None):
+        if obj is not None and obj.user != request.user:
+            return False
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        if obj is not None and obj.user != request.user:
+            return False
+        return True
 
 admin.site.register(Tag)
 admin.site.register(Category, CategoryAdmin)
