@@ -14,7 +14,7 @@ class StatusAdmin(admin.ModelAdmin):
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    fields= (('title','date'),('status','tags'),('assignees','team'),'description','updates')
+    fields= (('title','due_date'),('status','tags'),('assignees','team'),'description','updates')
     select2 = select2_modelform(Task, attrs={'width': '250px'})
     form = select2
 

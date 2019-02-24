@@ -1,8 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User
-from ckeditor.fields import RichTextField
 import uuid
-from datetime import date
+from gallery.validators import validate_file_size
+from imagekit.models import ProcessedImageField
+
+processed_image_field_specs = {
+    'format': 'JPEG',
+    'options': {'quality': 70}
+}
 
 class Testimonial(models.Model):
     def get_dp_path(self, filename):
@@ -13,7 +17,7 @@ class Testimonial(models.Model):
     message = models.TextField(null=True)
     author = models.CharField(null=True, max_length=100)
     credential = models.CharField(null=True, max_length=150)
-    avatar = models.ImageField(default='',verbose_name='Profile Picture', upload_to=get_dp_path)
+    image = ProcessedImageField(default='', verbose_name='Profile Picture', upload_to=get_dp_path, validators=[validate_file_size], **processed_image_field_specs)
 
     class Meta:
         verbose_name_plural = "Testimonials"
