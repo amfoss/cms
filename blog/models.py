@@ -4,8 +4,9 @@ from ckeditor.fields import RichTextField
 import uuid
 from datetime import date
 
+
 class Tag(models.Model):
-    name = models.CharField(null=True, max_length=25)
+    name = models.CharField(max_length=50)
     slug = models.SlugField()
 
     class Meta:
@@ -17,9 +18,9 @@ class Tag(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(null=True,max_length=25)
+    name = models.CharField(max_length=50)
     slug = models.SlugField()
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, verbose_name='Parent', null=True, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.SET_NULL, verbose_name='Parent', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Categories"
@@ -35,15 +36,15 @@ class Post(models.Model):
         filename = "%s.%s" % (uuid.uuid4(), ext)
         return 'static/uploads/blog/cover/' + filename
 
-    title = models.CharField(null=True,max_length=200)
-    slug =  models.SlugField()
+    title = models.CharField(max_length=200)
+    slug = models.SlugField()
     featured = models.BooleanField(default=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Post', verbose_name='Author')
     content = RichTextField()
     date = models.DateField(default=date.today)
-    featured_image = models.ImageField(default='', verbose_name='Featured Image',upload_to=get_featured_image_path)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Category', null=True, blank=True)
-    tags = models.ManyToManyField(Tag,verbose_name='Tag', blank=True)
+    featured_image = models.ImageField(default='', verbose_name='Featured Image', upload_to=get_featured_image_path)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, verbose_name='Category', null=True, blank=True)
+    tags = models.ManyToManyField(Tag, verbose_name='Tag', blank=True)
     album = models.ForeignKey('gallery.Album', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
@@ -55,12 +56,18 @@ class Post(models.Model):
 
 
 class ExternalPost(models.Model):
-    title = models.CharField(null=True,max_length=50)
-    slug =  models.SlugField()
+    def get_featured_image_path(self, filename):
+        ext = filename.split('.')[-1]
+        filename = "%s.%s" % (uuid.uuid4(), ext)
+        return 'static/uploads/blog/cover/' + filename
+
+    title = models.CharField(max_length=200)
+    slug = models.SlugField()
+    date = models.DateField(default=date.today)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ExternalPost', verbose_name='Author')
-    featured_image = models.ImageField(default='', verbose_name='Featured Image')
+    featured_image = models.ImageField(default='', verbose_name='Featured Image', upload_to=get_featured_image_path)
     url = models.URLField(max_length=100, verbose_name='Blog Post URL')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Category', blank=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, verbose_name='Category', null=True, blank=True)
     tags = models.ManyToManyField(Tag, verbose_name='Tag', blank=True)
 
     class Meta:
@@ -70,4 +77,5 @@ class ExternalPost(models.Model):
     def __str__(self):
         return self.title
 
-__all__ = ['ExternalPost','Tag','Category','Post']
+
+__all__ = ['ExternalPost', 'Tag', 'Category', 'Post']
