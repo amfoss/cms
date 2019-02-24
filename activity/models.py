@@ -5,7 +5,7 @@ from ckeditor.fields import RichTextField
 from members.models import Skill, Portal, Organization
 from datetime import date
 import uuid
-from gallery.validators import validate_file_size,
+from gallery.validators import validate_file_size, processed_image_field_specs
 from imagekit.models import ProcessedImageField
 
 EVENT_TYPES = [
@@ -17,11 +17,6 @@ EVENT_TYPES = [
     ('S', 'Summer School'),
     ('O', 'Others')
 ]
-
-processed_image_field_specs = {
-    'format': 'JPEG',
-    'options': {'quality': 70}
-}
 
 class Project(models.Model):
     def get_poster_path(instance, filename):

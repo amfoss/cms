@@ -3,13 +3,8 @@ from django.contrib.auth.models import User
 from blog.models import Tag, Category
 import uuid
 from datetime import date
-from .validators import validate_file_size
+from .validators import validate_file_size, processed_image_field_specs
 from imagekit.models import ProcessedImageField
-
-processed_image_field_specs = {
-    'format': 'JPEG',
-    'options': {'quality': 70}
-}
 
 class Photo(models.Model) :
     def get_gallery_path(self, filename):
@@ -19,7 +14,7 @@ class Photo(models.Model) :
 
     uploader = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField(default=date.today)
-    image = ProcessedImageField(default='', verbose_name='Image', upload_to=get_gallery_path, validators=[validate_file_size], **processed_image_field_specs)
+    image = ProcessedImageField(default='', verbose_name='Image', upload_to=get_gallery_path,validators=[validate_file_size], **processed_image_field_specs)
     caption = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):

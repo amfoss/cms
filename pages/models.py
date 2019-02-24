@@ -1,12 +1,7 @@
 from django.db import models
 import uuid
-from gallery.validators import validate_file_size
+from gallery.validators import validate_file_size, processed_image_field_specs
 from imagekit.models import ProcessedImageField
-
-processed_image_field_specs = {
-    'format': 'JPEG',
-    'options': {'quality': 70}
-}
 
 class Testimonial(models.Model):
     def get_dp_path(self, filename):

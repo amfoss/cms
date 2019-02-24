@@ -4,15 +4,11 @@ from ckeditor.fields import RichTextField
 from status.models import Thread
 import uuid
 from datetime import date
-from gallery.validators import validate_file_size
+from gallery.validators import validate_file_size, processed_image_field_specs
 from imagekit.models import ProcessedImageField
 
 SKILL_TYPES = (('T', 'Technical'), ('A', 'Arts'), ('S', 'Social'), ('P', 'Sports'), ('O', 'Others'))
 LEAVE_TYPE = (('M', 'Health'), ('F', 'Family/Home'), ('T', 'Tiredness'), ('A', 'Academics'), ('D', 'Duty'))
-processed_image_field_specs = {
-    'format': 'JPEG',
-    'options': {'quality': 70}
-}
 
 class Skill(models.Model):
     def get_icon_path(self, filename):

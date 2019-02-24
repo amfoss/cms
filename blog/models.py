@@ -3,13 +3,9 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 import uuid
 from datetime import date
-from gallery.validators import validate_file_size
+from gallery.validators import validate_file_size, processed_image_field_specs
 from imagekit.models import ProcessedImageField
 
-processed_image_field_specs = {
-    'format': 'JPEG',
-    'options': {'quality': 70}
-}
 
 POST_STATUS = [
     ('U', 'Unlisted'),
