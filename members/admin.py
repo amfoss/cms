@@ -6,19 +6,19 @@ from easy_select2 import select2_modelform
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    fieldsets = (
+    fieldsets = [
         ('Basic Details', {
-            'fields': (('user', 'role'), ('email', 'phone'),
-                       ('first_name', 'last_name'), ('roll_number', 'batch'))
+            'fields': (('user', 'role'), ('email', 'phone', 'avatar'),
+                       ('first_name', 'last_name'), )
         }),
         ('Additional Details', {
-            'fields': (('avatar', 'birthday'),('resume','system_no'), ('location', 'languages'), 'tagline', 'about')
+            'fields': ( ('roll_number', 'batch', 'birthday'), ('resume', 'system_no'), ('location', 'languages'), 'tagline', 'about')
         }),
         ('Interests & Expertise', {
             'fields': (('interests', 'expertise'),)
         }),
 
-    )
+    ]
     inlines = (sp_inline, wexp_inline, eq_inline)
     list_display = ('first_name', 'last_name', 'role', 'batch')
     list_filter = ('batch','role')
