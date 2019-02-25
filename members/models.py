@@ -4,6 +4,8 @@ from ckeditor.fields import RichTextField
 from status.models import Thread
 import uuid
 from datetime import date
+from gallery.validators import validate_file_size, processed_image_field_specs
+from imagekit.models import ProcessedImageField
 
 SKILL_TYPES = (('T', 'Technical'), ('A', 'Arts'), ('S', 'Social'), ('P', 'Sports'), ('O', 'Others'))
 LEAVE_TYPE = (('M', 'Health'), ('F', 'Family/Home'), ('T', 'Tiredness'), ('A', 'Academics'), ('D', 'Duty'))
@@ -16,7 +18,7 @@ class Skill(models.Model):
 
     name = models.CharField(max_length=25)
     type = models.CharField(choices=SKILL_TYPES, default='O', max_length=1)
-    icon = models.ImageField(default='', verbose_name='Icon', upload_to=get_icon_path, null=True, blank=True)
+    icon = ProcessedImageField(default='', verbose_name='Icon', upload_to=get_icon_path, null=True, blank=True, validators=[validate_file_size], **processed_image_field_specs)
 
     def __str__(self):
         return self.name
@@ -49,7 +51,7 @@ class Organization(models.Model):
         return 'static/uploads/images/organizations/' + filename
 
     name = models.CharField(max_length=50)
-    icon = models.ImageField(default='', verbose_name='Logo/Icon', upload_to=get_icon_path, null=True, blank=True)
+    icon = ProcessedImageField(default='', verbose_name='Logo/Icon', upload_to=get_icon_path, null=True, blank=True, validators=[validate_file_size], **processed_image_field_specs)
 
     def __str__(self):
         return self.name
@@ -73,7 +75,7 @@ class Profile(models.Model):
     roll_number = models.CharField(max_length=25,null=True, blank=True)
     role = models.ForeignKey(Role,on_delete=models.SET_NULL, null=True)
     batch = models.IntegerField(null=True, help_text='Year of Admission', blank=True)
-    avatar = models.ImageField(default='',verbose_name='Profile Picture', upload_to=get_dp_path)
+    avatar = ProcessedImageField(default='', verbose_name='Profile Picture', upload_to=get_dp_path, validators=[validate_file_size], **processed_image_field_specs)
     location = models.CharField(max_length=150, null=True, blank=True)
     birthday = models.DateField(null=True, help_text='YYYY-MM-DD', blank=True)
     tagline = models.CharField(max_length=80, null=True, blank=True)
@@ -83,7 +85,7 @@ class Profile(models.Model):
     expertise = models.ManyToManyField(Skill, related_name='expertise', blank=True)
     typing_speed = models.IntegerField(null=True, blank=True)
     system_no = models.IntegerField(null=True, blank=True)
-    resume = models.FileField(upload_to=get_resume_path, verbose_name='Attach Resume',null=True,blank=True)
+    resume = models.FileField(upload_to=get_resume_path, verbose_name='Attach Resume',null=True,blank=True, validators=[validate_file_size])
     experiences = models.ManyToManyField(Organization, related_name='WorkExperiences', through='WorkExperience')
     qualifications = models.ManyToManyField(Organization, related_name='EducationalQualifications', through='EducationalQualification')
     links = models.ManyToManyField(Portal, related_name='SocialProfile', through='SocialProfile')
@@ -175,7 +177,7 @@ class Responsibility(models.Model):
 
 class Team(models.Model):
     name = models.CharField(max_length=50)
-    image = models.ImageField()
+    image = ProcessedImageField(**processed_image_field_specs)
     about = RichTextField(max_length=2000, null=True, blank=True)
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE, null=True)
     members = models.ManyToManyField(User, related_name='Team')

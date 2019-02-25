@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'status',
     'gsoc',
     'gallery',
+    'imagekit',
 ]
 
 MIDDLEWARE = [
