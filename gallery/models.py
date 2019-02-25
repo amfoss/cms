@@ -31,7 +31,7 @@ class Album(models.Model) :
     description = models.TextField(null=True, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     category = models.ManyToManyField(Category, blank=True)
-    photos = models.ManyToManyField(Photo, blank=True)
+    photos = models.ManyToManyField(Photo)
 
     def __str__(self):
         return self.title

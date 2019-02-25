@@ -48,7 +48,7 @@
                   </div>
                 {% endfor %}
         %div{:class=>"col-md-6 p-2 h-100"}
-          %div{:class=>"achievement-card"}
+          %div{:class=>"achievement-card my-4"}
             %div{:class=>"w-100"}
               %h2 {{gsoc_members|length}} Students Selected
               %div{:class=>"icon-list row mx-0 mt-4"}
@@ -64,83 +64,85 @@
       {% if international_events %}
         %h2
           %img{:src => "{% static 'pages/images/icons/travel.png' %}" } International Achievements
-        %div{:class=>"row m-0"}
-          {% for i in international_events  %}
-            %div{:class=>"col-lg-3 col-md-4 py-2 h-100"}
-              %div{:class=>"achievement-card py-2"}
-                %div{:class=>"px-3 py-2 w-100"}
-                  {% if i.attendee.all|length > 1 %}
-                    {% for m in i.attendee.all %}
-                      <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
-                    {% endfor %}
-                  {% else %}
-                    {% for m in i.attendee.all %}
-                      <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
-                    {% endfor %}
-                  {% endif %}
-                  %hr
-                  %h4 {{i.title}}
-                  <span>{{i.type}}</span>
-                  %hr
-                  <sub><img src="/{{i.organizer.icon}}"></sub>
-                  %h5 {{i.organizer.name}}
-          {% endfor %}
+        <div id="international-slider">
+        {% for i in international_events  %}
+          %div{:class=>"achievement-card my-4"}
+            %div{:class=>"px-3 py-2 w-100"}
+              %h4 {{i.title}}
+              <span>{{i.type}}</span>
+              <sub><img src="/{{i.organizer.icon}}"></sub>
+              %h5 {{i.organizer.name}}
+            .bg-primary.p-2
+              {% if i.attendee.all|length > 1 %}
+                {% for m in i.attendee.all %}
+                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
+                {% endfor %}
+              {% else %}
+                {% for m in i.attendee.all %}
+                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
+                {% endfor %}
+              {% endif %}
+        {% endfor %}
+        </div>
         %hr
       {% endif %}
       {% if internships %}
         %h2
           %img{:src => "{% static 'pages/images/icons/coworking.png' %}" } Internship
-        %div{:class=>"row m-0"}
+        <div id="internship-slider">
         {% for i in internships  %}
-          %div{:class=>"col-lg-3 col-md-4 py-2 h-100"}
-            %div{:class=>"achievement-card py-2"}
-              %div{:class=>"px-3 py-2 w-100"}
-                {% if i.attendee.all|length > 1 %}
-                  {% for m in i.attendee.all %}
-                    <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
-                  {% endfor %}
-                {% else %}
-                  {% for m in i.attendee.all %}
-                    <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
-                  {% endfor %}
-                {% endif %}
-                %hr
-                <sub><img src="/{{i.organizer.icon}}"></sub>
-                %h5 {{i.organizer.name}}
-                %h4 {{i.title}}
+          %div{:class=>"achievement-card my-4"}
+            %div{:class=>"px-3 py-2 w-100"}
+              %h4 {{i.title}}
+              <sub><img src="/{{i.organizer.icon}}"></sub>
+              %h5 {{i.organizer.name}}
+            .bg-primary.p-2
+              {% if i.attendee.all|length > 1 %}
+                {% for m in i.attendee.all %}
+                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
+                {% endfor %}
+              {% else %}
+                {% for m in i.attendee.all %}
+                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
+                {% endfor %}
+              {% endif %}
         {% endfor %}
+        </div>
       %hr
       {% endif %}
       {% if talks %}
       %h2
         %img{:src => "{% static 'pages/images/icons/podium.png' %}" } Talks
-      %div{:class=>"row m-0"}
+      <div id="talks-slider">
         {% for t in talks %}
-          %div{:class=>"col-lg-3 col-md-4 p-2 h-100"}
-            %div{:class=>"achievement-card py-2"}
-              %div{:class=>"px-4 py-2 w-100"}
-                <a href="/@{{t.member.username}}"><img src="/{{t.member.Profile.avatar}}" class="avatar"> {{t.member.Profile.first_name}} {{t.member.Profile.last_name}}</a>
-                %hr
-                %h4 {{t.title}}
-                <sub><img src="/{{t.organizer.icon}}"></sub>
-                %hr
-                {% if t.event %}
-                %h5 {{t.event}}
-                {% else %}
-                %h5 {{t.organizer.name}}
-                {% endif %}
-                <span>{{t.date}}</span>
+          %div{:class=>"achievement-card my-4"}
+            %div{:class=>"px-4 py-2 w-100"}
+              %h4 {{t.title}}
+              <sub><img src="/{{t.organizer.icon}}"></sub>
+              {% if t.event %}
+              %h5 {{t.event}}
+              {% else %}
+              %h5 {{t.organizer.name}}
+              {% endif %}
+              <span>{{t.date}}</span>
+            .bg-primary.p-2
+              <a href="/@{{t.member.username}}"><img src="/{{t.member.Profile.avatar}}" class="avatar"> {{t.member.Profile.first_name}} {{t.member.Profile.last_name}}</a>
         {% endfor %}
+      </div>
       %hr
       {% endif %}
       {% if publications %}
         %h2
           %img{:src => "{% static 'pages/images/icons/news.png' %}" } Publications
-        %div{:class=>"row m-0"}
-        {% for p in publications  %}
-          %div{:class=>"col-lg-3 col-md-4 py-2 h-100"}
-            %div{:class=>"achievement-card py-2"}
+        <div id="publications-slider">
+          {% for p in publications  %}
+            %div{:class=>"achievement-card my-4"}
               %div{:class=>"px-3 py-2 w-100"}
+                %h4 {{p.title}}
+                <sub><img src="/{{p.publisher.icon}}"></sub>
+                %h5 {{p.publisher.name}}
+                <span>{{p.date}}</span>
+              .bg-primary.p-2
                 {% if p.members.all|length > 1 %}
                   {% for m in p.members.all %}
                     <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
@@ -150,14 +152,49 @@
                     <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
                   {% endfor %}
                 {% endif %}
-                %hr
-                %h4 {{p.title}}
-                <sub><img src="/{{p.publisher.icon}}"></sub>
-                %hr
-                %h5 {{p.publisher.name}}
-                <span>{{p.date}}</span>
-          %hr
-          {% endfor %}
-        {% endif %}
+            {% endfor %}
+        </div>
+      {% endif %}
+<script>
+let settings = {
+    autoplay: true,
+    adaptiveHeight: true,
+    slidesToShow: 6,
+    responsive: [{
 
+      breakpoint: 2500,
+      settings: {
+        slidesToShow: 4,
+        infinite: true
+      }
+
+    }, {
+
+      breakpoint: 900,
+      settings: {
+        slidesToShow: 3,
+        dots: true
+
+      }
+
+    }, {
+
+      breakpoint: 720,
+      settings: {
+        slidesToShow: 2,
+        dots: true
+      }
+    },{
+      breakpoint: 450,
+      settings: {
+        slidesToShow: 1,
+        dots: true
+      }
+    }]
+}
+$("#international-slider").slick(settings);
+$("#internship-slider").slick(settings);
+$("#talks-slider").slick(settings);
+$("#publications-slider").slick(settings);
+</script>
 {% endblock %}
