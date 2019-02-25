@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 import uuid
 from datetime import date
+from gallery.validators import validate_file_size, processed_image_field_specs
+from imagekit.models import ProcessedImageField
+
 
 POST_STATUS = [
     ('U', 'Unlisted'),
@@ -48,9 +51,9 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Post', verbose_name='Author')
     content = RichTextField()
     date = models.DateField(default=date.today)
-    featured_image = models.ImageField(default='', verbose_name='Featured Image', upload_to=get_featured_image_path)
+    featured_image = ProcessedImageField(default='', verbose_name='Featured Image', upload_to=get_featured_image_path, validators=[validate_file_size], **processed_image_field_specs)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, verbose_name='Category', null=True, blank=True)
-    tags = models.ManyToManyField(Tag, verbose_name='Tag', blank=True)
+    tags = models.ManyToManyField(Tag,verbose_name='Tag', blank=True)
     album = models.ForeignKey('gallery.Album', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
@@ -71,7 +74,7 @@ class ExternalPost(models.Model):
     slug = models.SlugField()
     date = models.DateField(default=date.today)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ExternalPost', verbose_name='Author')
-    featured_image = models.ImageField(default='', verbose_name='Featured Image', upload_to=get_featured_image_path)
+    featured_image = ProcessedImageField(default='', verbose_name='Featured Image', validators=[validate_file_size], **processed_image_field_specs)
     url = models.URLField(max_length=100, verbose_name='Blog Post URL')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, verbose_name='Category', null=True, blank=True)
     tags = models.ManyToManyField(Tag, verbose_name='Tag', blank=True)

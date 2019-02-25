@@ -5,7 +5,7 @@ from easy_select2 import select2_modelform
 
 @admin.register(Photo)
 class PhotoAdmin(admin.ModelAdmin):
-    fields = ('uploader', 'date', ('image', 'caption'))
+    fields = (('uploader', 'date'), 'image', 'caption')
     list_display = ('image', 'uploader', 'date')
     list_filter = ['date']
     search_fields = ['uploader']

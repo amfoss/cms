@@ -5,6 +5,8 @@ from ckeditor.fields import RichTextField
 from members.models import Skill, Portal, Organization
 from datetime import date
 import uuid
+from gallery.validators import validate_file_size, processed_image_field_specs
+from imagekit.models import ProcessedImageField
 
 EVENT_TYPES = [
     ('C', 'Conference/Summit'),
@@ -15,7 +17,6 @@ EVENT_TYPES = [
     ('S', 'Summer School'),
     ('O', 'Others')
 ]
-
 
 class Project(models.Model):
     def get_poster_path(instance, filename):
@@ -29,7 +30,7 @@ class Project(models.Model):
     tagline = models.CharField(max_length=100)
     members = models.ManyToManyField(User, related_name='Project')
     published = models.DateField(default=date.today)
-    cover = models.ImageField(default='', verbose_name='Project Poster', upload_to=get_poster_path)
+    cover = ProcessedImageField(default='', verbose_name='Project Poster', upload_to=get_poster_path, validators=[validate_file_size], **processed_image_field_specs)
     topics = models.ManyToManyField(Skill, related_name='ProjectTopics', blank=True)
     detail = RichTextField(verbose_name='Details')
     links = models.ManyToManyField(Portal, related_name='ProjectLinks', through='ProjectLink')
@@ -61,9 +62,8 @@ class Certificate(models.Model):
         return 'static/uploads/documents/certificates/' + filename
 
     title = models.CharField(max_length=200)
-    attachment = models.FileField(upload_to=get_certificate_path, verbose_name='Attach Certificate', null=True,
-                                  blank=True)
-    member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Certificate', verbose_name='Certified')
+    attachment = models.FileField(upload_to=get_certificate_path, verbose_name='Attach Certificate',null=True,blank=True, validators=[validate_file_size])
+    member = models.ForeignKey(User,on_delete=models.CASCADE, related_name='Certificate', verbose_name='Certified')
     topics = models.ManyToManyField(Skill, related_name='CertificateTopics', blank=True)
     date = models.DateField(default=date.today)
     issuer = models.ForeignKey(Organization, on_delete=models.PROTECT)
