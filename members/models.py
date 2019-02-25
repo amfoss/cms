@@ -211,7 +211,7 @@ class MentorGroup(models.Model):
         return self.mentor.username
 
 class LeaveRecord(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User', related_name='LeaveRecord')
+    member = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User', related_name='LeaveRecord')
     approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='Approved By (Faculty/Mentor)', related_name="Allover", null=True, blank=True)
     start_date = models.DateField(default=date.today, null=True, help_text='YYYY-MM-DD', verbose_name="From")
     end_date = models.DateField(default=date.today, null=True, help_text='YYYY-MM-DD', verbose_name="To", blank=True)

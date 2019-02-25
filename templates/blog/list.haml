@@ -12,17 +12,19 @@
     %section.my-4
       .row.m-0#members
         {% for p in posts %}
-          .col-md-4.col-6.p-2
-            <a href="/@{{p.author.username}}/{{p.slug}}">
-              .section-card.bg-white.p-0.anime.zoomIn
-                <img src="/{{p.featured_image}}" class="cover">
-                .content
-                  @{{p.author.username}}
-                  %h4 {{p.title}}
-                  %div
-                    %span
-                      .fa.fa-calendar
-                      {{p.date}}
-            </a>
+          {% if p.status == 'P' %}
+            .col-md-4.col-6.p-2
+              <a href="/@{{p.author.username}}/{{p.slug}}">
+                .section-card.bg-white.p-0.anime.zoomIn
+                  <img src="/{{p.featured_image}}" class="cover">
+                  .content
+                    @{{p.author.username}}
+                    %h4 {{p.title}}
+                    %div
+                      %span
+                        .fa.fa-calendar
+                        {{p.date}}
+              </a>
+            {% endif %}
         {% endfor %}
 {% endblock %}

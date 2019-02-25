@@ -6,7 +6,16 @@ from members.models import Skill, Portal, Organization
 from datetime import date
 import uuid
 
-EVENT_TYPES = (('C', 'Conference/Summit'), ('H', 'Hackathon'), ('D', 'Developer Meet'), ('I', 'Internship'), ('E','Student Exchange'), ('S','Summer School'), ('O', 'Others'))
+EVENT_TYPES = [
+    ('C', 'Conference/Summit'),
+    ('H', 'Hackathon'),
+    ('D', 'Developer Meet'),
+    ('I', 'Internship'),
+    ('E', 'Student Exchange'),
+    ('S', 'Summer School'),
+    ('O', 'Others')
+]
+
 
 class Project(models.Model):
     def get_poster_path(instance, filename):
@@ -14,17 +23,17 @@ class Project(models.Model):
         filename = "%s.%s" % (uuid.uuid4(), ext)
         return 'static/uploads/images/projects/' + filename
 
-    name = models.CharField(max_length=200, null=True)
-    slug =  models.SlugField()
+    name = models.CharField(max_length=200)
+    slug = models.SlugField()
     featured = models.BooleanField(default=False)
-    tagline = models.CharField(max_length=100, null=True)
-    members = models.ManyToManyField(User,related_name='Project')
+    tagline = models.CharField(max_length=100)
+    members = models.ManyToManyField(User, related_name='Project')
     published = models.DateField(default=date.today)
-    cover = models.ImageField(default='',verbose_name='Project Poster', upload_to=get_poster_path)
+    cover = models.ImageField(default='', verbose_name='Project Poster', upload_to=get_poster_path)
     topics = models.ManyToManyField(Skill, related_name='ProjectTopics', blank=True)
-    detail = RichTextField(verbose_name='Details', max_length=10000, null=True)
+    detail = RichTextField(verbose_name='Details')
     links = models.ManyToManyField(Portal, related_name='ProjectLinks', through='ProjectLink')
-    album = models.ForeignKey(Album, on_delete=models.CASCADE, null=True, blank=True)
+    album = models.ForeignKey(Album, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Projects"
@@ -33,14 +42,17 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
+
 class ProjectLink(models.Model):
-    portal = models.ForeignKey(Portal, on_delete=models.CASCADE, related_name='project_links_portal', verbose_name='Portal Name')
-    link = models.URLField(max_length=100,verbose_name='Project Page URL')
+    portal = models.ForeignKey(Portal, on_delete=models.CASCADE, related_name='project_links_portal',
+                               verbose_name='Portal Name')
+    link = models.URLField(max_length=100, verbose_name='Project Page URL')
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = "Project Profile Links"
         verbose_name = "Project Profile Link"
+
 
 class Certificate(models.Model):
     def get_certificate_path(instance, filename):
@@ -49,11 +61,12 @@ class Certificate(models.Model):
         return 'static/uploads/documents/certificates/' + filename
 
     title = models.CharField(max_length=200)
-    attachment = models.FileField(upload_to=get_certificate_path, verbose_name='Attach Certificate',null=True,blank=True)
-    member = models.ForeignKey(User,on_delete=models.CASCADE, related_name='Certificate', verbose_name='Certified')
+    attachment = models.FileField(upload_to=get_certificate_path, verbose_name='Attach Certificate', null=True,
+                                  blank=True)
+    member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Certificate', verbose_name='Certified')
     topics = models.ManyToManyField(Skill, related_name='CertificateTopics', blank=True)
     date = models.DateField(default=date.today)
-    issuer = models.ForeignKey(Organization,on_delete=models.PROTECT)
+    issuer = models.ForeignKey(Organization, on_delete=models.PROTECT)
 
     class Meta:
         verbose_name_plural = "Certificates"
@@ -62,13 +75,14 @@ class Certificate(models.Model):
     def __str__(self):
         return self.title
 
+
 class Course(models.Model):
     name = models.CharField(max_length=200)
-    url = models.URLField(null=True,blank=True)
-    member = models.ForeignKey(User,on_delete=models.CASCADE, related_name='Course', verbose_name='Member')
+    url = models.URLField(null=True, blank=True)
+    member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Course', verbose_name='Member')
     topics = models.ManyToManyField(Skill, related_name='CourseTopics', blank=True)
     date = models.DateField(default=date.today)
-    issuer = models.ForeignKey(Organization,on_delete=models.PROTECT)
+    issuer = models.ForeignKey(Organization, on_delete=models.PROTECT)
     certificate = models.ForeignKey(Certificate, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
@@ -78,14 +92,15 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
+
 class Honour(models.Model):
     title = models.CharField(max_length=200)
-    issuer = models.ForeignKey(Organization,on_delete=models.PROTECT)
-    member = models.ForeignKey(User,on_delete=models.CASCADE, related_name='Honour', verbose_name='Member')
+    issuer = models.ForeignKey(Organization, on_delete=models.PROTECT)
+    member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Honour', verbose_name='Member')
     date = models.DateField(default=date.today)
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True)
     certificate = models.ForeignKey(Certificate, on_delete=models.SET_NULL, null=True, blank=True)
-    url = models.URLField(null=True,blank=True)
+    url = models.URLField(null=True, blank=True)
     topics = models.ManyToManyField(Skill, related_name='HonourTopic', blank=True)
 
     class Meta:
@@ -95,13 +110,14 @@ class Honour(models.Model):
     def __str__(self):
         return self.title
 
+
 class Publication(models.Model):
     title = models.CharField(max_length=200)
-    publisher = models.ForeignKey(Organization,on_delete=models.PROTECT)
+    publisher = models.ForeignKey(Organization, on_delete=models.PROTECT)
     members = models.ManyToManyField(User, related_name='Publication', verbose_name='Member')
     date = models.DateField(default=date.today)
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True)
-    url = models.URLField(null=True,blank=True)
+    url = models.URLField(null=True, blank=True)
     topics = models.ManyToManyField(Skill, related_name='PublicationTopic', blank=True)
 
     class Meta:
@@ -110,6 +126,7 @@ class Publication(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class Event(models.Model):
     title = models.CharField(max_length=200)
@@ -120,7 +137,7 @@ class Event(models.Model):
     topics = models.ManyToManyField(Skill, related_name='EventTopics', blank=True)
     projects = models.ManyToManyField(Project, related_name='EventProject', blank=True)
     honours = models.ManyToManyField(Honour, related_name='EventHonours', blank=True)
-    organizer = models.ForeignKey(Organization,on_delete=models.PROTECT, blank=True, null=True)
+    organizer = models.ForeignKey(Organization, on_delete=models.PROTECT, blank=True, null=True)
     album = models.ForeignKey(Album, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
@@ -130,12 +147,13 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
+
 class Talk(models.Model):
     title = models.CharField(max_length=200)
     member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Talk', verbose_name='Member')
     date = models.DateField(default=date.today)
     topics = models.ManyToManyField(Skill, related_name='TalkTopics', blank=True)
-    organizer = models.ForeignKey(Organization,on_delete=models.PROTECT,blank=True, null=True)
+    organizer = models.ForeignKey(Organization, on_delete=models.PROTECT, blank=True, null=True)
     event = models.ForeignKey(Event, on_delete=models.PROTECT, blank=True, null=True)
 
     class Meta:
@@ -145,4 +163,5 @@ class Talk(models.Model):
     def __str__(self):
         return self.title
 
-__all__ = ['Event', 'Talk','Project','Portal','Course','Certificate','Publication','ProjectLink','Honour']
+
+__all__ = ['Event', 'Talk', 'Project', 'Portal', 'Course', 'Certificate', 'Publication', 'ProjectLink', 'Honour']

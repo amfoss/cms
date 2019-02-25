@@ -58,11 +58,42 @@ class AttendanceAdmin(admin.ModelAdmin):
 
 @admin.register(LeaveRecord)
 class LeaveRecordAdmin(admin.ModelAdmin):
-    fields= (('user', 'type'), ('start_date', 'end_date'), 'reason')
-    list_display = ('user', 'type', 'start_date', 'end_date')
-    list_filter = ('user', 'type')
+    fields = [
+                ('member', 'type'),
+                ('start_date', 'end_date'),
+                'reason'
+             ]
+    list_display = ('member', 'type', 'start_date', 'end_date')
+    list_filter = ('member', 'type')
     select2 = select2_modelform(LeaveRecord, attrs={'width': '250px'})
     form = select2
+
+    def get_queryset(self, request):
+        qs = super(LeaveRecordAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(member=request.user)
+
+    def has_view_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if obj is not None and obj.member != request.user:
+            return False
+        return True
+
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if obj is not None and obj.member != request.user:
+            return False
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if obj is not None and obj.member != request.user:
+            return False
+        return True
 
 @admin.register(Responsibility)
 class ResponsibilityAdmin(admin.ModelAdmin):

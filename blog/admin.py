@@ -12,12 +12,32 @@ class CategoryAdmin(admin.ModelAdmin):
     select2 = select2_modelform(Category, attrs={'width': '250px'})
     form = select2
 
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     fields = [('name', 'slug')]
     search_fields = ['name']
     list_display = ('name', 'slug')
+
+
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
 
 
 @admin.register(Post)
@@ -27,11 +47,10 @@ class PostAdmin(admin.ModelAdmin):
         ('author', 'date', 'featured_image'),
         ('category', 'tags'),
         'content',
-        'featured',
-        'album'
+        ('featured', 'status', 'album')
     ]
-    list_display = ('title', 'author', 'category')
-    list_filter = ('author', 'category', 'tags')
+    list_display = ('title', 'status', 'author', 'category')
+    list_filter = ('status', 'category', 'tags')
     search_fields = ['title', 'author', 'category', 'tags']
     select2 = select2_modelform(Post, attrs={'width': '250px'})
     form = select2
@@ -58,12 +77,12 @@ class PostAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:
             return True
-        if obj is not None and obj.user != request.user:
+        if obj is not None and obj.author != request.user:
             return False
         return True
 
     def has_delete_permission(self, request, obj=None):
-        if obj is not None and obj.user != request.user:
+        if obj is not None and obj.author != request.user:
             return False
         return True
 
@@ -71,12 +90,12 @@ class PostAdmin(admin.ModelAdmin):
 @admin.register(ExternalPost)
 class ExternalPostAdmin(admin.ModelAdmin):
     fields = [
-        ('title', 'slug'),
-        ('author', 'date', 'featured_image'),
-        ('category', 'tags'),
-        'url',
-        'featured'
-    ]
+                ('title', 'slug'),
+                ('author', 'date', 'featured_image'),
+                ('category', 'tags'),
+                'url',
+                'featured'
+             ]
     list_display = ('title', 'author', 'category')
     list_filter = ('author', 'category', 'tags')
     search_fields = ['title', 'author', 'category', 'tags']
@@ -110,6 +129,8 @@ class ExternalPostAdmin(admin.ModelAdmin):
         return True
 
     def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
         if obj is not None and obj.user != request.user:
             return False
         return True

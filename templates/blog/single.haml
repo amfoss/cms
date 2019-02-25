@@ -7,14 +7,19 @@
     %link{:rel => "stylesheet", :href =>"{% sass_src 'pages/styles/post.sass' %}" }
 {% endblock %}
 {% block content %}
-    %section{:class=>"page-cover"}
-      %div
-        %h1 {{post.title}}
-        %div.author-title
-          <img src="/{{author.avatar}}">
-          {{author.first_name}} {{author.last_name}}
-    %section.my-4.container
-      <img src="/{{post.featured_image}}" class="featured_image">
-      .post-card.bg-white
-        {{post.content|safe}}
+    {% if post.status == 'D' %}
+      #full-cover.text-center.align-items-center.justify-content-center.d-flex
+        %h1.huge-text 404
+    {% else %}
+      %section{:class=>"page-cover"}
+        %div
+          %h1 {{post.title}}
+          %div.author-title
+            <img src="/{{author.avatar}}">
+            {{author.first_name}} {{author.last_name}}
+      %section.my-4.container
+        <img src="/{{post.featured_image}}" class="featured_image">
+        .post-card.bg-white
+          {{post.content|safe}}
+    {% endif %}
 {% endblock %}

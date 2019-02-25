@@ -4,6 +4,11 @@ from ckeditor.fields import RichTextField
 import uuid
 from datetime import date
 
+POST_STATUS = [
+    ('U', 'Unlisted'),
+    ('D', 'Draft'),
+    ('P', 'Published')
+]
 
 class Tag(models.Model):
     name = models.CharField(max_length=50)
@@ -38,6 +43,7 @@ class Post(models.Model):
 
     title = models.CharField(max_length=200)
     slug = models.SlugField()
+    status = models.CharField(choices=POST_STATUS, default='D', max_length=1)
     featured = models.BooleanField(default=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Post', verbose_name='Author')
     content = RichTextField()

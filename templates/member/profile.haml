@@ -239,27 +239,29 @@
     %section.tab#blog-tab
       .row.m-0
         {% for p in posts %}
-        .col-lg-4.col-md-6
-          <a href="{{p.slug}}">
-            .section-card.bg-white.blog-post
-              <img src="/{{p.featured_image}}" class="cover">
-              .content
-                %h3 {{p.title}}
-                %div
-                  %span
-                    .fa.fa-calendar
-                    {{p.date}}
-                  %span
-                    {%for c in p.category_set.all %}
-                      {{c.name}}
-                      %h1 tag
-                    {% endfor %}
-                  %span
-                    {%for c in p.tag_set.all %}
-                      {{c.name}}
-                      %h1 tag
-                    {% endfor %}
-          </a>
+          {% if p.status == 'P' %}
+            .col-lg-4.col-md-6
+              <a href="{{p.slug}}">
+                .section-card.bg-white.blog-post
+                  <img src="/{{p.featured_image}}" class="cover">
+                  .content
+                    %h3 {{p.title}}
+                    %div
+                      %span
+                        .fa.fa-calendar
+                        {{p.date}}
+                      %span
+                        {%for c in p.category_set.all %}
+                          {{c.name}}
+                          %h1 tag
+                        {% endfor %}
+                      %span
+                        {%for c in p.tag_set.all %}
+                          {{c.name}}
+                          %h1 tag
+                        {% endfor %}
+                </a>
+            {% endif %}
         {% endfor %}
 
   {% else %}
