@@ -15,27 +15,27 @@
         %img{:src => "{% static 'pages/images/icons/gsoc.png' %}" } Google Summer of Code
       %div{:class=>"row p-2 m-0"}
         %div{:class=>"col-lg-3 col-md-4 col-6 p-2 h-100"}
-          %div{:class=>"achievement-card py-2"}
-            %div{:class=>"num"}
-              %h3 8th
+          %div{:class=>"achievement-card anime fadeInUp py-2"}
+            .w-100.py-4.px-2
+              %h3.num 8th
               %h5 Global Rank
         %div{:class=>"col-lg-3 col-md-4 col-6 p-2 h-100"}
-          %div{:class=>"achievement-card py-2"}
-            %div{:class=>"num"}
-              %h3  {{gsoc_members|length}}
+          %div{:class=>"achievement-card anime fadeInDown py-2"}
+            .w-100.py-4.px-2
+              %h3.num {{gsoc_members|length}}
               %h5 GSoC Students (Total)
         %div{:class=>"col-lg-3 col-md-4 col-6 p-2 h-100"}
-          %div{:class=>"achievement-card py-2"}
-            %div{:class=>"num"}
-              %h3 ${{gsoc_stipend}}k
+          %div{:class=>"achievement-card anime fadeInUp py-2"}
+            .w-100.py-4.px-2
+              %h3.num ${{gsoc_stipend}}k
               %h5 Stipend (Total)
         %div{:class=>"col-lg-3 col-md-4 col-6 p-2 h-100"}
-          %div{:class=>"achievement-card py-2"}
-            %div{:class=>"num"}
-              %h3 {{current_gsoc|length}}
+          %div{:class=>"achievement-card anime fadeInDown py-2"}
+            .w-100.py-4.px-2
+              %h3.num {{current_gsoc|length}}
               %h5 GSoC this year
         %div{:class=>"col-md-6 p-2 h-100"}
-          %div{:class=>"achievement-card"}
+          %div{:class=>"achievement-card anime zoomIn"}
             %div{:class=>"w-100"}
               %h2 {{gsoc_orgs|length}} Organizations Contributed
               %div{:class=>"icon-list row mx-0 mt-4"}
@@ -48,7 +48,7 @@
                   </div>
                 {% endfor %}
         %div{:class=>"col-md-6 p-2 h-100"}
-          %div{:class=>"achievement-card my-4"}
+          %div{:class=>"achievement-card anime zoomIn"}
             %div{:class=>"w-100"}
               %h2 {{gsoc_members|length}} Students Selected
               %div{:class=>"icon-list row mx-0 mt-4"}
@@ -66,7 +66,7 @@
           %img{:src => "{% static 'pages/images/icons/travel.png' %}" } International Achievements
         <div id="international-slider">
         {% for i in international_events  %}
-          %div{:class=>"achievement-card my-4"}
+          %div{:class=>"achievement-card anime fadeInUp my-4"}
             %div{:class=>"px-3 py-2 w-100"}
               %h4 {{i.title}}
               <span>{{i.type}}</span>
@@ -91,7 +91,7 @@
           %img{:src => "{% static 'pages/images/icons/coworking.png' %}" } Internship
         <div id="internship-slider">
         {% for i in internships  %}
-          %div{:class=>"achievement-card my-4"}
+          %div{:class=>"achievement-card anime fadeInUp my-4"}
             %div{:class=>"px-3 py-2 w-100"}
               %h4 {{i.title}}
               <sub><img src="/{{i.organizer.icon}}"></sub>
@@ -115,7 +115,7 @@
         %img{:src => "{% static 'pages/images/icons/podium.png' %}" } Talks
       <div id="talks-slider">
         {% for t in talks %}
-          %div{:class=>"achievement-card my-4"}
+          %div{:class=>"achievement-card anime fadeInUp my-4"}
             %div{:class=>"px-4 py-2 w-100"}
               %h4 {{t.title}}
               <sub><img src="/{{t.organizer.icon}}"></sub>
@@ -136,7 +136,7 @@
           %img{:src => "{% static 'pages/images/icons/news.png' %}" } Publications
         <div id="publications-slider">
           {% for p in publications  %}
-            %div{:class=>"achievement-card my-4"}
+            %div{:class=>"achievement-card anime fadeInUp my-4"}
               %div{:class=>"px-3 py-2 w-100"}
                 %h4 {{p.title}}
                 <sub><img src="/{{p.publisher.icon}}"></sub>

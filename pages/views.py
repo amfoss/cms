@@ -4,6 +4,7 @@ from members.models import *
 from activity.models import *
 from gsoc.models import *
 from blog.models import *
+from status.models import *
 from .models import *
 from django.contrib.auth.models import User
 from django.views.generic import View, ListView, DetailView, UpdateView, DeleteView, CreateView, TemplateView
@@ -32,9 +33,13 @@ class UserProfile(DetailView):
 
     def get_activity(self, member):
         att = Attendance.objects.filter(member=member)
+        status = StatusRegister.objects.filter(member=member, status=True)
+        print(status)
         a = {}
         for i in att:
             a[str(int(i.session_start.timestamp()))] = int(i.duration.seconds/(60*60))
+        for j in status:
+            a[str(int(j.date.strftime("%s")))] = 2
         return a
 
 

@@ -37,12 +37,11 @@ $primary-color: #ffc107
 
 
 #activity-heatmap
+    display: flex!important
+    justify-content: center
     overflow-x: auto
     height: 100%
     display: block
-
-    .cal-heatmap-container
-        margin-top: 3vh
 
 
 @media (max-width: 720px)
@@ -70,10 +69,11 @@ $primary-color: #ffc107
         border-left: 1px solid
         border-right: 1px solid
         border-color: #ddd
-        font-size: calc(1rem + 0.3vw)
+        font-size: calc(0.8rem + 0.4vw)
         img
-            max-width: 45px
-            padding: 0.3rem
+            width: 3vmax
+            min-width: 36px
+            padding: 0.2rem
     a:hover
         background-color: #eeee
 

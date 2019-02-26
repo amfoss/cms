@@ -6,6 +6,7 @@
 {% block styles %}
   <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
   <script type="text/javascript" src="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.css" />
   %link{:rel => "stylesheet", :href =>"{% sass_src 'pages/styles/profile.sass' %}" }
 {% endblock %}
@@ -38,13 +39,65 @@
 
     %section.tab#activity-tab
       .row.m-0
-        .col-lg-6.col-md-8.p-2
-          .section-card.bg-white
-            %h4
-              %img{:src => "{% static 'pages/images/icons/activity-grid.png' %}"}
-              Activity Heatmap
-            <div id="activity-heatmap"></div>
-        .col
+        .col-lg-8.row.m-0
+          .col-12.p-2
+            .section-card.bg-white.p-0.m-2
+              .bg-primary.px-4.py-2
+                %h4
+                  Activity Heatmap
+              .p-3
+                <div id="activity-heatmap"></div>
+          .col-lg-3.col-md-4.col-6.p-2
+            .section-card.bg-white.text-center.p-0.m-2
+              .p-3
+                %h3.num
+                  %img{:src => "{% static 'pages/images/icons/streak.png' %}"}
+                  .count.py-2 8
+                %div
+                  Longest Streak - 8 Days
+              .bg-primary.p-4
+                %h5.d-inline
+                  Day Streak
+          .col-lg-3.col-md-4.col-6.p-2
+            .section-card.bg-white.text-center.p-0.m-2
+              .p-3
+                %h3.num
+                  %img{:src => "{% static 'pages/images/icons/hourglass.png' %}"}
+                  .count.py-2 535
+                %div
+                  50hrs this week
+              .bg-primary.p-4
+                %h5.d-inline
+                  Lab Hours
+          .col-lg-3.col-md-4.col-6.p-2
+            .section-card.bg-white.text-center.p-0.m-2
+              .p-3
+                %h3.num
+                  %img{:src => "{% static 'pages/images/icons/sleep.png' %}"}
+                  .count.py-2 0
+                %div
+                  0hrs this week
+              .bg-primary.p-4
+                %h5.d-inline
+                  Break Hours
+          .col-lg-3.col-md-4.col-6.p-2
+            .section-card.bg-white.text-center.p-0.m-2
+              .p-3
+                %h3.num
+                  %img{:src => "{% static 'pages/images/icons/sleep.png' %}"}
+                  .count.py-2 0
+                %div
+                  0hrs this week
+              .bg-primary.p-4
+                %h5.d-inline
+                  Break Hours
+        .col-lg-4.col-md-6.p-2
+          .section-card.bg-white.p-0.m-2
+            .bg-primary.px-4.py-2
+              %h4
+                Activity BreakUp
+            .p-3
+              <canvas id="activity-breakup"></canvas>
     %section.tab#profile-tab
       .row.m-0
         .col
@@ -318,6 +371,27 @@
     data: vals,
     displayLegend: false
   });
+
+  var ctx = document.getElementById("activity-breakup");
+  var myChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['Work', 'Activities', 'Responsibilities', 'Mentoring'],
+      datasets: [{
+        fontSize: 16,
+        data: [14, 25, 20, 9],
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      }]
+    },
+    options: {
+      scale: {
+        pointLabels: {
+          fontSize: 16
+        }
+      }
+    }
+  });
+  myChart.options.legend.display = false;
 
 </script>
 {% endblock %}

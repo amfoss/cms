@@ -56,6 +56,18 @@ class Task(models.Model):
     def __str__(self):
         return self.name
 
+class StatusRegister(models.Model):
+    member = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateField(default=date.today)
+    status = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name_plural = "Member Status Register"
+        verbose_name = "Member Status Entry"
+
+    def __str__(self):
+        return self.member.username
+
 class Notification(models.Model):
     title = models.CharField(null=True, max_length=50)
     groups = models.ManyToManyField('members.group')
