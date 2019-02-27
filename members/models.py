@@ -19,7 +19,15 @@ class Skill(models.Model):
 
     name = models.CharField(max_length=25)
     type = models.CharField(choices=SKILL_TYPES, default='O', max_length=1)
-    icon = ProcessedImageField(default='', verbose_name='Icon', upload_to=get_icon_path, null=True, blank=True, validators=[validate_file_size], **processed_image_field_specs)
+    icon = ProcessedImageField(
+        default='./pages/static/pages/defaults/members-skill-icon-default.png',
+        blank=True,
+        verbose_name='Icon',
+        upload_to=get_icon_path,
+        null=True,
+        validators=[validate_file_size],
+        **processed_image_field_specs
+    )
 
     def __str__(self):
         return self.name
@@ -55,7 +63,15 @@ class Organization(models.Model):
         return 'static/uploads/images/organizations/' + filename
 
     name = models.CharField(max_length=50)
-    icon = ProcessedImageField(default='', verbose_name='Logo/Icon', upload_to=get_icon_path, null=True, blank=True, validators=[validate_file_size], **processed_image_field_specs)
+    icon = ProcessedImageField(
+        default='./pages/static/pages/defaults/members-organization-icon-default.jpg',
+        blank=True,
+        verbose_name='Logo/Icon',
+        upload_to=get_icon_path,
+        null=True,
+        validators=[validate_file_size],
+        **processed_image_field_specs
+    )
 
     def __str__(self):
         return self.name
@@ -89,7 +105,8 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=50)
     avatar = ProcessedImageField(
-                default='',
+                default='./pages/static/pages/defaults/members-avatar-default.png',
+                blank=True,
                 verbose_name='Profile Picture',
                 upload_to=get_dp_path,
                 validators=[validate_file_size],
@@ -114,12 +131,12 @@ class Profile(models.Model):
     system_no = models.IntegerField(null=True, blank=True)
     cover = ProcessedImageField(
         default='',
+        blank=True,
         verbose_name='Cover Picture',
         upload_to=get_cover_path,
         validators=[validate_file_size],
         **processed_image_field_specs,
         null=True,
-        blank=True
     )
     accent = models.CharField(
             max_length=15,
@@ -231,7 +248,11 @@ class Responsibility(models.Model):
 
 class Team(models.Model):
     name = models.CharField(max_length=50)
-    image = ProcessedImageField(**processed_image_field_specs)
+    image = ProcessedImageField(
+        default='./pages/static/pages/defaults/members-team-image-default.png',
+        blank=True,
+        **processed_image_field_specs
+    )
     about = RichTextField(max_length=2000, null=True, blank=True)
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE, null=True)
     members = models.ManyToManyField(User, related_name='Team')
