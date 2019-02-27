@@ -4,18 +4,30 @@ from activity.models import *
 from .inlines import *
 from easy_select2 import select2_modelform
 
+
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Basic Details', {
-            'fields': (('user', 'role'), ('email', 'phone', 'avatar'),
-                       ('first_name', 'last_name'), )
+            'fields': [
+                        ('user', 'role'),
+                        ('email', 'phone', 'avatar'),
+                        ('first_name', 'last_name'),
+                      ]
         }),
         ('Additional Details', {
-            'fields': ( ('roll_number', 'batch', 'birthday'), ('resume', 'system_no'), ('location', 'languages'), 'tagline', 'about')
+            'fields': [
+                        ('roll_number', 'batch', 'birthday'),
+                        ('resume', 'system_no', 'typing_speed'),
+                        ('location', 'languages'),
+                        ('cover', 'accent', 'tagline'),
+                        'about'
+                      ]
         }),
         ('Interests & Expertise', {
-            'fields': (('interests', 'expertise'),)
+            'fields': [
+                        ('interests', 'expertise'),
+                      ]
         }),
 
     ]
@@ -40,6 +52,7 @@ class ProfileAdmin(admin.ModelAdmin):
             return False
         return True
 
+
 @admin.register(AttendanceLog)
 class AttendanceLogAdmin(admin.ModelAdmin):
     fields  = (('member', 'timestamp','ip'), 'ssids')
@@ -48,6 +61,7 @@ class AttendanceLogAdmin(admin.ModelAdmin):
     select2 = select2_modelform(AttendanceLog, attrs={'width': '250px'})
     form = select2
 
+
 @admin.register(Attendance)
 class AttendanceAdmin(admin.ModelAdmin):
     fields  = ('member', ('session_start', 'session_end'),)
@@ -55,6 +69,7 @@ class AttendanceAdmin(admin.ModelAdmin):
     list_filter = ('member', 'session_start')
     select2 = select2_modelform(Attendance, attrs={'width': '250px'})
     form = select2
+
 
 @admin.register(LeaveRecord)
 class LeaveRecordAdmin(admin.ModelAdmin):
@@ -95,6 +110,7 @@ class LeaveRecordAdmin(admin.ModelAdmin):
             return False
         return True
 
+
 @admin.register(Responsibility)
 class ResponsibilityAdmin(admin.ModelAdmin):
     search_fields = ['title', 'members']
@@ -103,6 +119,7 @@ class ResponsibilityAdmin(admin.ModelAdmin):
     select2 = select2_modelform(Responsibility, attrs={'width': '250px'})
     form = select2
 
+
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
     search_fields = ['name', 'members']
@@ -110,6 +127,7 @@ class TeamAdmin(admin.ModelAdmin):
     list_filter = ('name', 'members')
     select2 = select2_modelform(Team, attrs={'width': '250px'})
     form = select2
+
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
@@ -120,6 +138,7 @@ class GroupAdmin(admin.ModelAdmin):
     select2 = select2_modelform(Group, attrs={'width': '250px'})
     form = select2
 
+
 @admin.register(MentorGroup)
 class MentorGroupAdmin(admin.ModelAdmin):
     search_fields = ['mentor', 'mentees']
@@ -128,25 +147,30 @@ class MentorGroupAdmin(admin.ModelAdmin):
     select2 = select2_modelform(MentorGroup, attrs={'width': '250px'})
     form = select2
 
+
 @admin.register(Portal)
 class PortalAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):
         return False
+
 
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):
         return False
 
+
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):
         return False
 
+
 @admin.register(Role)
 class RolesAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):
         return False
+
 
 @admin.register(Language)
 class LanguageAdmin(admin.ModelAdmin):

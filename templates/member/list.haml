@@ -15,11 +15,11 @@
           <input id="search-box" type="text" onkeyup="searchFunction()" class="form-control" placeholder="Search Here">
 
     %section.my-4
-      .row.m-0#members
+      .row.m-0#members.p-3
         {% for p in profiles %}
           <div member class="col-lg-3 col-md-4 col-6 p-2"  tags="{{p.first_name.lower }} {{ p.last_name.lower }} {{p.user.username.lower}}">
             <a href="/@{{p.user.username}}">
-              .section-card.bg-white.p-0.anime.zoomIn.m-3
+              .section-card.bg-white.p-0.anime.zoomIn.m-1
                 <img src="/{{p.avatar}}" class="cover">
                 .content
                   %h4 {{p.first_name}} {{p.last_name}}

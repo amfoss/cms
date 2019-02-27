@@ -12,7 +12,8 @@
 {% endblock %}
 {% block content %}
   {% if profile %}
-    %section#cover
+    <section id="cover"
+      style="background-image: {% if profile.cover %} linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/{{profile.cover}}'); {% endif %} background-position: center; background-size: cover; background-color: {{profile.accent}};">
       %div.name.text-center
         <img src="/{{profile.avatar}}" id="avatar" class="w-100 rounded-circle">
         %h1 {{profile.first_name}} {{profile.last_name}}
@@ -23,6 +24,7 @@
           {% for l in socialProfiles %}
             <a href="{{l.link}}" style="color: {{l.portal.color}}"  class="{{l.portal.icon}}"></a>
           {% endfor %}
+    </section>
     %nav#section-switcher
       %a#activity-tab-button
         %img{:src => "{% static 'pages/images/icons/calendar.png' %}"}
@@ -357,7 +359,7 @@
   var vals =  {{activity|safe}}
   console.log(vals);
 
-  var dateOffset = (24*60*60*1000) * 330;
+  var dateOffset = (24*60*60*1000) * 360;
   var startDate = new Date();
   startDate.setTime(startDate.getTime() - dateOffset);
 
@@ -392,6 +394,40 @@
     }
   });
   myChart.options.legend.display = false;
+
+  function invertHex(hexnum){
+    if(hexnum.length != 7) {
+      return false;
+    }
+
+    hexnum = hexnum.substr(1);
+    hexnum = hexnum.toUpperCase();
+    var splitnum = hexnum.split("");
+    var resultnum = "";
+    var simplenum = "FEDCBA9876".split("");
+    var complexnum = new Array();
+    complexnum.A = "5";
+    complexnum.B = "4";
+    complexnum.C = "3";
+    complexnum.D = "2";
+    complexnum.E = "1";
+    complexnum.F = "0";
+
+    for(i=0; i<6; i++){
+      if(!isNaN(splitnum[i])) {
+        resultnum += simplenum[splitnum[i]];
+      } else if(complexnum[splitnum[i]]){
+        resultnum += complexnum[splitnum[i]];
+      } else {
+        alert("Hex colors must only include hex numbers 0-9, and A-F");
+        return false;
+      }
+    }
+
+    return '#' + resultnum;
+  }
+  color = invertHex("{{profile.accent|safe}}");
+  $('#cover').css('color',color);
 
 </script>
 {% endblock %}

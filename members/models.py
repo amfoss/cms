@@ -10,6 +10,7 @@ from imagekit.models import ProcessedImageField
 SKILL_TYPES = (('T', 'Technical'), ('A', 'Arts'), ('S', 'Social'), ('P', 'Sports'), ('O', 'Others'))
 LEAVE_TYPE = (('M', 'Health'), ('F', 'Family/Home'), ('T', 'Tiredness'), ('A', 'Academics'), ('D', 'Duty'))
 
+
 class Skill(models.Model):
     def get_icon_path(self, filename):
         ext = filename.split('.')[-1]
@@ -23,17 +24,20 @@ class Skill(models.Model):
     def __str__(self):
         return self.name
 
+
 class Language(models.Model):
     name = models.CharField(max_length=25)
 
     def __str__(self):
         return self.name
 
+
 class Role(models.Model):
     name = models.CharField(max_length=25)
 
     def __str__(self):
         return self.name
+
 
 class Portal(models.Model):
     name = models.CharField(max_length=25)
@@ -56,38 +60,85 @@ class Organization(models.Model):
     def __str__(self):
         return self.name
 
+
 class Profile(models.Model):
     def get_dp_path(self, filename):
         ext = filename.split('.')[-1]
         filename = "%s.%s" % (uuid.uuid4(), ext)
         return 'static/uploads/images/dp/' + filename
 
+    def get_cover_path(self, filename):
+        ext = filename.split('.')[-1]
+        filename = "%s.%s" % (uuid.uuid4(), ext)
+        return 'static/uploads/images/cover/' + filename
+
     def get_resume_path(self, filename):
         ext = filename.split('.')[-1]
         filename = "%s.%s" % (uuid.uuid4(), ext)
         return 'static/uploads/documents/resume/' + filename
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='Profile', verbose_name='User')
-    email = models.EmailField(max_length=254, null=True)
-    phone = models.CharField(max_length=12, null=True)
-    first_name = models.CharField(max_length=25, null=True)
-    last_name = models.CharField(max_length=50, null=True)
+    # Basic Info
+    user = models.OneToOneField(
+                User, on_delete=models.CASCADE,
+                related_name='Profile',
+                verbose_name='User'
+    )
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
+    email = models.EmailField(max_length=254)
+    phone = models.CharField(max_length=12)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=50)
+    avatar = ProcessedImageField(
+                default='',
+                verbose_name='Profile Picture',
+                upload_to=get_dp_path,
+                validators=[validate_file_size],
+                **processed_image_field_specs
+    )
+
+    # Additional Details
     roll_number = models.CharField(max_length=25,null=True, blank=True)
-    role = models.ForeignKey(Role,on_delete=models.SET_NULL, null=True)
     batch = models.IntegerField(null=True, help_text='Year of Admission', blank=True)
-    avatar = ProcessedImageField(default='', verbose_name='Profile Picture', upload_to=get_dp_path, validators=[validate_file_size], **processed_image_field_specs)
     location = models.CharField(max_length=150, null=True, blank=True)
     birthday = models.DateField(null=True, help_text='YYYY-MM-DD', blank=True)
     tagline = models.CharField(max_length=80, null=True, blank=True)
     about = RichTextField(max_length=1000, null=True, blank=True)
+    typing_speed = models.IntegerField(null=True, blank=True)
+    resume = models.FileField(
+                upload_to=get_resume_path,
+                verbose_name='Attach Resume',
+                null=True,
+                blank=True,
+                validators=[validate_file_size]
+    )
+    system_no = models.IntegerField(null=True, blank=True)
+    cover = ProcessedImageField(
+        default='',
+        verbose_name='Cover Picture',
+        upload_to=get_cover_path,
+        validators=[validate_file_size],
+        **processed_image_field_specs,
+        null=True,
+        blank=True
+    )
+    accent = models.CharField(
+            max_length=15,
+            verbose_name='Accent Colour for Profile',
+            help_text='Hex value with #',
+            blank=True,
+            null=True
+    )
+
+    # Relational Fields
     languages = models.ManyToManyField(Language, blank=True)
     interests = models.ManyToManyField(Skill, related_name='interests', blank=True)
     expertise = models.ManyToManyField(Skill, related_name='expertise', blank=True)
-    typing_speed = models.IntegerField(null=True, blank=True)
-    system_no = models.IntegerField(null=True, blank=True)
-    resume = models.FileField(upload_to=get_resume_path, verbose_name='Attach Resume',null=True,blank=True, validators=[validate_file_size])
     experiences = models.ManyToManyField(Organization, related_name='WorkExperiences', through='WorkExperience')
-    qualifications = models.ManyToManyField(Organization, related_name='EducationalQualifications', through='EducationalQualification')
+    qualifications = models.ManyToManyField(
+                Organization,
+                related_name='EducationalQualifications',
+                through='EducationalQualification'
+    )
     links = models.ManyToManyField(Portal, related_name='SocialProfile', through='SocialProfile')
 
     class Meta:
@@ -122,6 +173,7 @@ class WorkExperience(models.Model):
         verbose_name_plural = "Work Experiences"
         verbose_name = "Work Experience"
 
+
 class EducationalQualification(models.Model):
     institution = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='institution', verbose_name='Institution')
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -138,11 +190,13 @@ class EducationalQualification(models.Model):
         verbose_name_plural = "Educational Qualifications"
         verbose_name = "Educational Qualification"
 
+
 class AttendanceLog(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='AttendanceLog')
     timestamp = models.DateTimeField()
     ssids = models.TextField()
     ip = models.CharField(max_length=200)
+
 
 class Attendance(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Attendance')
@@ -189,6 +243,7 @@ class Team(models.Model):
     def __str__(self):
         return self.name
 
+
 class Group(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=150)
@@ -201,6 +256,7 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
+
 class MentorGroup(models.Model):
     mentor = models.OneToOneField(User, on_delete=models.CASCADE, related_name='Mentor', verbose_name='Mentor Name')
     mentees = models.ManyToManyField(User, related_name='Mentees')
@@ -211,6 +267,7 @@ class MentorGroup(models.Model):
 
     def __str__(self):
         return self.mentor.username
+
 
 class LeaveRecord(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User', related_name='LeaveRecord')
