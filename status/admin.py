@@ -15,7 +15,7 @@ class StatusAdmin(admin.ModelAdmin):
 
 @admin.register(StatusRegister)
 class StatusRegisterAmdin(admin.ModelAdmin):
-    list_display = ('member', 'date', 'status')
+    list_display = ('member', 'timestamp', 'status')
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):

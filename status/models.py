@@ -58,7 +58,7 @@ class Task(models.Model):
 
 class StatusRegister(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateField(default=date.today)
+    timestamp = models.DateTimeField()
     status = models.BooleanField(default=False)
 
     class Meta:
