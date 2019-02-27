@@ -5,7 +5,11 @@ from easy_select2 import select2_modelform
 
 @admin.register(Photo)
 class PhotoAdmin(admin.ModelAdmin):
-    fields = (('uploader', 'date'), 'image', 'caption')
+    fields = [
+                ('uploader', 'date'),
+                'image',
+                'caption'
+             ]
     list_display = ('image', 'uploader', 'date')
     list_filter = ['date']
     search_fields = ['uploader']
@@ -18,7 +22,14 @@ class PhotoAdmin(admin.ModelAdmin):
 
 @admin.register(Album)
 class AlbumAdmin(admin.ModelAdmin):
-    fields = (('title', 'uploader'), 'date', 'description', ('tags', 'category'), 'photos')
+    fields = [
+                'title',
+                ('slug', 'uploader', 'date'),
+                'description',
+                ('tags', 'category', 'cover'),
+                'photos',
+                'featured'
+            ]
     list_display = ('title', 'uploader', 'date')
     list_filter = ('date', 'tags', 'category')
     search_fields = ['uploader', 'tags', 'category']

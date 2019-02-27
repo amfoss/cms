@@ -45,7 +45,7 @@ class Post(models.Model):
         return 'static/uploads/blog/cover/' + filename
 
     title = models.CharField(max_length=200)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     status = models.CharField(choices=POST_STATUS, default='D', max_length=1)
     featured = models.BooleanField(default=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Post', verbose_name='Author')

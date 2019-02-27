@@ -4,6 +4,7 @@ from members.models import *
 from activity.models import *
 from gsoc.models import *
 from blog.models import *
+from gallery.models import *
 from status.models import *
 from .models import *
 from django.contrib.auth.models import User
@@ -172,6 +173,29 @@ class ProjectDetail(DetailView):
             context['socialProfiles'] = ProjectLink.objects.filter(project=project)
         except Profile.DoesNotExist:
             context['error'] = 'No data found for this project!'
+        return context
+
+class Gallery(ListView):
+    model = Album
+    template_name = 'gallery/list.haml'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['albums'] = Album.objects.filter(featured=True)
+        return context
+
+class GalleryAlbum(DetailView):
+    model = Album
+    template_name = 'gallery/album.haml'
+
+    def get_context_data(self, **kwargs):
+        context = super(GalleryAlbum, self).get_context_data(**kwargs)
+        try:
+            album = Album.objects.get(slug=self.kwargs['slug'])
+            context['album'] = album
+            context['uploader'] = Profile.objects.get(user=album.uploader)
+        except Profile.DoesNotExist:
+            context['error'] = 'No data found for this post!'
         return context
 
 class HomePage(TemplateView):

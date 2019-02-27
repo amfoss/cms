@@ -27,12 +27,15 @@ class Photo(models.Model) :
 
 class Album(models.Model) :
     title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
     uploader = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField(default=date.today)
     description = models.TextField(null=True, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     category = models.ManyToManyField(Category, blank=True)
-    photos = models.ManyToManyField(Photo)
+    featured = models.BooleanField(default=False)
+    cover = models.ForeignKey(Photo, on_delete=models.SET_NULL, null=True, related_name='featured_image')
+    photos = models.ManyToManyField(Photo, related_name='album')
 
     def __str__(self):
         return self.title

@@ -14,9 +14,10 @@
       %section{:class=>"page-cover"}
         %div
           %h1 {{post.title}}
-          %div.author-title
-            <img src="/{{author.avatar}}">
-            {{author.first_name}} {{author.last_name}}
+      .post-card.bg-white.py-3
+        .d-flex.p-2.align-items-center
+          <img src="/{{author.avatar}}" style="width: 40px; height: 40px; object-fit: cover;" class="rounded-circle">
+          .pl-2 {{author.first_name}} {{author.last_name}}
       %section.my-4.container
         <img src="/{{post.featured_image}}" class="featured_image">
         .post-card.bg-white
