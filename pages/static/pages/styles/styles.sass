@@ -136,13 +136,17 @@ img
                 div
                     width: 100%
 
+@media (max-width: 800px)
+    #sidebar
+        width: 100%!important
+
 @media (min-width: 1200px)
     #page-container
         margin-left: 18rem
         min-height: 100vh
         margin-top: 0!important
     #sidebar
-        display: block!important
+        display: flex!important
         padding-top: 1.8vw!important
         .text-center
             display: block!important
@@ -170,6 +174,7 @@ img
         left: 10vw
         font-size: 1.5rem
         font-weight: 300
+        animation-duration: 0.4s
 
     img
         height: 1.8rem
@@ -186,7 +191,11 @@ img
     z-index: 3000
     overflow-y: auto
     padding-top: 5rem
+    justify-content: center
     box-shadow: 5px 3px 3px 1px rgba(0,0,0,0.2)
+    animation-duration: 0.4s
+
+    .menu-container
 
     img
         height: 23vh
