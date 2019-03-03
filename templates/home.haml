@@ -58,17 +58,19 @@
 
       %div{:class=>"col-lg-6 col-md-4 p-4"}
         %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/who_are_we.jpg' %}"}
-    %hr
-    #testimonials.bg-white.p-4
-      {% for t in testimonials %}
-          .testimonial.text-center.w-100
-            .message "{{t.message}}"
-            %div
-              <img src="/{{t.avatar}}">
-              %div.d-block
-                %span.d-block.text-left {{t.author}}
-                .sub {{t.credential}}
-      {% endfor %}
+    {% if testimonials %}
+      %hr
+      #testimonials.bg-white.p-4
+        {% for t in testimonials %}
+            .testimonial.text-center.w-100
+              .message "{{t.message}}"
+              %div
+                <img src="/{{t.avatar}}">
+                %div.d-block
+                  %span.d-block.text-left {{t.author}}
+                  .sub {{t.credential}}
+        {% endfor %}
+    {% endif %}
 
   %div{:id=>"what-we-do",:class=>"bg-white section-card anime fadeInRight"}
     %div{:class=>"row mb-4 mx-0"}
