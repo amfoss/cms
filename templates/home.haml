@@ -38,7 +38,7 @@
 
   %div{:id=>"what-we-do",:class=>"bg-white section-card anime fadeInLeft"}
     %div{:class=>"row mb-4 mx-0"}
-       %div{:class=>"col-lg-6 col-md-8 p-4 text-left"}
+       %div{:class=>"col-lg-6 col-md-8 p-4 text-left order-1"}
           %h2.anime.slideInLeft Who are We?
           %p.anime.slideInUp
             FOSS@Amrita (also known as amFOSS ) is a community of passionate college students,
@@ -56,7 +56,7 @@
             and established Amrita Vishwa Vidyapeetham, Amritapuri Campus as globally 8th ranked in GSoC ranking.
             The club is run by the students themselves, with the help of research scholars, alumni, and faculties.
 
-      %div{:class=>"col-lg-6 col-md-4 p-4"}
+      %div{:class=>"col-lg-6 col-md-4 p-4 order-md-2 align-items-center d-flex"}
         %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/who_are_we.jpg' %}"}
     {% if testimonials %}
       %hr
@@ -74,7 +74,7 @@
 
   %div{:id=>"what-we-do",:class=>"bg-white section-card anime fadeInRight"}
     %div{:class=>"row mb-4 mx-0"}
-        %div{:class=>"col-lg-6 col-md-4 p-4"}
+        %div{:class=>"col-lg-6 col-md-4 p-4 align-items-center d-flex"}
           %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/what_we_do.png' %}"}
         %div{:class=>"col-lg-6 col-md-8 p-4 text-left"}
           %h2.anime.slideInRight What We Do?
@@ -97,27 +97,30 @@
 
     %hr
     %div{:class=>"row my-4 mx-0 features"}
-      %div{:class=>"col-md-4 p-2 anime zoomInLeft"}
+      %div{:class=>"col-md-4 col-6 p-2 anime zoomInLeft"}
         %img{:src => "{% static 'pages/images/icons/mentorship.png' %}"}
         %h5 Mentor & Train Students
           %span to take on the world
-        %a{:href=> "#"} Our Vision
-        %a{:href=> "#"} Club Activities
-      %div{:class=>"col-md-4 p-2 anime zoomInUp"}
+        .d-none.d-md-block
+          %a{:href=> "#"} Our Vision
+          %a{:href=> "#"} Club Activities
+      %div{:class=>"col-md-4 col-6 p-2 anime zoomInUp"}
         %img{:src => "{% static 'pages/images/icons/open-source.png' %}"}
         %h5 Promote Open Source
            %span and Computer Science
-        %a{:href=> "#"} Workshops
-        %a{:href=> "#"} Initiatives
+       .d-none.d-md-block
+          %a{:href=> "#"} Workshops
+          %a{:href=> "#"} Initiatives
       %div{:class=>"col-md-4 p-2 anime zoomInRight"}
         %img{:src => "{% static 'pages/images/icons/contribute.png' %}"}
         %h5 Contribute to Open Source
           %span Projects & Communities
-        %a{:href=> "#"} Our Contributions
+        .d-none.d-md-block
+          %a{:href=> "#"} Our Contributions
 
   %div{:id=>"achievements",:class=>"bg-white section-card animie fadeInLeft"}
     %div{:class=>"row mb-4 mx-0"}
-      %div{:class=>"col-lg-6 col-md-8 p-4 text-left"}
+      %div{:class=>"col-lg-6 col-md-8 p-4 text-left order-1"}
         %h2.anime.slideInLeft What We have Achieved?
         %p.anime.slideInUp
           The club has become one of the forerunners in promoting, and contributing to open source in the country,
@@ -131,48 +134,51 @@
           Intel, IBM and VMWare. The active members also get selected for summer schools at global universities, and
           paid internships at top companies. Some of our alumni are currently Phd. research scholars at various foreign universities.
 
-      %div{:class=>"col-lg-6 col-md-4 p-4"}
+      %div{:class=>"col-lg-6 col-md-4 p-4 order-md-1 align-items-center d-flex"}
         %img{:class=>"featured-image anime jackInTheBox", :src => "{% static 'pages/images/club/what_did_we_achieve.png' %}"}
 
     %hr
     %div{:class=>"row my-4 mx-0 features"}
-      %div{:class=>"col-md-3 p-2 anime zoomInLeft"}
+      %div{:class=>"col-md-3 col-6 p-2 anime zoomInLeft"}
         %h4.num
           .count 33
           %span Google Summer of Code
-        %a{:href=> "#"} GSoC Ranking
-        %a{:href=> "/achievements#GSOC"} GSoC Projects
-      %div{:class=>"col-md-3 p-2 anime zoomInRight"}
+        .d-none.d-md-block
+          %a{:href=> "#"} GSoC Ranking
+          %a{:href=> "/achievements#GSOC"} GSoC Projects
+      %div{:class=>"col-md-3 col-6 p-2 anime zoomInRight"}
         %h4{:class=>"num"}
           .count 835
           %span Students Trained
-        %a{:href=> "#"} Our Alumni
-        %a{:href=> "#"} Alumini Blog
-      %div{:class=>"col-md-3 p-2 anime zoomInLeft"}
+        .d-none.d-md-block
+          %a{:href=> "#"} Our Alumni
+          %a{:href=> "#"} Alumini Blog
+      %div{:class=>"col-md-3 col-6 p-2 anime zoomInLeft"}
         %h4{:class=>"num"}
           .count 50
           %span Organizations Contributed
-        %a{:href=> "/projects"} Projects
-        %a{:href=> "/stats"} Statistics
-      %div{:class=>"col-md-3 p-2 anime zoomInRight"}
+        .d-none.d-md-block
+          %a{:href=> "/projects"} Projects
+          %a{:href=> "/stats"} Statistics
+      %div{:class=>"col-md-3 col-6 p-2 anime zoomInRight"}
         %h4{:class=>"num"}
           .count 15
           %span Workshops Conducted
-        %a{:href=> "#"} Workshops & Events
-
+        .d-none.d-md-block
+          %a{:href=> "#"} Workshops & Events
 
   %div{:class=>"row mb-4 mx-0"}
     %div{:class=>"col-lg-6 col-md-8 p-2 text-left"}
       %div{:class=>"bg-white section-card p-0 anime slideInRight"}
         .text-center
           %img{:class=>"card-icon pb-2 pt-4 anime bounceInDown",:src => "{% static 'pages/images/icons/diamond.png' %}" }
-          %h2{:class=>"py-2 px-4 anime bounceInUp"} Why should you join club?
+          %h3{:class=>"py-2 px-4 anime bounceInUp"} Why should you join club?
         %hr
         %div{:class=>"point row m-0 anime flipInX"}
-          %div{:class=>"col-sm-2 col-3 p-2 d-flex align-items-center"}
+          %div{:class=>"col-sm-2 p-2 d-flex align-items-center"}
             %img{:src => "{% static 'pages/images/icons/code.png' %}" }
           %div{:class=>"col p-2"}
-            %h3
+            %h4
               Advance Technically to New Heights
             %p
               Web, Android, Data Science, Desktop Application Development, Networks, IoT- learn and prosper
@@ -180,10 +186,10 @@
               software in Open Source. Make an impact!
         %hr
         %div{:class=>"point row m-0 anime flipInY"}
-          %div{:class=>"col-sm-2 col-3 p-2 d-flex align-items-center"}
+          %div{:class=>"col-sm-2 p-2 d-flex align-items-center"}
             %img{:src => "{% static 'pages/images/icons/care.png' %}" }
           %div{:class=>"col p-2"}
-            %h3
+            %h4
              Receive Care & Support through Mentorship
             %p
               Receive care and support from our rich mentorship environment.
@@ -192,10 +198,10 @@
 
         %hr
         %div{:class=>"point row m-0 anime flipInX"}
-          %div{:class=>"col-sm-2 col-3 p-2 d-flex align-items-center"}
+          %div{:class=>"col-sm-2 p-2 d-flex align-items-center"}
             %img{:src => "{% static 'pages/images/icons/run.png' %}" }
           %div{:class=>"col p-2"}
-            %h3
+            %h4
               Become Competent to Face the Real World
             %p
               Sharpen your skills, get exposed to collaborative product making, be a part and lead developer
@@ -203,18 +209,18 @@
               world class working style. Grow!
         %hr
         %div{:class=>"point row m-0 anime flipInY"}
-          %div{:class=>"col-sm-2 col-3 p-2 d-flex align-items-center"}
+          %div{:class=>"col-sm-2 p-2 d-flex align-items-center"}
             %img{:src => "{% static 'pages/images/icons/travel.png' %}" }
           %div{:class=>"col p-2"}
-            %h3
+            %h4
               Surf in an Ocean of Opportunities
             %p
               Internships, Student Exchange Programs, Summer Schools, Conferences, Talks, Hackathons - be it GSoC, SoK,
               RGSoC, Outreachy, FOSDEM etc - get exposed to the best of opportunities out there and
               prove your metal in the real world. Carpe diem!
         %div{:class=>"point cta row m-0 anime flipInX"}
-          %div{:class=>"col-sm-8 p-2 d-flex"}
-            %h3 Interested in joining in the club?
+          %div{:class=>"col-sm-8 p-2 d-flex justify-content-center"}
+            %h5 Interested in joining in the club?
           %div{:class=>"col p-2 d-flex"}
             %a{:href=> "#"} Apply Now
 
@@ -222,7 +228,7 @@
       #news.bg-white.section-card.p-0.anime.slideInRight
         .text-center
           %img{:class=>"card-icon pb-2 pt-4 anime bounceInDown",:src => "{% static 'pages/images/icons/news.png' %}" }
-          %h2{:class=>"py-2 px-4 anime bounceInUp"} News about the Club
+          %h3{:class=>"py-2 px-4 anime bounceInUp"} News about the Club
 
           {% for i in news %}
             %hr
@@ -240,8 +246,8 @@
               </a>
           {% endfor %}
           %div{:class=>"point cta row m-0 anime flipInX"}
-            %div{:class=>"col-8 p-2 d-flex"}
-              %h3 Want to get updated about the club?
+            %div{:class=>"col-sm-8 p-2 d-flex justify-content-center"}
+              %h5 Want to get updated about the club?
             %div{:class=>"col p-2 d-flex"}
               %a{:href=> "#"} Subscribe to Newsletter
 

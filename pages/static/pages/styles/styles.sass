@@ -190,12 +190,9 @@ img
     top: 0
     z-index: 3000
     overflow-y: auto
-    padding-top: 5rem
     justify-content: center
     box-shadow: 5px 3px 3px 1px rgba(0,0,0,0.2)
     animation-duration: 0.4s
-
-    .menu-container
 
     img
         height: 23vh
@@ -281,6 +278,10 @@ img
         font-size: calc(1.8rem + 1.5vw)!important
         text-shadow: 2px 3px rgba(237,177,0,0.5)
 
+    h3
+        font-size: calc(1.5rem + 1.2vw)!important
+        text-shadow: 2px 3px rgba(237,177,0,0.5)
+
     h4
         font-size: calc(1.2rem + 0.8vw)
         line-height: 1
@@ -301,8 +302,7 @@ img
 
 
     p
-        font-size: 120%
-        font-weight: 600
+        font-size: calc(0.8rem + 0.5vmax)!important
 
     hr
         border-top: 2px solid rgba(0,0,0,.1)
@@ -344,12 +344,11 @@ img
         padding: 0.5rem 1rem
         text-align: left!important
         p
-            font-size: 100%
+            font-size: 1rem!important
         img
             width: 64px
             height: 64px
             object-fit: cover
-            margin-right: 0.5rem
 
         a
             color: inherit
@@ -360,7 +359,7 @@ img
             text-align: center
     .cta
         background-color: $primary-color
-        h3
+        h5
             margin-bottom: 0
             margin-top: 0.5rem
         a
@@ -426,4 +425,5 @@ h2
         line-height: 1
     span
         display: block
-        font-size: 75%
+        font-size: calc(1rem + 0.5vmax)
+        margin: 1rem 0
