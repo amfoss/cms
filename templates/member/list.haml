@@ -9,11 +9,28 @@
 {% block content %}
     %section{:class=>"page-cover"}
       %h1 Members
-    #filter-bar.row.m-0
+    #filter-bar.bg-white.row.m-0
       .col-6#search-icon.justify-content-center.align-items-center.fa.fa-search
       .col-md-4.col-10#search-container.align-items-center.justify-content-center
           <input id="search-box" type="text" onkeyup="searchFunction()" class="form-control" placeholder="Search Here">
-
+      .col-md-4.col-10.align-items-center.justify-content-center
+          <select id="year-filter" class="form-control">
+              <option>Freshers</option>
+              <option>Sophomore</option>
+              <option>Senior</option>
+              <option>Super Senior</option>
+              <option>Alumni</option>
+              <option>Mentors</option>
+          </select>
+      .col-md-4.col-10.align-items-center.justify-content-center
+          <select id="team-filter" class="form-control">
+              <option>Web Development</option>
+              <option>App Development</option>
+              <option>Machine Learning</option>
+              <option>Problem Solving</option>
+              <option>Alumni</option>
+              <option>Mentors</option>
+          </select>
     %section.my-4
       .row.m-0#members.p-3
         {% for p in profiles %}
