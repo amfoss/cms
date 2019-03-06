@@ -15,7 +15,7 @@
             .col-md-4.col-6.p-2
               <a href="/gallery/{{a.slug}}">
                 .section-card.bg-white.p-0.anime.zoomIn
-                  <img src="/{{a.cover.image}}" class="cover">
+                  <img src="{{a.cover.image.url}}" class="cover">
                   .content
                     @{{a.uploader.username}}
                     %h4 {{a.title}}

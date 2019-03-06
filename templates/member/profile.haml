@@ -15,7 +15,7 @@
     <section id="cover"
       style="background-image: {% if profile.cover %} linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/{{profile.cover}}'); {% endif %} background-position: center; background-size: cover; background-color: {{profile.accent}};">
       %div.name.text-center
-        <img src="/{{profile.avatar}}" id="avatar" class="w-100 rounded-circle">
+        <img src="{{profile.avatar.url}}" id="avatar" class="w-100 rounded-circle">
         %h1 {{profile.first_name}} {{profile.last_name}}
         {% if profile.tagline %}
         %div.tagline {{profile.tagline}}
@@ -130,7 +130,7 @@
                 .tag-list
                   {% for i in interests %}
                     %span
-                      <img src="/{{i.icon}}">
+                      <img src="{{i.icon.url}}">
                       {{i.name}}
                   {% endfor %}
             {% endif %}
@@ -142,7 +142,7 @@
                 .tag-list
                   {% for i in expertise %}
                     %span
-                      <img src="/{{i.icon}}">
+                      <img src="{{i.icon.url}}">
                       {{i.name}}
                   {% endfor %}
             {% endif %}
@@ -154,7 +154,7 @@
             .section-card.bg-white
               .row.m-0
                 .col-sm-1.col-2.p-1
-                  <img src="/{{e.organization.icon}}">
+                  <img src="{{e.organization.icon.url}}">
                 .col
                   %h4 {{e.position}}
                   %h5 {{e.organization}}
@@ -178,7 +178,7 @@
             .section-card.bg-white
               .row.m-0
                 .col-sm-1.col-2.p-1.d-flex.align-items-center
-                  <img src="/{{e.institution.icon}}">
+                  <img src="{{e.institution.icon.url}}">
                 .col
                   %h4 {{e.title}}
                   %h5 {{e.institution}}
@@ -210,7 +210,7 @@
                 %h5 {{h.title}}
                 %div
                   %span
-                    <img src="/{{h.issuer.icon}}">
+                    <img src="{{h.issuer.icon.url}}">
                     {{h.issuer.name}}
                   %span
                     %i.fa.fa-calendar.mr-2
@@ -228,7 +228,7 @@
                 %h5 {{p.title}}
                 %div
                   %span
-                    <img src="/{{p.publisher.icon}}">
+                    <img src="{{p.publisher.icon.url}}">
                     {{p.publisher.name}}
                   %span
                     %i.fa.fa-calendar.mr-2
@@ -246,7 +246,7 @@
                 %h5 {{c.title}}
                 %div
                   %span
-                    <img src="/{{c.issuer.icon}}">
+                    <img src="{{c.issuer.icon.url}}">
                     {{c.issuer.name}}
                   %span
                     %i.fa.fa-calendar.mr-2
@@ -265,7 +265,7 @@
                 %h6 {{t.event.title}}
                 %div
                   %span
-                    <img src="/{{t.organizer.icon}}">
+                    <img src="{{t.organizer.icon.url}}">
                     {{t.organizer.name}}
 
             {% endfor %}
@@ -285,7 +285,7 @@
         .col-lg-4.col-md-6
           <a href="/project/{{p.slug}}">
             .section-card.bg-white.project-card
-              <img src="/{{p.cover}}" class="cover">
+              <img src="{{p.cover.url}}" class="cover">
               .content
                 %h3 {{p.name}}
                 .tagline {{p.tagline}}
@@ -298,7 +298,7 @@
             .col-lg-4.col-md-6
               <a href="{{p.slug}}">
                 .section-card.bg-white.blog-post
-                  <img src="/{{p.featured_image}}" class="cover">
+                  <img src="{{p.featured_image.url}}" class="cover">
                   .content
                     %h3 {{p.title}}
                     %div

@@ -16,10 +16,10 @@
           %h1 {{post.title}}
       .post-card.bg-white.py-3
         .d-flex.p-2.align-items-center
-          <img src="/{{author.avatar}}" style="width: 40px; height: 40px; object-fit: cover;" class="rounded-circle">
+          <img src="{{author.avatar.url}}" style="width: 40px; height: 40px; object-fit: cover;" class="rounded-circle">
           .pl-2 {{author.first_name}} {{author.last_name}}
       %section.my-4.container
-        <img src="/{{post.featured_image}}" class="featured_image">
+        <img src="{{post.featured_image.url}}" class="featured_image">
         .post-card.bg-white
           {{post.content|safe}}
     {% endif %}
