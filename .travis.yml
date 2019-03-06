@@ -2,6 +2,7 @@ language: python
 python:
   - "3.6"
 before_install:
+  - cp .env.example .env
   - sed '/django-heroku==/d' requirements.txt > requirements-build.txt
 install:
   - pip install -r requirements-build.txt
