@@ -78,7 +78,9 @@
                 this.boxes.push(element);
               };
 
-            $('#preload-screen').addClass('animated fadeOut');
+            $(window).on('load', function() {
+                $('#preload-screen').addClass('animated fadeOut');
+            });
             -# $('.anime').on('scrollSpy:exit', function() {
             -#    $(this).css({
             -#      'visibility': 'hidden',
