@@ -10,14 +10,12 @@
 {% endblock %}
 {% block content %}
     {% if project %}
-
-        .container-fluid
-            .row
-                <section id="cover" style="background-color:#ffc107" >
-                <div class="col-sm-4">
-                    <img src="/{{ project.cover }}" id="full-img" class="rounded" >
-                </div>
-                <div class="col-sm-8">
+    <section id="cover" style="background-color:#ffc107" >
+        .container
+            .row.m-0.bg-white.section-card
+                .col-md-4
+                    <img src="{{ project.cover.url }}" id="full-img" class="rounded" >
+                .col-md-8
                     %h1 {{project.name}}
                     .tagline {{project.tagline}}
                     .social-links
@@ -26,23 +24,17 @@
                                 <a href="{{l.link}}" style="color: {{l.portal.color}}"  class="{{l.portal.icon}}"></a>
                             {% endfor %}
                         {% endif %}
-                </div>
-                </section>
-
-    <nav id='section-switcher'>
-      <a id='description-tab-button'>
-        <img src='/static/pages/images/icons/profile.png'>
-        <span>Description</span>
-      </a>
-      <a id='gallery-tab-button'>
-        <img src='/static/pages/images/icons/portfolio.png'>
-        <span>Gallery</span>
-      </a>
-      <a id='members-tab-button'>
+    </section>
+    #section-switcher
+      %a#description-tab-button
         <img src='/static/pages/images/icons/about.png'>
-        <span>Members</span>
-      </a>
-    </nav>
+        %span Description
+      %a#gallery-tab-button
+        <img src='/static/pages/images/icons/portfolio.png'>
+        %span Gallery
+      %a#members-tab-button
+        <img src='/static/pages/images/icons/crowd.png'>
+        %span Members
 
     %section.tab#description-tab
         %section.my-4.container
@@ -55,7 +47,7 @@
                 {% for p in project.album.photos.all %}
                     .col-sm-3.col-md-4.col-6.p-2
                         .section-card.p-0
-                            <img src="/{{p.image}}">
+                            <img src="{{p.image.url}}">
                 {% endfor %}
 {
 
@@ -65,7 +57,7 @@
           <div class="col-lg-3 col-md-4 col-6 p-2"  tags="{{m.first_name.lower }} {{ m.last_name.lower }} {{m.user.username.lower}}">
             <a href="/@{{m.user.username}}">
               .section-card.bg-white.p-0.anime.zoomIn.m-1
-                <img src="/{{m.avatar}}" class="cover">
+                <img src="{{m.avatar.url}}" class="cover">
                 .content
                   %h4 {{m.first_name}} {{m.last_name}}
                   {% if m.tagline %}

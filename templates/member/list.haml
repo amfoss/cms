@@ -11,9 +11,10 @@
       %h1 Members
     #filter-bar.bg-white.row.m-0
       .col-6#search-icon.justify-content-center.align-items-center.fa.fa-search
+      .col-6#filter-icon.justify-content-center.align-items-center.fa.fa-filter
       .col-md-4.col-10#search-container.align-items-center.justify-content-center
           <input id="search-box" type="text" onkeyup="searchFunction()" class="form-control" placeholder="Search Here">
-      .col-md-4.col-10.align-items-center.justify-content-center
+      .col-md-4.col-10#filter-container.align-items-center.justify-content-left
           <select id="year-filter" class="form-control">
               <option>Freshers</option>
               <option>Sophomore</option>
@@ -22,7 +23,6 @@
               <option>Alumni</option>
               <option>Mentors</option>
           </select>
-      .col-md-4.col-10.align-items-center.justify-content-center
           <select id="team-filter" class="form-control">
               <option>Web Development</option>
               <option>App Development</option>
@@ -59,11 +59,35 @@
   $("#search-icon").click(function() {
       if( $("#search-container").css('display') == 'flex' )
       {
+        $("#filter-icon").css("display","block");
         $("#search-container").css("display","none");
         $("#search-icon").addClass("col-6 fa-search").removeClass("col-2 fa-times");
       }
-      else { $("#search-container").css("display","flex"); $("#search-icon").removeClass("col-6 fa-search").addClass("col-2 fa-times"); }
+      else {
+
+        $("#search-container").css("display","flex");
+        $("#filter-icon").css("display","none");
+        $("#filter-container").css("display","none");
+        $("#search-icon").removeClass("col-6 fa-search").addClass("col-2 fa-times");
+      }
   });
+  $("#filter-icon").click(function() {
+   if( $("#filter-container").css('display') == 'block' )
+      {
+        $("#search-icon").css("display","block");
+        $("#filter-bar").css("height","4rem").removeClass("d-block");
+        $("#filter-container").css("display","none");
+        $("#filter-icon").addClass("col-6 fa-filter").removeClass("col-12 fa-times").css("margin-top","0");
+      }
+      else {
+        $("#filter-bar").css("height","100%").addClass("d-block");
+        $("#filter-container").css("display","block");
+        $("#search-icon").css("display","none");
+        $("#search-container").css("display","none");
+        $("#filter-icon").removeClass("col-6 fa-filter").addClass("col-12 fa-times").css("margin-top","4rem");
+      }
+  });
+
   function searchFunction()
   {
       query = document.getElementById('search-box').value;

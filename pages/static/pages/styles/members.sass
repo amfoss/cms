@@ -18,8 +18,14 @@
         top: unset!important
     #search-container
         display: none
-    #search-icon
-        display: flex!important
+    #page-container
+      margin-bottom: 4rem
+
+@media (min-width: 720px)
+    #search-icon, #filter-icon
+        display: none!important
+    #filter-container
+        display: flex
 
 
 @media (min-width: 721px)
@@ -28,26 +34,31 @@
     #filter-bar
       padding: 1rem!important
 
-#filter-bar
-  padding: 0!important
-  border: none
 
+#filter-bar
+  padding: 0.5rem 0!important
+  border: none
+  font-weight: 900
   box-shadow: 1px 1px 2px #222222
   display: flex
   text-align: center
   z-index: 2000
+  position: sticky
+  top: 0
 
-#year-filter, #search-box
+#year-filter, #team-filter, #search-box
   border: none
   border-radius: 0
   height: 3.2rem!important
+  margin: 0 1rem
+  font-weight: 900
+  font-size: 1.2rem
 
 #year-filter
   width: 10rem
+#team-filter
+  width: 20rem
 
-
-
-#search-icon
-  display: none
+#search-icon, #filter-icon
   font-size: 130%
   padding: 0.8rem
