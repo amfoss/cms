@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=PT+Serif')
 
-.tagline
-    font-size: calc(1rem + 0.5vw)
 .post-card
   padding: 2rem
   box-shadow: 8px 10px 20px 0 rgba(46,61,73,.15)
@@ -21,3 +19,120 @@
     border-radius: 100vh
     margin-right: 0.5rem
 
+$primary-color: #ffc107
+
+.tab
+    min-height: 100vh
+    padding: 5vh 2vw
+
+
+@media (max-width: 720px)
+    #section-switcher
+        position: fixed!important
+        bottom: 0
+        right: 0
+        left: 0
+        top: unset!important
+
+#cover
+    background-color: $primary-color
+    display: flex
+    align-items: center
+    justify-content: center
+    min-height: 60vh
+    text-shadow: 0.2rem 0.3rem rgba(0,0,0,0.3)
+
+    #title-block
+        display: flex
+        align-items: center
+        justify-content: center
+        min-height: 50vh
+
+    .name
+        max-width: 720px
+        img
+            width: 200px!important
+            height: 200px!important
+            border: 0.3rem solid white
+            box-shadow: 0.2rem 0.3rem rgba(0,0,0,0.3)
+            margin: 0.5rem
+
+    h1
+        font-size: calc(2rem + 1vw)
+        margin: 0
+
+    .tagline
+        font-size: calc(1rem + 0.5vw)
+
+
+#section-switcher
+    background: #fff
+    box-shadow: 1px 1px 2px #222222
+    display: flex
+    text-align: center
+    justify-content: center
+    z-index: 3000
+    position: sticky
+    top: 0
+
+    a
+        display: inline-block
+        padding: 0.5rem 3vw
+        font-weight: 900
+        border-left: 1px solid
+        border-right: 1px solid
+        border-color: #ddd
+        font-size: calc(0.8rem + 0.4vw)
+        img
+            width: 3vmax
+            min-width: 36px
+            padding: 0.2rem
+    a:hover
+        background-color: #eeee
+
+
+#description-tab
+    h2
+        margin-top: 2rem
+        margin-left: 2vw
+        font-size: calc(1.5rem + 1vw)
+        img
+            max-width: 45px
+            margin-right: 1rem
+    p
+        font-size: 100%
+        font-weight: 300
+    span
+        margin: 0.3rem
+
+    .desc
+        padding: 0.5rem
+
+#gallery-tab, #members-tab
+    a
+        text-decoration: none
+        color: inherit
+
+    a:hover
+        text-decoration: none
+    .blog-post, .project-card
+        padding: 0!important
+        .content
+            padding: 1.5rem
+        h3
+            font-size: calc(1.5rem + 1vw)
+
+#members
+    a
+        color: inherit
+    a:hover
+        text-decoration: none
+
+.section-card
+    box-shadow: 8px 10px 20px 0 rgba(46,61,73,.15)
+    margin: 1.5vw 1vw
+    text-align: left
+
+#full-img
+    max-height: 100%
+    min-width: 100%
