@@ -11,7 +11,7 @@ new TypeIt('#header-title', {
 .type('We promote & contribute to Open Source Technologies.')
 .pause(300)
 .delete(52)
-.type('We mentor students to achieve excellence in <br>')
+.type('We mentor students to achieve excellence in ')
 .type('Technical and')
 .pause(200)
 .delete(13)
