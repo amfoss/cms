@@ -187,6 +187,12 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 AWS_DEFAULT_ACL = None
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 try:
     import django_heroku
