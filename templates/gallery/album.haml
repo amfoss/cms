@@ -12,7 +12,7 @@
           %h1 {{album.title}}
       .post-card.bg-white.py-3
         .d-flex.p-2.align-items-center
-          <img src="/{{uploader.avatar}}" style="width: 40px; height: 40px; object-fit: cover;" class="rounded-circle">
+          <img src="{{uploader.avatar.url}}" style="width: 40px; height: 40px; object-fit: cover;" class="rounded-circle">
           .pl-2 {{uploader.first_name}} {{uploader.last_name}}
         .my-4
           {{album.description|safe}}
@@ -21,6 +21,6 @@
             {% for p in album.photos.all %}
               .col-sm-3.col-md-4.col-6.p-2
                 .section-card.p-0
-                  <img src="/{{p.image}}">
+                  <img src="{{p.image.url}}">
             {% endfor %}
 {% endblock %}

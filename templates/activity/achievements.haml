@@ -42,7 +42,7 @@
                 {% for o in gsoc_orgs %}
                   <div class="col-lg-3 col-md-4 col-6 p-2">
                     <a href="/organization/{{o.id}}" class="p-3">
-                      <img src="/{{o.icon}}" style="width: 80%">
+                      <img src="{{o.icon.url}}" style="width: 80%">
                       <span>{{o.count}}</span>
                     </a>
                   </div>
@@ -55,7 +55,7 @@
                 {% for m in gsoc_members %}
                   <div class="col-lg-3 col-md-4 col-6 p-2">
                     <a href="/@{{m.username}}">
-                      <img src="/{{m.avatar}}" style="width: 100%">
+                      <img src="{{m.avatar.url}}" style="width: 100%">
                       <span>{{m.count}}</span>
                     </a>
                   </div>
@@ -70,16 +70,16 @@
             %div{:class=>"px-3 py-2 w-100"}
               %h4 {{i.title}}
               <span>{{i.type}}</span>
-              <sub><img src="/{{i.organizer.icon}}"></sub>
+              <sub><img src="{{i.organizer.icon.url}}"></sub>
               %h5 {{i.organizer.name}}
             .bg-primary.p-2
               {% if i.attendee.all|length > 1 %}
                 {% for m in i.attendee.all %}
-                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
+                  <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
                 {% endfor %}
               {% else %}
                 {% for m in i.attendee.all %}
-                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
+                  <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
                 {% endfor %}
               {% endif %}
         {% endfor %}
@@ -94,16 +94,16 @@
           %div{:class=>"achievement-card anime fadeInUp my-4"}
             %div{:class=>"px-3 py-2 w-100"}
               %h4 {{i.title}}
-              <sub><img src="/{{i.organizer.icon}}"></sub>
+              <sub><img src="{{i.organizer.icon.url}}"></sub>
               %h5 {{i.organizer.name}}
             .bg-primary.p-2
               {% if i.attendee.all|length > 1 %}
                 {% for m in i.attendee.all %}
-                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
+                  <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
                 {% endfor %}
               {% else %}
                 {% for m in i.attendee.all %}
-                  <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
+                  <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
                 {% endfor %}
               {% endif %}
         {% endfor %}
@@ -118,7 +118,7 @@
           %div{:class=>"achievement-card anime fadeInUp my-4"}
             %div{:class=>"px-4 py-2 w-100"}
               %h4 {{t.title}}
-              <sub><img src="/{{t.organizer.icon}}"></sub>
+              <sub><img src="{{t.organizer.icon.url}}"></sub>
               {% if t.event %}
               %h5 {{t.event}}
               {% else %}
@@ -126,7 +126,7 @@
               {% endif %}
               <span>{{t.date}}</span>
             .bg-primary.p-2
-              <a href="/@{{t.member.username}}"><img src="/{{t.member.Profile.avatar}}" class="avatar"> {{t.member.Profile.first_name}} {{t.member.Profile.last_name}}</a>
+              <a href="/@{{t.member.username}}"><img src="{{t.member.Profile.avatar.url}}" class="avatar"> {{t.member.Profile.first_name}} {{t.member.Profile.last_name}}</a>
         {% endfor %}
       </div>
       %hr
@@ -139,17 +139,17 @@
             %div{:class=>"achievement-card anime fadeInUp my-4"}
               %div{:class=>"px-3 py-2 w-100"}
                 %h4 {{p.title}}
-                <sub><img src="/{{p.publisher.icon}}"></sub>
+                <sub><img src="{{p.publisher.icon.url}}"></sub>
                 %h5 {{p.publisher.name}}
                 <span>{{p.date}}</span>
               .bg-primary.p-2
                 {% if p.members.all|length > 1 %}
                   {% for m in p.members.all %}
-                    <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
+                    <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
                   {% endfor %}
                 {% else %}
                   {% for m in p.members.all %}
-                    <a href="/@{{m.username}}"><img src="/{{m.Profile.avatar}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
+                    <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
                   {% endfor %}
                 {% endif %}
             {% endfor %}
