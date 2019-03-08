@@ -16,27 +16,26 @@
     %h1#header-title
 
   %section#intro
-    %div{:class=>"row mt-0 mb-4 mx-0 section-card icon-row"}
-      %div{:class=>"col-md-3 col-6 p-2 mb-3"}
+    .row.mt-0.mb-4.mx-0.section-card.icon-row
+      .col-md-3.col-3.p-2
         %a{:class=>"intro-card",:href=>"#about"}
           %img{:src => "{% static 'pages/images/icons/about.png' %}"}
-          %h5 About Us
-          %p
+          %h6 About Us
 
-      %div{:class=>"col-md-3 col-6 p-2 mb-3"}
+      .col-md-3.col-3.p-2
         %a{:class=>"intro-card",:href=>"#what-we-do"}
           %img{:src => "{% static 'pages/images/icons/work.png' %}"}
-          %h5  What We Do?
+          %h6  What We Do?
 
-      %div{:class=>"col-md-3 col-6 p-2 mb-3"}
+      .col-md-3.col-3.p-2
         %a{:class=>"intro-card",:href=>"#achievements"}
           %img{:src => "{% static 'pages/images/icons/crown.png' %}"}
-          %h5 Achievements
+          %h6 Achievements
 
-      %div{:class=>"col-md-3 col-6 p-2 mb-3"}
-       %a{:class=>"intro-card",:href=>"/news"}
-         %img{:src => "{% static 'pages/images/icons/news.png' %}"}
-          %h5 News & Updates
+      .col-md-3.col-3.p-2
+        %a{:class=>"intro-card",:href=>"/news"}
+          %img{:src => "{% static 'pages/images/icons/news.png' %}"}
+          %h6 News & Updates
 
   %div{:id=>"what-we-do",:class=>"bg-white section-card anime fadeInLeft"}
     %div{:class=>"row mb-4 mx-0"}

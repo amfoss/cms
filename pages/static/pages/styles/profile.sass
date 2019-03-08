@@ -41,7 +41,9 @@ $primary-color: #ffc107
     justify-content: center
     overflow-x: auto
     height: 100%
-    display: block
+
+    .cal-heatmap-container, svg
+        overflow-x: auto
 
 
 @media (max-width: 720px)
@@ -66,13 +68,11 @@ $primary-color: #ffc107
         display: inline-block
         padding: 0.5rem 3vw
         font-weight: 900
-        border-left: 1px solid
-        border-right: 1px solid
         border-color: #ddd
         font-size: calc(0.8rem + 0.4vw)
         img
             width: 3vmax
-            min-width: 36px
+            min-width: 32px
             padding: 0.2rem
     a:hover
         background-color: #eeee
