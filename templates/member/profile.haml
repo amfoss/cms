@@ -103,20 +103,27 @@
     %section.tab#profile-tab
       .row.m-0
         .col.p-2
-          .section-card.bg-white.p-3
+          .section-card.bg-white.p-4
+              %h3 About
             {% if profile.about %}
               .desc {{profile.about|safe}}
             {% endif %}
               .row.m-0
+                {% if profile.location or profile.birthday %}
                 .col-md-6.p-2
                   {% if profile.location %}
                     %div
                       <b>Location</b> : {{profile.location}}
                   {% endif %}
-                  {% if profile.location %}
+                  {% if profile.birthday %}
                     %div
                       <b>Birthday</b> : {{profile.birthday}}
                   {% endif %}
+                {% endif %}
+                {% if profile.resume %}
+                .col-md-6.p-2
+                  <a href="{{profile.resume}}" class="link-button px-3 py-2 m-2">View Resume</a>
+                {% endif %}
           {% if interests or expertise %}
           %h2
             %img{:src => "{% static 'pages/images/icons/skill.png' %}" } Skills
@@ -215,7 +222,9 @@
                     %i.fa.fa-calendar.mr-2
                     {{h.date}}
                   %span
-                    <a href="{{h.url}}">View</a>
+                    {% if h.url %}
+                      <a  class="link-button" href="{{h.url}}">View</a>
+                    {% endif %}
             {% endfor %}
           {% endif%}
           {% if publications %}
@@ -251,7 +260,9 @@
                     %i.fa.fa-calendar.mr-2
                     {{c.date}}
                   %span
-                    <a href="/{{c.attachment}}">View Certificate</a>
+                    {% if c.attachment %}
+                      <a class="link-button" href="/{{c.attachment}}">View Certificate</a>
+                    {% endif %}
             {% endfor %}
           {% endif%}
           {% if talks %}
@@ -269,7 +280,7 @@
 
             {% endfor %}
           {% endif%}
-          {% if profile.languages %}
+          {% if profile.languages.all %}
           .section-card.bg-white.p-3
             %h4
               %img{:src => "{% static 'pages/images/icons/language.png' %}" } Languages
