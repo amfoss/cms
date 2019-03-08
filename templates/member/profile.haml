@@ -102,9 +102,8 @@
               <canvas id="activity-breakup"></canvas>
     %section.tab#profile-tab
       .row.m-0
-        .col
-
-          .section-card.bg-white
+        .col.p-2
+          .section-card.bg-white.p-3
             {% if profile.about %}
               .desc {{profile.about|safe}}
             {% endif %}
@@ -123,8 +122,8 @@
             %img{:src => "{% static 'pages/images/icons/skill.png' %}" } Skills
           .row.m-0
             {% if interests %}
-            .col-md-6
-              .section-card.bg-white.mx-0.p-4
+            .col-md-6.p-2
+              .section-card.bg-white.mx-0.p-2
                 %h4
                   %img{:src => "{% static 'pages/images/icons/hearts.png' %}" } Interests
                 .tag-list
@@ -135,8 +134,8 @@
                   {% endfor %}
             {% endif %}
             {% if expertise %}
-            .col-md-6
-              .section-card.bg-white.mx-0.p-4
+            .col-md-6.p-2
+              .section-card.bg-white.mx-0.p-2
                 %h4
                   %img{:src => "{% static 'pages/images/icons/crown.png' %}" } Expertise
                 .tag-list
@@ -151,7 +150,7 @@
           %h2
             %img{:src => "{% static 'pages/images/icons/job.png' %}" } Work Experience
           {% for e in workExperience %}
-            .section-card.bg-white
+            .section-card.bg-white.p-3
               .row.m-0
                 .col-sm-1.col-2.p-1
                   <img src="{{e.organization.icon.url}}">
@@ -175,7 +174,7 @@
           %h2
             %img{:src => "{% static 'pages/images/icons/education.png' %}" } Educational Qualifications
           {% for e in educationalQualification %}
-            .section-card.bg-white
+            .section-card.bg-white.p-3
               .row.m-0
                 .col-sm-1.col-2.p-1.d-flex.align-items-center
                   <img src="{{e.institution.icon.url}}">
@@ -202,7 +201,7 @@
           {% endif %}
         .col-md-5#profile-sidebar
           {% if honours %}
-          .section-card.bg-white.p-4
+          .section-card.bg-white.p-3
             %h4
               %img{:src => "{% static 'pages/images/icons/prize.png' %}" } Honors & Awards
             {% for h in honours %}
@@ -220,7 +219,7 @@
             {% endfor %}
           {% endif%}
           {% if publications %}
-          .section-card.bg-white.p-4
+          .section-card.bg-white.p-3
             %h4
               %img{:src => "{% static 'pages/images/icons/news.png' %}" } Publications
             {% for p in publications %}
@@ -238,7 +237,7 @@
             {% endfor %}
           {% endif%}
           {% if certificates %}
-          .section-card.bg-white.p-4
+          .section-card.bg-white.p-3
             %h4
               %img{:src => "{% static 'pages/images/icons/certificate.png' %}" } Certifications
             {% for c in certificates %}
@@ -256,7 +255,7 @@
             {% endfor %}
           {% endif%}
           {% if talks %}
-          .section-card.bg-white.p-4
+          .section-card.bg-white.p-3
             %h4
               %img{:src => "{% static 'pages/images/icons/podium.png' %}" } Talks
             {% for t in talks %}
@@ -271,7 +270,7 @@
             {% endfor %}
           {% endif%}
           {% if profile.languages %}
-          .section-card.bg-white.p-4
+          .section-card.bg-white.p-3
             %h4
               %img{:src => "{% static 'pages/images/icons/language.png' %}" } Languages
             .tag-list
