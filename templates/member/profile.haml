@@ -13,7 +13,7 @@
 {% block content %}
   {% if profile %}
     <section id="cover"
-      style="background-image: {% if profile.cover %} linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/{{profile.cover}}'); {% endif %} background-position: center; background-size: cover; background-color: {{profile.accent}};">
+      style="background-image: {% if profile.cover %} linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{profile.cover.url}}'); {% endif %} background-position: center; background-size: cover; background-color: {{profile.accent}};">
       %div.name.text-center
         <img src="{{profile.avatar.url}}" id="avatar" class="w-100 rounded-circle">
         %h1 {{profile.first_name}} {{profile.last_name}}
