@@ -31,6 +31,10 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css">
         {% block scripts %}{% endblock %}
 
+        <script>
+            $('#page-container').css("height","100vh").css("overflow","hidden");
+        </script>
+
     %body
         #preload-screen
             <img src="{% static 'pages/images/preloader.gif' %}">
@@ -80,6 +84,7 @@
 
             $(window).on('load', function() {
                 $('#preload-screen').addClass('animated fadeOut').delay(1500).addClass('d-none');
+                $('#page-container').css("height","100%").css("overflow","inherit");
             });
             -# $('.anime').on('scrollSpy:exit', function() {
             -#    $(this).css({
