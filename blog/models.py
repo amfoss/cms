@@ -80,6 +80,7 @@ class ExternalPost(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField()
     date = models.DateField(default=date.today)
+    featured = models.BooleanField(default=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ExternalPost', verbose_name='Author')
     featured_image = ProcessedImageField(
         default='./pages/static/pages/defaults/blog-featured-image-default.jpg',
