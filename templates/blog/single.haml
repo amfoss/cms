@@ -15,10 +15,14 @@
         %div
           %h1 {{post.title}}
       .post-card.bg-white.py-3
-        <a href="/@{{author.user.username}}" class="d-flex p-2 align-items-center">
+        {% if author.user.is_active %}
+          <a href="/@{{author.user.username}}" class="d-flex p-2 align-items-center">
+        {% endif %}
           <img src="{{author.avatar.url}}" style="width: 40px; height: 40px; object-fit: cover;" class="rounded-circle">
           .pl-2 {{author.first_name}} {{author.last_name}}
-        </a>
+        {% if author.user.is_active %}
+          </a>
+        {% endif %}
       %section.my-4.container
         {% if post.featured_image %}
             <img src="{{post.featured_image.url}}" class="featured_image">
