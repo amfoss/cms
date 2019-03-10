@@ -15,15 +15,17 @@
       .col-md-4.col-10#search-container.align-items-center.justify-content-center
           <input id="search-box" type="text" onkeyup="searchFunction()" class="form-control" placeholder="Search Here">
       .col-md-4.col-10#filter-container.align-items-center.justify-content-left
-          <select id="year-filter" class="form-control">
-              <option>Freshers</option>
-              <option>Sophomore</option>
-              <option>Senior</option>
-              <option>Super Senior</option>
-              <option>Alumni</option>
-              <option>Mentors</option>
+          <select id="year-filter"  onchange="yearFilter()" value="0" class="form-control">
+              <option value="0">Select Year</option>
+              <option value="1">Freshers</option>
+              <option value="2">Sophomore</option>
+              <option value="3">Senior</option>
+              <option value="4">Super Senior</option>
+              <option value="5">Alumni</option>
+              <option value="6">Mentors</option>
           </select>
           <select id="team-filter" class="form-control">
+              <option>Select Team</option>
               <option>Web Development</option>
               <option>App Development</option>
               <option>Machine Learning</option>
@@ -34,7 +36,7 @@
     %section.my-4
       .row.m-0#members.p-3
         {% for p in profiles %}
-          <div member class="col-lg-3 col-md-4 col-6 p-2"  tags="{{p.first_name.lower }} {{ p.last_name.lower }} {{p.user.username.lower}}">
+          <div member class="col-lg-3 col-md-4 col-6 p-2"  tags="{{p.first_name.lower }} {{ p.last_name.lower }} {{p.user.username.lower}}" cr="{{p.role}}" batch="{{p.batch}}">
             <a href="/@{{p.user.username}}">
               .section-card.bg-white.p-0.anime.zoomIn.m-1
                 <img src="{{p.avatar.url}}" class="cover">
@@ -88,6 +90,7 @@
       }
   });
 
+
   function searchFunction()
   {
       query = document.getElementById('search-box').value;
@@ -97,6 +100,30 @@
           $('[member][tags*="' + query.toLowerCase() + '"]').show();
       } else {
           filterItems.show();
+      }
+  }
+  function yearFilter()
+  {
+      query = document.getElementById('year-filter').value;
+      var filterItems = $('[member]');
+      if( query != '0')
+      {
+         filterItems.hide();
+         if( query <5) {
+           year = new Date().getFullYear();
+           val = year - query;
+           $('[member][batch*="' + val + '"]').show();
+         }
+         else if(query==5)
+         {
+           $('[member][cr*="' + 'Alumni' + '"]').show();
+         }
+         else if(query==6)
+         {
+           $('[member][cr*="' + 'Mentor' + '"]').show();
+         }
+      } else {
+                filterItems.show();
       }
   }
 </script>
