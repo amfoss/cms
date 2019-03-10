@@ -201,7 +201,7 @@
                 {% endif %}
                 %span
                   %i.fa.fa-calendar
-                  {{e.start}} - {% if e.end %} %{{e.end}}{% else %} Present {% endif %}
+                  {{e.start}} - {% if e.end %} {{e.end}}{% else %} Present {% endif %}
               .desc
                 {{e.description|safe}}
           {% endfor %}

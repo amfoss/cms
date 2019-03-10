@@ -303,7 +303,7 @@ class LeaveRecord(models.Model):
         verbose_name = "Leave Record"
 
     def __str__(self):
-        return self.user.username
+        return self.member.username
 
 __all__ = [
             'LeaveRecord',
