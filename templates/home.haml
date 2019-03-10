@@ -33,7 +33,7 @@
           %h6 Achievements
 
       .col-md-3.col-3.p-2
-        %a{:class=>"intro-card",:href=>"/blog"}
+        %a{:class=>"intro-card",:href=>"#news"}
           %img{:src => "{% static 'pages/images/icons/news.png' %}"}
           %h6 News & Updates
 
@@ -236,12 +236,12 @@
             .point
               <a href="/@{{i.author}}/{{i.slug}}" >
                 .row.m-0.py-2
-                  .col-2
-                      {% if i.featured_image %}
-                        <img src="{{i.featured_image.url}}">
-                      {% endif %}
+                  {% if i.featured_image %}
+                    .col-2
+                          <img src="{{i.featured_image.url}}">
+                  {% endif %}
                   .col-10.text-left
-                      %h3.m-0 {{i.title}}
+                      %h4.m-0 {{i.title}}
                       %div
                         .span
                           .fa.fa-calendar.mr-2
