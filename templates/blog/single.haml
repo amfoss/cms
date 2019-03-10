@@ -20,7 +20,9 @@
           .pl-2 {{author.first_name}} {{author.last_name}}
         </a>
       %section.my-4.container
-        <img src="{{post.featured_image.url}}" class="featured_image">
+        {% if post.featured_image %}
+            <img src="{{post.featured_image.url}}" class="featured_image">
+        {% endif %}
         .post-card.bg-white
           {{post.content|safe}}
     {% endif %}
