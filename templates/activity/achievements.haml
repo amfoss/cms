@@ -75,11 +75,11 @@
             .bg-primary.p-2
               {% if i.attendee.all|length > 1 %}
                 {% for m in i.attendee.all %}
-                  <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
+                  <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar" alt="{{m.Profile.first_name}}  {% if m.Profile.last_name %}{{m.Profile.last_name}}{% endif %}"></a>
                 {% endfor %}
               {% else %}
                 {% for m in i.attendee.all %}
-                  <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
+                  <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar"> {{m.Profile.first_name}}  {% if m.Profile.last_name %}{{m.Profile.last_name}}{% endif %}</a>
                 {% endfor %}
               {% endif %}
         {% endfor %}
@@ -99,11 +99,11 @@
             .bg-primary.p-2
               {% if i.attendee.all|length > 1 %}
                 {% for m in i.attendee.all %}
-                  <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar" alt="{{m.Profile.first_name}} {{m.Profile.last_name}}"></a>
+                  <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar" alt="{{m.Profile.first_name}}  {% if m.Profile.last_name %}{{m.Profile.last_name}}{% endif %}"></a>
                 {% endfor %}
               {% else %}
                 {% for m in i.attendee.all %}
-                  <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
+                  <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar"> {{m.Profile.first_name}} {% if m.Profile.last_name %}{{m.Profile.last_name}}{% endif %}</a>
                 {% endfor %}
               {% endif %}
         {% endfor %}
@@ -126,7 +126,7 @@
               {% endif %}
               <span>{{t.date}}</span>
             .bg-primary.p-2
-              <a href="/@{{t.member.username}}"><img src="{{t.member.Profile.avatar.url}}" class="avatar"> {{t.member.Profile.first_name}} {{t.member.Profile.last_name}}</a>
+              <a href="/@{{t.member.username}}"><img src="{{t.member.Profile.avatar.url}}" class="avatar"> {{t.member.Profile.first_name}} {% if t.member.Profile.last_name %}{{t.member.Profile.last_name}}{% endif %}</a>
         {% endfor %}
       </div>
       %hr
@@ -149,7 +149,7 @@
                   {% endfor %}
                 {% else %}
                   {% for m in p.members.all %}
-                    <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar"> {{m.Profile.first_name}} {{m.Profile.last_name}}</a>
+                    <a href="/@{{m.username}}"><img src="{{m.Profile.avatar.url}}" class="avatar"> {{m.Profile.first_name}} {% if m.Profile.last_name %}{{m.Profile.last_name}}{% endif %}</a>
                   {% endfor %}
                 {% endif %}
             {% endfor %}
