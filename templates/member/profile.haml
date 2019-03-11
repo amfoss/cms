@@ -16,7 +16,7 @@
       style="background-image: {% if profile.cover %} linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{profile.cover.url}}'); {% endif %} background-position: center; background-size: cover; background-color: {{profile.accent}};">
       %div.name.text-center
         <img src="{{profile.avatar.url}}" id="avatar" class="w-100 rounded-circle">
-        %h1 {{profile.first_name}} {{profile.last_name}}
+        %h1 {{profile.first_name}} {% if profile.last_name %}{{profile.last_name}}{% endif %}
         {% if profile.tagline %}
         %div.tagline {{profile.tagline}}
         {% endif %}
@@ -26,18 +26,22 @@
           {% endfor %}
     </section>
     %nav#section-switcher
-      %a#activity-tab-button
+      %a#activity-tab-button.d-none
         %img{:src => "{% static 'pages/images/icons/calendar.png' %}"}
         %span Activity
       %a#profile-tab-button
         %img{:src => "{% static 'pages/images/icons/profile.png' %}"}
         %span Profile
+      {% if projects %}
       %a#portfolio-tab-button
         %img{:src => "{% static 'pages/images/icons/portfolio.png' %}"}
         %span Portfolio
+      {% endif %}
+      {% if posts %}
       %a#blog-tab-button
         %img{:src => "{% static 'pages/images/icons/blog.png' %}"}
         %span Blog
+      {% endif %}
 
     %section.tab#activity-tab
       .row.m-0

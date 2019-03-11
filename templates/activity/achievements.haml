@@ -9,7 +9,7 @@
 {% block content %}
     %section{:class=>"page-cover"}
       %h1 Achievements
-    %section{:id=>"achievements"}
+    %section#achievements.p-2
       {% if gsoc_members %}
       %h2
         %img{:src => "{% static 'pages/images/icons/gsoc.png' %}" } Google Summer of Code
@@ -41,7 +41,7 @@
               %div{:class=>"icon-list row mx-0 mt-4"}
                 {% for o in gsoc_orgs %}
                   <div class="col-lg-3 col-md-4 col-6 p-2">
-                    <a href="/organization/{{o.id}}" class="p-3">
+                    <a href="#" class="p-3">
                       <img src="{{o.icon.url}}" style="width: 80%">
                       <span>{{o.count}}</span>
                     </a>
@@ -69,7 +69,7 @@
           %div{:class=>"achievement-card anime fadeInUp my-4"}
             %div{:class=>"px-3 py-2 w-100"}
               %h4 {{i.title}}
-              <span>{{i.type}}</span>
+              <span>{{i.type.name}}</span>
               <sub><img src="{{i.organizer.icon.url}}"></sub>
               %h5 {{i.organizer.name}}
             .bg-primary.p-2

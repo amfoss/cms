@@ -97,7 +97,7 @@ class Profile(models.Model):
     user = models.OneToOneField(
                 User, on_delete=models.CASCADE,
                 related_name='Profile',
-                verbose_name='User'
+                verbose_name='User',
     )
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
     email = models.EmailField(max_length=254)

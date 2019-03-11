@@ -34,7 +34,7 @@
               <option>Mentors</option>
           </select>
     %section.my-4
-      .row.m-0#members.p-3
+      .row.m-0#members.p-0
         {% for p in profiles %}
           {% if p.user.is_active %}
             <div member class="col-lg-3 col-md-4 col-6 p-2"  tags="{{p.first_name.lower }} {{ p.last_name.lower }} {{p.user.username.lower}}" cr="{{p.role}}" batch="{{p.batch}}">
@@ -42,7 +42,7 @@
                 .section-card.bg-white.p-0.anime.zoomIn.m-1.h-100
                   <img src="{{p.avatar.url}}" class="cover">
                   .content
-                    %h4 {{p.first_name}} {{p.last_name}}
+                    %h4 {{p.first_name}} {% if p.last_name %}{{p.last_name}}{% endif %}
                     {% if p.tagline %}
                     .tagline {{p.tagline}}
                     {% else %}

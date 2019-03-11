@@ -13,7 +13,7 @@
       .row.m-0#members
         {% for p in posts %}
           {% if p.status == 'P' %}
-            .col-md-4.col-6.p-2
+            .col-md-4.p-2
               <a href="/@{{p.author.username}}/{{p.slug}}">
                 .section-card.bg-white.p-0.anime.zoomIn
                   {% if p.featured_image %}

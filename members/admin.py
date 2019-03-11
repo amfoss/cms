@@ -33,7 +33,7 @@ class ProfileAdmin(admin.ModelAdmin):
     ]
     inlines = (sp_inline, wexp_inline, eq_inline)
     list_display = ('first_name', 'last_name', 'role', 'batch')
-    list_filter = ('batch','role')
+    list_filter = ('batch', 'role')
     search_fields = ['first_name', 'last_name', 'email', 'phone', 'batch', 'role']
     select2 = select2_modelform(Profile, attrs={'width': '250px'})
     form = select2
