@@ -10,7 +10,7 @@
   %h1 About
 
 #story.my-4.mx-1.py-1
-  %h2.px-4.pt-4.pb-0
+  %h2.p-4
     %img{:src => "{% static 'pages/images/icons/shooting-stars.png' %}" } Our Story
   #story-slider
     %div.p-2
@@ -116,9 +116,8 @@ $('#story-slider').slick({
   autoplay: true,
   pauseOnHover: true,
   autoplaySpeed: 5000,
+  adaptiveHeight: true,
   dots: true,
-  infinite: true,
-  adaptiveHeight: true
 });
 </script>
 {% endblock %}

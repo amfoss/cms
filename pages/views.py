@@ -128,8 +128,9 @@ class Blog(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['posts'] = Post.objects.filter(featured=True)
+        context['posts'] = Post.objects.filter(featured=True).order_by('-date')
         return context
+
 
 class BlogPost(DetailView):
     model = Post
@@ -145,6 +146,7 @@ class BlogPost(DetailView):
             context['error'] = 'No data found for this post!'
         return context
 
+
 class Projects(ListView):
     model = Project
     template_name = 'project/list.haml'
@@ -153,6 +155,7 @@ class Projects(ListView):
         context = super().get_context_data(**kwargs)
         context['projects'] = Project.objects.filter(featured=True)
         return context
+
 
 class ProjectDetail(DetailView):
     model = Project
