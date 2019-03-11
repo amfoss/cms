@@ -14,6 +14,7 @@ import json
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 
+
 class UserProfile(DetailView):
     model = User
     template_name = 'member/profile.haml'
@@ -67,6 +68,7 @@ class UserProfile(DetailView):
             context['error'] = 'No data found for this user!'
         return context
 
+
 class Achievements(ListView):
     model = User
     template_name = 'activity/achievements.haml'
@@ -94,10 +96,11 @@ class Achievements(ListView):
         return orgs
 
     def get_gsoc_stipend(self):
-         c = GSoC.objects.filter(status='C').count()
-         s = GSoC.objects.filter(status='2').count()
-         f = GSoC.objects.filter(status='1').count()
-         return int((f*0.3*3) + (s*0.6*3) + (c*3))
+        c = GSoC.objects.filter(status='C').count()
+        s = GSoC.objects.filter(status='2').count()
+        f = GSoC.objects.filter(status='1').count()
+        return int((f*0.3*3) + (s*0.6*3) + (c*3))
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -107,10 +110,11 @@ class Achievements(ListView):
         context['publications'] = Publication.objects.all()
         gsocs = GSoC.objects.filter(status__in=['C','S','1','2','3'])
         context['gsoc_members'] = self.get_gsoc_members(gsocs)
-        context['current_gsoc'] = GSoC.objects.filter(status__in=['C','S','1','2','3'], year=2018)
+        context['current_gsoc'] = GSoC.objects.filter(status__in=['C', 'S', '1', '2', '3'], year=2018)
         context['gsoc_orgs'] = self.get_gsoc_orgs(gsocs)
         context['gsoc_stipend'] = self.get_gsoc_stipend()
         return context
+
 
 class Members(ListView):
     model = User
@@ -118,7 +122,7 @@ class Members(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['profiles'] = Profile.objects.all()
+        context['profiles'] = Profile.objects.order_by('-batch', 'first_name')
         return context
 
 
@@ -128,7 +132,7 @@ class Blog(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['posts'] = Post.objects.filter(featured=True).order_by('date')
+        context['posts'] = Post.objects.filter(featured=True).order_by('-date')
         return context
 
 
@@ -153,7 +157,7 @@ class Projects(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['projects'] = Project.objects.filter(featured=True)
+        context['projects'] = Project.objects.filter(featured=True).order_by('-published')
         return context
 
 
@@ -178,6 +182,7 @@ class ProjectDetail(DetailView):
             context['error'] = 'No data found for this project!'
         return context
 
+
 class Gallery(ListView):
     model = Album
     template_name = 'gallery/list.haml'
@@ -186,6 +191,7 @@ class Gallery(ListView):
         context = super().get_context_data(**kwargs)
         context['albums'] = Album.objects.filter(featured=True)
         return context
+
 
 class GalleryAlbum(DetailView):
     model = Album
@@ -200,6 +206,7 @@ class GalleryAlbum(DetailView):
         except Profile.DoesNotExist:
             context['error'] = 'No data found for this post!'
         return context
+
 
 class HomePage(TemplateView):
     template_name = "home.haml"
@@ -217,14 +224,19 @@ class HomePage(TemplateView):
             context['error'] = 'No data found for this project!'
         return context
 
+
 class AboutPage(TemplateView):
     template_name = "about/about.haml"
+
 
 class ClubLifePage(TemplateView):
     template_name = "about/life.haml"
 
+
 def handler404(request):
     return render(request, 'error/404.haml', status=404)
 
+
 def handler500(request):
     return render(request, 'error/500.haml', status=500)
+

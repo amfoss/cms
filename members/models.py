@@ -101,12 +101,11 @@ class Profile(models.Model):
     )
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
     email = models.EmailField(max_length=254)
-    phone = models.CharField(max_length=12)
+    phone = models.CharField(max_length=12, blank=True, null=True)
     first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50, blank=True, null=True)
     avatar = ProcessedImageField(
                 default='./pages/static/pages/defaults/members-avatar-default.png',
-                blank=True,
                 verbose_name='Profile Picture',
                 upload_to=get_dp_path,
                 validators=[validate_file_size],
