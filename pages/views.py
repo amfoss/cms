@@ -128,7 +128,7 @@ class Blog(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['posts'] = Post.objects.filter(featured=True).order_by('-date')
+        context['posts'] = Post.objects.filter(featured=True).order_by('date')
         return context
 
 
