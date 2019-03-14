@@ -217,7 +217,7 @@ class HomePage(TemplateView):
             context['testimonials'] = Testimonial.objects.all()
             try:
                 cat = Category.objects.get(slug="news")
-                context['news'] = Post.objects.filter(category = cat)
+                context['news'] = Post.objects.filter(category=cat,featured=True).order_by('-date')[:6]
             except ObjectDoesNotExist:
                 context['news'] = None
         except Profile.DoesNotExist:
