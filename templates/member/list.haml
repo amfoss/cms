@@ -40,14 +40,16 @@
             <div member class="col-lg-3 col-md-4 col-6 p-2"  tags="{{p.first_name.lower }} {{ p.last_name.lower }} {{p.user.username.lower}}" cr="{{p.role}}" batch="{{p.batch}}">
               <a href="/@{{p.user.username}}">
                 .section-card.bg-white.p-0.anime.zoomIn.m-1.h-100
-                  <img src="{{p.avatar.url}}" class="cover">
-                  .content
-                    %h4 {{p.first_name}} {% if p.last_name %}{{p.last_name}}{% endif %}
-                    {% if p.tagline %}
-                    .tagline {{p.tagline}}
-                    {% else %}
-                    .tagline {{p.role}}
-                    {% endif %}
+                  .row.m-0.w-100
+                    .col-lg-4.col-md-6.p-2.text-center
+                      <img src="{{p.avatar.url}}" class="cover">
+                    .col.content.p-2
+                      %h4 {{p.first_name}} {% if p.last_name %}{{p.last_name}}{% endif %}
+                      {% if p.tagline %}
+                      .tagline {{p.tagline}}
+                      {% else %}
+                      .tagline {{p.role}}
+                      {% endif %}
               </a>
             </div>
           {% endif %}
