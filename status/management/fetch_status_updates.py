@@ -87,8 +87,9 @@ class DailyStatus:
 
         for message in messages:
             member = self.get_member_details(id=message['id'])
-            email = member["email"]
-            if member and email not in self.emails:
-                members[email] = member["time"]
-                self.emails.append(email)
+            if member:
+                email = member["email"]
+                if member and email not in self.emails:
+                    members[email] = member["time"]
+                    self.emails.append(email)
         return members

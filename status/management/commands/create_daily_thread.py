@@ -8,7 +8,7 @@ from framework import settings
 
 
 class Command(BaseCommand):
-    help = 'Updates Status Update Register'
+    help = 'Creates Status Update Thread'
 
     def handle(self, *args, **options):
         mailing_list = settings.MAILING_LIST
