@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from status.management.fetch_status_updates import DailyStatus
-from datetime import date
+from datetime import date, datetime
 from members.models import Profile
 from status.models import StatusRegister
 from framework import settings
@@ -12,7 +12,7 @@ class Command(BaseCommand):
     help = 'Logs Daily Status Updates'
 
     def handle(self, *args, **options):
-        d = date.today()
+        d = date(2019, 4, 7)
         log = DailyStatus(d)
         profiles = Profile.objects.filter(email__in=log.emails)
 
@@ -22,7 +22,7 @@ class Command(BaseCommand):
             if profile.user.is_active:
                 StatusRegister.objects.create(member=profile.user, timestamp=log.members[profile.email], status=True)
                 i += 1
-        members_list = Profile.objects.values('first_name', 'last_name', 'email', 'batch').order_by('batch')
+        members_list = Profile.objects.values('user', 'first_name', 'last_name', 'email', 'batch').order_by('batch')
 
         updates = StatusRegister.objects.filter(timestamp__gt=d).order_by('timestamp')
         if i > 0:
@@ -62,6 +62,16 @@ class Command(BaseCommand):
                     if not yf:
                         message += '\n<b>' + str(y) + '</b>\n'
                         yf = 1
+                    last = StatusRegister.objects.filter(member=m['user']).order_by('-timestamp')[0]
+                    if last:
+                        diff = d-last.timestamp.date()
+                        if diff.days < 2:
+                            message += '&#128164; '
+                        elif diff.days <= 5:
+                            message += '&#128308; '
+                        elif diff.days > 5:
+                            message += '&#10060; '
+
                     message += m['first_name'] + ' ' + m['last_name'] + '\n'
         if not mf:
             message += '\n\n<b>Everyone has send their Status Updates today! &#128079;</b>\n'
