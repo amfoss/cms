@@ -12,7 +12,7 @@ class Command(BaseCommand):
     help = 'Logs Daily Status Updates'
 
     def handle(self, *args, **options):
-        d = date(2019, 4, 7)
+        d = date.today()
         log = DailyStatus(d)
         profiles = Profile.objects.filter(email__in=log.emails)
 
@@ -62,8 +62,9 @@ class Command(BaseCommand):
                     if not yf:
                         message += '\n<b>' + str(y) + '</b>\n'
                         yf = 1
-                    last = StatusRegister.objects.filter(member=m['user']).order_by('-timestamp')[0]
-                    if last:
+                    obj = StatusRegister.objects.filter(member=m['user']).order_by('-timestamp')
+                    if obj:
+                        last = obj[0]
                         diff = d-last.timestamp.date()
                         if diff.days < 2:
                             message += '&#128164; '
