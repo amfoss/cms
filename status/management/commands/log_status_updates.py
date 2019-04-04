@@ -51,8 +51,8 @@ class Command(BaseCommand):
             message += '''<b>&#128012; Last to Send: </b>'''
             message += ln + ' (' + lt.astimezone(timezone('Asia/Kolkata')).strftime('%I:%M %p') + ')\n'
         mf = 0
-        year = members_list[0]['batch']
-        for y in range(year, year-4, -1):
+
+        for y in range(d.year, d.year-4, -1):
             yf = 0
             for m in members_list:
                 if m['email'] not in log.emails and y == m['batch']:
