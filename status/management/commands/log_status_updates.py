@@ -1,10 +1,10 @@
+import telegram
 from django.core.management.base import BaseCommand
 from status.management.fetch_status_updates import DailyStatus
 from datetime import date, datetime
 from members.models import Profile
 from status.models import StatusRegister
 from framework import settings
-import telegram
 from pytz import timezone
 
 
