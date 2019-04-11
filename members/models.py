@@ -7,8 +7,9 @@ from datetime import date
 from gallery.validators import validate_file_size, processed_image_field_specs
 from imagekit.models import ProcessedImageField
 
+ROLES = (('1', 'Member'), ('2', 'Mentor'), ('3', 'Staff'), ('5', 'Alumni'), ('6', 'Sudo'))
 SKILL_TYPES = (('T', 'Technical'), ('A', 'Arts'), ('S', 'Social'), ('P', 'Sports'), ('O', 'Others'))
-LEAVE_TYPE = (('M', 'Health'), ('F', 'Family/Home'), ('T', 'Tiredness'), ('A', 'Academics'), ('D', 'Duty'))
+LEAVE_TYPE = (('M', 'Health'), ('F', 'Family/Home'), ('T', 'Tiredness'), ('A', 'Academics/Duty'))
 
 
 class Skill(models.Model):
@@ -34,13 +35,6 @@ class Skill(models.Model):
 
 
 class Language(models.Model):
-    name = models.CharField(max_length=25)
-
-    def __str__(self):
-        return self.name
-
-
-class Role(models.Model):
     name = models.CharField(max_length=25)
 
     def __str__(self):
@@ -99,7 +93,7 @@ class Profile(models.Model):
                 related_name='Profile',
                 verbose_name='User',
     )
-    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
+    role = models.CharField(choices=ROLES, default='O', max_length=1)
     email = models.EmailField(max_length=254)
     phone = models.CharField(max_length=12, blank=True, null=True)
     first_name = models.CharField(max_length=30)
@@ -317,7 +311,6 @@ __all__ = [
             'SocialProfile',
             'Profile',
             'Language',
-            'Role',
             'Skill',
             'Portal',
             'Organization'

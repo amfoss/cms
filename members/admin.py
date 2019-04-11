@@ -3,6 +3,8 @@ from .models import *
 from activity.models import *
 from .inlines import *
 from easy_select2 import select2_modelform
+from django.contrib.auth.models import User
+
 
 
 @admin.register(Profile)
@@ -11,8 +13,8 @@ class ProfileAdmin(admin.ModelAdmin):
         ('Basic Details', {
             'fields': [
                         ('user', 'role'),
-                        ('email', 'phone', 'avatar'),
-                        ('first_name', 'last_name'),
+                        ('first_name', 'last_name', 'avatar'),
+                        ('email', 'phone'),
                       ]
         }),
         ('Additional Details', {
@@ -52,6 +54,10 @@ class ProfileAdmin(admin.ModelAdmin):
             return False
         return True
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "user":
+            kwargs["queryset"] = User.objects.filter(username=request.user.username)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 @admin.register(AttendanceLog)
 class AttendanceLogAdmin(admin.ModelAdmin):
@@ -64,7 +70,7 @@ class AttendanceLogAdmin(admin.ModelAdmin):
 
 @admin.register(Attendance)
 class AttendanceAdmin(admin.ModelAdmin):
-    fields  = ('member', ('session_start', 'session_end'),)
+    fields = ('member', ('session_start', 'session_end'),)
     list_display = ('member', 'session_start', 'session_end', 'duration')
     list_filter = ('member', 'session_start')
     select2 = select2_modelform(Attendance, attrs={'width': '250px'})
@@ -131,7 +137,7 @@ class TeamAdmin(admin.ModelAdmin):
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    fields=(('name','description'),'members')
+    fields = (('name', 'description'), 'members')
     search_fields = ['name', 'members']
     list_display = ('name', 'description')
     list_filter = ('name', 'members')
@@ -162,12 +168,6 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
-    def has_module_permission(self, request):
-        return False
-
-
-@admin.register(Role)
-class RolesAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):
         return False
 
