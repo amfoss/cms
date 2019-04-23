@@ -12,6 +12,7 @@ Django==2.1.7
 django-appconf==1.0.2
 django-ckeditor==5.6.1
 django-compressor==2.2
+django-cors-headers==2.5.2
 django-easy-select2==1.5.5
 django-filter==2.1.0
 django-graphql-jwt==0.2.0
@@ -59,6 +60,7 @@ Rx==1.6.1
 s3transfer==0.2.0
 singledispatch==3.4.0.3
 six==1.12.0
+sqlparse==0.3.0
 uritemplate==3.0.0
 urllib3==1.24.1
 whitenoise==4.1.2
