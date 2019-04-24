@@ -3,24 +3,13 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from datetime import date
 
+
 class Thread(models.Model):
     name = models.CharField(null=True,max_length=50)
 
     def __str__(self):
         return self.name
 
-class TaskTag(models.Model):
-    name = models.CharField(null=True, max_length=50)
-    colour = models.CharField(max_length=50, null=True, blank=True)
-
-    def __str__(self):
-        return self.name
-
-class TaskStatus(models.Model):
-    name = models.CharField(null=True, max_length=50)
-
-    def __str__(self):
-        return self.name
 
 class Status(models.Model):
     date = models.DateTimeField(auto_now=True,verbose_name='Posted on')
@@ -39,22 +28,6 @@ class Status(models.Model):
         else:
             return self.author.username
 
-class Task(models.Model):
-    title = models.CharField(null=True,max_length=50)
-    description = RichTextField(max_length=300, null=True)
-    assignees = models.ManyToManyField(User)
-    due_date = models.DateField(default=date.today)
-    team = models.ManyToManyField('members.Team', blank=True)
-    tags = models.ManyToManyField(TaskTag, blank=True)
-    status = models.ForeignKey(TaskStatus, on_delete=models.SET_NULL, null=True)
-    updates = models.ManyToManyField(Status, blank=True)
-
-    class Meta:
-        verbose_name_plural = "Tasks"
-        verbose_name = "Task"
-
-    def __str__(self):
-        return self.name
 
 class StatusRegister(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -67,6 +40,7 @@ class StatusRegister(models.Model):
 
     def __str__(self):
         return self.member.username
+
 
 class Notification(models.Model):
     title = models.CharField(null=True, max_length=50)

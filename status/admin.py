@@ -17,16 +17,10 @@ class StatusAdmin(admin.ModelAdmin):
 class StatusRegisterAmdin(admin.ModelAdmin):
     list_display = ('member', 'timestamp', 'status')
 
-@admin.register(Task)
-class TaskAdmin(admin.ModelAdmin):
-    fields= (('title', 'due_date'), ('status', 'tags'), ('assignees', 'team'), 'description', 'updates')
-    select2 = select2_modelform(Task, attrs={'width': '250px'})
-    form = select2
-
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
-    fields= (('title', 'date'), 'groups', 'description')
+    fields = (('title', 'date'), 'groups', 'description')
     select2 = select2_modelform(Notification, attrs={'width': '250px'})
     form = select2
 
@@ -36,15 +30,4 @@ class ThreadAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):
         return False
 
-
-@admin.register(TaskTag)
-class TaskTagAdmin(admin.ModelAdmin):
-    def has_module_permission(self, request):
-        return False
-
-
-@admin.register(TaskStatus)
-class TaskStatusAdmin(admin.ModelAdmin):
-    def has_module_permission(self, request):
-        return False
 

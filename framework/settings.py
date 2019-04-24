@@ -13,7 +13,7 @@ import os
 from datetime import timedelta
 # Looks for server_settings, uses local_settings if not found
 try:
-    from framework.original_server_settings import *
+    from framework.server_settings import *
 except ImportError:
     from framework.local_settings import *
 
@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'hamlpy',
     'ckeditor',
     'easy_select2',
+    'imagekit',
+    'storages',
+    'corsheaders',
     'members',
     'activity',
     'blog',
@@ -44,9 +47,7 @@ INSTALLED_APPS = [
     'status',
     'gsoc',
     'gallery',
-    'imagekit',
-    'storages',
-    'corsheaders'
+    'tasks'
 ]
 
 MIDDLEWARE = [

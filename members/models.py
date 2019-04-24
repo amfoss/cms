@@ -93,7 +93,7 @@ class Profile(models.Model):
                 related_name='Profile',
                 verbose_name='User',
     )
-    role = models.CharField(choices=ROLES, default='O', max_length=1)
+    role = models.CharField(choices=ROLES, default='1', max_length=1)
     email = models.EmailField(max_length=254)
     phone = models.CharField(max_length=12, blank=True, null=True)
     first_name = models.CharField(max_length=30)

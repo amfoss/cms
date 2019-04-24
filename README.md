@@ -99,8 +99,7 @@ The members app manages the profile and data of the club members
 The status app manages the reporting system in the club
  
 1. **Status** - holds status updates posted by members, under different threads, for various subjects. 
-2. **Tasks** -  records and accounts different tasks assigned to the club members 
-3. **Notifications** - manages notifications
+2. **Notifications** - manages notifications
 
 ## :dizzy: API
 
