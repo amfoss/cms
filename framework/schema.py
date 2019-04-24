@@ -3,6 +3,7 @@ import graphql_jwt
 import members.schema
 import blog.schema
 import activity.schema
+import tasks.schema
 from django.contrib.auth.models import User
 from graphene_django.types import DjangoObjectType
 
@@ -12,7 +13,7 @@ class UserObj(DjangoObjectType):
         exclude_fields = ('id','username','first_name','last_name','password','is_staff','is_active','is_superuser','last_login','date_joined','groups','email')
 
 
-class Query(members.schema.Query, activity.schema.Query, blog.schema.Query, graphene.ObjectType):
+class Query(members.schema.Query, activity.schema.Query, blog.schema.Query, tasks.schema.Query, graphene.ObjectType):
     user = graphene.List(UserObj, username=graphene.String(required=True), token=graphene.String(required=True))
 
     def resolve_user(self, info, **kwargs):
