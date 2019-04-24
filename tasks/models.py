@@ -56,7 +56,7 @@ class Task(models.Model):
 
 class TaskLog(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='TaskLog', verbose_name='Member')
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='Task', verbose_name='Task')
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='Log', verbose_name='Task')
     status = models.CharField(choices=TASK_STATUS, default='1', verbose_name='Task Status', max_length=1)
     proof = RichTextField(max_length=2000, null=True, blank=True)
     reviewers = models.ManyToManyField(User, related_name='Reviewers', verbose_name='Task Reviewers', blank=True)

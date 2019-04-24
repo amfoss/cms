@@ -58,7 +58,7 @@ class OrganizationObj(DjangoObjectType):
 class ProfileObj(DjangoObjectType):
     class Meta:
         model = Profile
-        exclude_fields = ('id', 'user','links','experiences')
+        exclude_fields = ('id', 'user', 'links', 'experiences')
 
     def resolve_id(self, info):
         raise Exception('You dont have access to view id of profile.')

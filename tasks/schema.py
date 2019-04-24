@@ -23,7 +23,14 @@ class TaskLogObj(DjangoObjectType):
 
 class Query(object):
     tasks = graphene.List(TaskObj)
+    task = graphene.Field(TaskObj, id=graphene.String(required=True), token=graphene.String(required=True))
     tasks_log = graphene.List(TaskObj, username=graphene.String(required=False), token=graphene.String(required=True))
+
+    def resolve_task(self, info, **kwargs):
+        id = kwargs.get('id')
+        if id is not None:
+            return Task.objects.get(id=id)
+        raise Exception('Task ID is a required parameter')
 
     def resolve_tasks_log(self, info, **kwargs):
         username = kwargs.get('username')
