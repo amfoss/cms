@@ -26,6 +26,9 @@ class Query(object):
     task = graphene.Field(TaskObj, id=graphene.String(required=True), token=graphene.String(required=True))
     tasks_log = graphene.List(TaskObj, username=graphene.String(required=False), token=graphene.String(required=True))
 
+    def resolve_tasks(self, info, **kwargs):
+        return Task.objects.all()
+
     def resolve_task(self, info, **kwargs):
         id = kwargs.get('id')
         if id is not None:
