@@ -21,9 +21,11 @@ class TaskLogObj(DjangoObjectType):
 
 
 class Query(object):
+    stream = graphene.Field(StreamObj, slug=graphene.String(required=True))
     streams = graphene.List(StreamObj,
                             stream_type=graphene.String(required=False),
                             hasParent=graphene.Boolean(required=False),
+                            parent=graphene.Boolean(required=False)
                             )
     tasks = graphene.List(TaskObj,
                           stream=graphene.String(required=False),
@@ -35,14 +37,24 @@ class Query(object):
     task = graphene.Field(TaskObj, id=graphene.String(required=True))
     tasks_log = graphene.List(TaskObj, username=graphene.String(required=False), token=graphene.String(required=True))
 
+    def resolve_stream(self, info, **kwargs):
+        slug = kwargs.get('slug')
+        if slug is not None:
+            return Stream.objects.get(slug=slug)
+        raise Exception('Task ID is a required parameter')
+
     def resolve_streams(self, info, **kwargs):
         stream_type = kwargs.get('stream_type')
         hasParent = kwargs.get('hasParent')
+        parent = kwargs.get('parent')
         streams = Stream.objects.all()
         if stream_type is not None:
             streams = streams.filter(type=stream_type)
         if hasParent is not None:
             streams = streams.filter(parent__isnull=not(hasParent))
+        elif parent is not None:
+            parent_obj = Stream.objects.get(slug=parent)
+            streams = streams.filter(parent=parent_obj)
         return streams
 
     def resolve_tasks(self, info, **kwargs):
