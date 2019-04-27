@@ -20,7 +20,7 @@ class Stream(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField()
     type = models.CharField(choices=TYPE, default='t', max_length=1)
-    description = RichTextField(max_length=2000, null=True, blank=True)
+    description = models.TextField(max_length=2000, null=True, blank=True)
     icon = ProcessedImageField(
         verbose_name='Icon Image',
         upload_to=get_icon_path,
@@ -28,7 +28,7 @@ class Stream(models.Model):
         **processed_image_field_specs
     )
     color = models.CharField(max_length=10, verbose_name='Color', help_text='hexcode with #', null=True)
-    parents = models.ManyToManyField('self', verbose_name='Parents', blank=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, verbose_name='Parent', blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Streams"

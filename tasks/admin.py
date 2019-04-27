@@ -7,7 +7,7 @@ from easy_select2 import select2_modelform
 class StreamAdmin(admin.ModelAdmin):
     fields = [
         ('name', 'slug'),
-        ('type', 'parents'),
+        ('type', 'parent'),
         ('icon', 'color'),
         'description',
     ]

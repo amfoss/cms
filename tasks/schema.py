@@ -14,7 +14,6 @@ class TaskObj(DjangoObjectType):
     class Meta:
         model = Task
 
-
 class TaskLogObj(DjangoObjectType):
     class Meta:
         model = TaskLog
@@ -22,7 +21,10 @@ class TaskLogObj(DjangoObjectType):
 
 
 class Query(object):
-    streams = graphene.List(StreamObj, stream_type=graphene.String(required=False))
+    streams = graphene.List(StreamObj,
+                            stream_type=graphene.String(required=False),
+                            hasParent=graphene.Boolean(required=False),
+                            )
     tasks = graphene.List(TaskObj,
                           stream=graphene.String(required=False),
                           max_points=graphene.Int(required=False),
@@ -35,9 +37,12 @@ class Query(object):
 
     def resolve_streams(self, info, **kwargs):
         stream_type = kwargs.get('stream_type')
+        hasParent = kwargs.get('hasParent')
         streams = Stream.objects.all()
         if stream_type is not None:
-            streams = Stream.objects.filter(type=stream_type)
+            streams = streams.filter(type=stream_type)
+        if hasParent is not None:
+            streams = streams.filter(parent__isnull=not(hasParent))
         return streams
 
     def resolve_tasks(self, info, **kwargs):
