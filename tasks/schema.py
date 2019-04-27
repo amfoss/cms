@@ -22,12 +22,44 @@ class TaskLogObj(DjangoObjectType):
 
 
 class Query(object):
-    tasks = graphene.List(TaskObj)
+    streams = graphene.List(StreamObj, stream_type=graphene.String(required=False))
+    tasks = graphene.List(TaskObj,
+                          stream=graphene.String(required=False),
+                          max_points=graphene.Int(required=False),
+                          min_points=graphene.Int(required=False),
+                          max_difficulty=graphene.Int(required=False),
+                          min_difficulty=graphene.Int(required=False),
+                          )
     task = graphene.Field(TaskObj, id=graphene.String(required=True), token=graphene.String(required=True))
     tasks_log = graphene.List(TaskObj, username=graphene.String(required=False), token=graphene.String(required=True))
 
+    def resolve_streams(self, info, **kwargs):
+        stream_type = kwargs.get('stream_type')
+        streams = Stream.objects.all()
+        if stream_type is not None:
+            streams = Stream.objects.filter(type=stream_type)
+        return streams
+
     def resolve_tasks(self, info, **kwargs):
-        return Task.objects.all()
+        stream = kwargs.get('stream')
+        max_points = kwargs.get('max_points')
+        min_points = kwargs.get('min_points')
+        max_difficulty = kwargs.get('max_difficulty')
+        min_difficulty = kwargs.get('min_difficulty')
+
+        tasks = Task.objects.all()
+        if stream is not None:
+            s = Stream.objects.get(slug=stream)
+            tasks = Task.objects.filter(stream=s)
+        if max_points is not None:
+            tasks = Task.objects.filter(points__lte=max_points)
+        if min_points is not None:
+            tasks = Task.objects.filter(points__gte=min_points)
+        if max_difficulty is not None:
+            tasks = Task.objects.filter(difficulty__lte=max_difficulty)
+        if min_difficulty is not None:
+            tasks = Task.objects.filter(difficulty__gte=min_difficulty)
+        return tasks
 
     def resolve_task(self, info, **kwargs):
         id = kwargs.get('id')
