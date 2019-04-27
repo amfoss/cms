@@ -32,7 +32,7 @@ class Query(object):
                           max_difficulty=graphene.Int(required=False),
                           min_difficulty=graphene.Int(required=False),
                           )
-    task = graphene.Field(TaskObj, id=graphene.String(required=True), token=graphene.String(required=True))
+    task = graphene.Field(TaskObj, id=graphene.String(required=True))
     tasks_log = graphene.List(TaskObj, username=graphene.String(required=False), token=graphene.String(required=True))
 
     def resolve_streams(self, info, **kwargs):
@@ -57,13 +57,13 @@ class Query(object):
             s = Stream.objects.get(slug=stream)
             tasks = Task.objects.filter(stream=s)
         if max_points is not None:
-            tasks = Task.objects.filter(points__lte=max_points)
+            tasks = tasks.filter(points__lte=max_points)
         if min_points is not None:
-            tasks = Task.objects.filter(points__gte=min_points)
+            tasks = tasks.filter(points__gte=min_points)
         if max_difficulty is not None:
-            tasks = Task.objects.filter(difficulty__lte=max_difficulty)
+            tasks = tasks.filter(difficulty__lte=max_difficulty)
         if min_difficulty is not None:
-            tasks = Task.objects.filter(difficulty__gte=min_difficulty)
+            tasks = tasks.filter(difficulty__gte=min_difficulty)
         return tasks
 
     def resolve_task(self, info, **kwargs):
