@@ -103,7 +103,7 @@ class Query(object):
 
     attendance = DjangoFilterConnectionField(AttendanceObj)
 
-    def resolve_profiles(self,info,**kwargs):
+    def resolve_profiles(self, info, **kwargs):
         return Profile.objects.all()
 
     # def resolve_attendance(self,info,**kwargs):

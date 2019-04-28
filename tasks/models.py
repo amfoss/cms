@@ -72,4 +72,4 @@ class TaskLog(models.Model):
         verbose_name = "Task Log"
 
     def __str__(self):
-        return self.member + ' - ' + self.task.id
+        return self.member.username
