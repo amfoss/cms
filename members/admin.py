@@ -12,7 +12,7 @@ class ProfileAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Basic Details', {
             'fields': [
-                        ('user', 'role'),
+                        'user',
                         ('first_name', 'last_name', 'avatar'),
                         ('email', 'phone'),
                       ]
@@ -34,8 +34,8 @@ class ProfileAdmin(admin.ModelAdmin):
 
     ]
     inlines = (sp_inline, wexp_inline, eq_inline)
-    list_display = ('first_name', 'last_name', 'role', 'batch')
-    list_filter = ('batch', 'role')
+    list_display = ('first_name', 'last_name', 'batch')
+    list_filter = ('batch',)
     search_fields = ['first_name', 'last_name', 'email', 'phone', 'batch', 'role']
     select2 = select2_modelform(Profile, attrs={'width': '250px'})
     form = select2
