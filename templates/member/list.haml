@@ -37,7 +37,7 @@
       .row.m-0#members.p-0
         {% for p in profiles %}
           {% if p.user.is_active %}
-            <div member class="col-lg-3 col-md-4 col-6 p-2"  tags="{{p.first_name.lower }} {{ p.last_name.lower }} {{p.user.username.lower}}" cr="{{p.role}}" batch="{{p.batch}}">
+            <div member class="col-lg-3 col-md-4 col-6 p-2"  tags="{{p.first_name.lower }} {{ p.last_name.lower }} {{p.user.username.lower}}" batch="{{p.batch}}">
               <a href="/@{{p.user.username}}">
                 .section-card.bg-white.p-0.anime.zoomIn.m-1.h-100
                   .row.m-0.w-100
@@ -48,7 +48,7 @@
                       {% if p.tagline %}
                       .tagline {{p.tagline}}
                       {% else %}
-                      .tagline {{p.role}}
+                      .tagline
                       {% endif %}
               </a>
             </div>
