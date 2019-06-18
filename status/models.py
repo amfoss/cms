@@ -32,7 +32,7 @@ class Status(models.Model):
 class StatusRegister(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField()
-    status = models.BooleanField(default=False)
+
 
     class Meta:
         verbose_name_plural = "Member Status Register"
