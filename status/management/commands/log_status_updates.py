@@ -47,12 +47,12 @@ class Command(BaseCommand):
             updates = StatusRegister.objects.filter(timestamp__gt=d).order_by('timestamp')
             if i > 0:
                 first = Profile.objects.get(user=updates[0].member)
-                fn = first.first_name + ' ' + first.last_name
+                fn = first.first_name
                 ft = updates[0].timestamp
 
                 u = list(reversed(updates))
                 last = Profile.objects.get(user=u[0].member)
-                ln = last.first_name + ' ' + last.last_name
+                ln = last.first_name
                 lt = u[0].timestamp
 
             # Composing Status Update Report Message for Telegram
