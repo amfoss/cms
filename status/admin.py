@@ -15,7 +15,7 @@ class StatusAdmin(admin.ModelAdmin):
 
 @admin.register(StatusRegister)
 class StatusRegisterAmdin(admin.ModelAdmin):
-    list_display = ('member', 'timestamp', 'status')
+    list_display = ('member', 'timestamp')
 
 
 @admin.register(Notification)
