@@ -37,7 +37,7 @@ class Command(BaseCommand):
         i = 0
         for profile in profiles:
             if profile.user.is_active:
-                StatusRegister.objects.create(member=profile.user, timestamp=log.members[profile.email], status=True)
+                StatusRegister.objects.create(member=profile.user, timestamp=log.members[profile.email])
                 i += 1
 
         if options['send_telegram_report']:
@@ -83,22 +83,16 @@ class Command(BaseCommand):
                         if not yf:
                             message += '\n<b>' + str(y) + '</b>\n'
                             yf = 1
-                        obj = StatusRegister.objects.filter(member=m['user']).order_by('-timestamp')
-                        if obj:
-                            last = obj[0]
-                            diff = d-last.timestamp.date()
 
-                            # Emojis are included with each name as warning state
-                            if diff.days == 1:
-                                message += '&#128164; '
-                            elif diff.days == 2:
-                                message += '&#11093; '
-                            elif diff.days > 2:
-                                message += '&#10060; '
 
                         message += m['first_name'] + ' '
                         if type(m['last_name']) is str:
                             message += m['last_name']
+                        obj = StatusRegister.objects.filter(member=m['user']).order_by('-timestamp')
+                        if obj:
+                            last = obj[0]
+                            diff = d-last.timestamp.date()
+                            message += ' [ ' + str(diff.days) + ' ]'
                         message += '\n'
             if not mf:
                 message += '\n\n<b>Everyone has send their Status Updates today! &#128079;</b>\n'

@@ -97,8 +97,9 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=50, blank=True, null=True)
     avatar = ProcessedImageField(
-                default='./pages/static/pages/defaults/members-avatar-default.png',
+                default='./pages/static/pages/images/defaults/user-avatar.png',
                 verbose_name='Profile Picture',
+                blank=True,
                 upload_to=get_dp_path,
                 validators=[validate_file_size],
                 **processed_image_field_specs

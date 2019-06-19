@@ -55,6 +55,8 @@ class ProfileAdmin(admin.ModelAdmin):
         return True
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if request.user.is_superuser:
+            return super().formfield_for_foreignkey(db_field, request, **kwargs)
         if db_field.name == "user":
             kwargs["queryset"] = User.objects.filter(username=request.user.username)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
