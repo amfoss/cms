@@ -104,14 +104,14 @@ class Command(BaseCommand):
                         if obj:
                             last = obj[0]
                             diff = d-last.timestamp.date()
-                            if diff.days > 7:
-                                message += ' [1W+, '
-                            elif diff.days > 14:
-                                message += ' [2W+, '
+                            if diff.days > 28:
+                                message += ' [1M+, '
                             elif diff.days > 21:
                                 message += ' [3W+, '
-                            elif diff.days > 28:
-                                message += ' [1M+, '
+                            elif diff.days > 14:
+                                message += ' [2W+, '
+                            elif diff.days > 7:
+                                message += ' [1W+, '
                             else:
                                 message += ' [ ' + str(diff.days) + 'D, '
                             month_ago = d - timedelta(days=31)
