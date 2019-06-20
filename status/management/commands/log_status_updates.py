@@ -1,7 +1,7 @@
 import telegram
 from django.core.management.base import BaseCommand
 from status.management.fetch_status_updates import DailyStatus
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from members.models import Profile
 from status.models import StatusRegister
 from framework import settings
@@ -41,10 +41,11 @@ class Command(BaseCommand):
                 i += 1
 
         if options['send_telegram_report']:
+            t = datetime.now() - timedelta(hours=12)
             members_list = Profile.objects.values('user', 'first_name', 'last_name', 'email', 'batch').order_by('batch')
             members_count = Profile.objects.filter(batch__gt=d.year-4).count()
 
-            updates = StatusRegister.objects.filter(timestamp__gt=d).order_by('timestamp')
+            updates = StatusRegister.objects.filter(timestamp__gt=t).order_by('timestamp')
             if i > 0:
                 first = Profile.objects.get(user=updates[0].member)
                 fn = first.first_name
