@@ -76,7 +76,8 @@ class Command(BaseCommand):
             mf = 0
 
             #Reports of people who send report lately
-            lateLogs = StatusRegister.objects.filter(timestamp__gt=maxt).order_by('timestamp')
+            now = datetime.now()
+            lateLogs = StatusRegister.objects.filter(timestamp__gt=maxt, timestamp__lt=now).order_by('timestamp')
             if lateLogs.count() > 0:
                 message += '''\n\n<b>Members who were late to sent their status update: </b> \n'''
             for m in members_list:
