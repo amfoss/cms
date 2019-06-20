@@ -64,10 +64,10 @@ class Command(BaseCommand):
                 message += '''\n\n<b>More than 90% of members sent their status update today.</b>'''
             elif i/members_list.count() > 0.75:
                 message += '''\n\n<b>More than 75% of members sent their status update today.</b>'''
-            elif i/members_list.count() < 0.10:
-                message += '''\n\n<b>Less than 10% of members sent their status update today.</b>'''
             elif i/members_list.count() < 0.25:
                 message += '''\n\n<b>Less than 25% of members sent their status update today.</b>'''
+            elif i/members_list.count() < 0.10:
+                message += '''\n\n<b>Less than 10% of members sent their status update today.</b>'''
             if i > 0:
                 message += '''\n\n<b>&#11088; First to Send: </b>'''
                 message += fn + ' (' + ft.astimezone(timezone('Asia/Kolkata')).strftime('%I:%M %p') + ')\n'
@@ -82,7 +82,7 @@ class Command(BaseCommand):
             for m in members_list:
                 obj = lateLogs.filter(member=m['user'])
                 if obj:
-                    message += m['first_name'] + ' ' + m['last_name']  + ' [' + str(obj[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime('%I:%M %p')) + '] \n'
+                    message += m['first_name'] + ' [' + str(obj[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime('%I:%M %p')) + '] \n'
 
             # Reports are generated only for the last 4 batches from current year
             for y in range(d.year, d.year-4, -1):
