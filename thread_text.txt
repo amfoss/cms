@@ -1,0 +1,27 @@
+<b>Namah Shivaya,</b>
+<br>
+This is an automatically generated thread for sending your daily status update for today.
+Please send your status update as a reply to this thread after 06:00 PM and <b>before 11:00 PM</b> today.
+<br>
+Remember to mention the work you did today (including relevant non-technical work), the work/goals you plan
+for tomorrow, and any blockers you are facing. Also, include a proper signature for your update.
+<br>
+A good model for a status update would be -
+<pre>
+    Namah Shivaya,
+
+    <b>Done:</b>
+        Work done in paragraphs, or descriptive bullet points
+    <b>Planned:</b>
+        Each plan/goal in Bullet Points
+    <b>Blockers: (optional) </b>
+        Mention any blockers you are facing (if any), so others in the club can help you out.
+    <b>Hours Worked: </b> [Hours you worked]
+
+    [ Signature ]
+</pre>
+Kindly note that an automated bot is tracking your status update, and generating reports. Failing to
+send status updates repeatedly shall entail severe actions.
+<br>
+<br>
+<b>Wishing you a productive day!</b>

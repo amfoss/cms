@@ -5,6 +5,7 @@ from members.models import Profile
 from status.models import StatusRegister
 from django.core.mail import EmailMultiAlternatives, send_mail
 from framework import settings
+from django.utils.html import strip_tags
 
 
 class Command(BaseCommand):
@@ -16,13 +17,15 @@ class Command(BaseCommand):
 
         subject = 'Status Update [%s]' % date.today().strftime('%d-%m-%Y')
 
-        text_content = 'Please reply to this thread to send your status ' \
-                       'updates for %s' % date.today().strftime('%d-%m-%Y')
+        with open("thread_text.txt") as file:
+            message = file.read()
 
+        plain_message = strip_tags(message)
         send_mail(
             subject,
-            text_content,
+            plain_message,
             from_email,
             [mailing_list],
+            html_message=message,
             fail_silently=False,
         )
