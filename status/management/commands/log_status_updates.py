@@ -79,47 +79,63 @@ class Command(BaseCommand):
             now = datetime.now()
             lateLogs = StatusRegister.objects.filter(timestamp__gt=maxt, timestamp__lt=now).order_by('timestamp')
             if lateLogs.count() > 0:
-                message += '''\n\n<b>Members who were late to sent their status update: </b> \n'''
+                message += '''\n<b>&#8987; Members who were late to send their status update: </b> \n'''
+            i=0
             for m in members_list:
                 obj = lateLogs.filter(member=m['user'])
                 if obj:
-                    message += m['first_name'] + ' [' + str(obj[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime('%I:%M %p')) + '] \n'
+                    i = i+1
+                    message += str(i) + '. ' + m['first_name'] + ' <i>[' + str(obj[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime('%I:%M %p')) + ']</i>\n'
 
             # Reports are generated only for the last 4 batches from current year
             for y in range(d.year, d.year-4, -1):
                 yf = 0
+                i=0
                 for m in members_list:
                     if m['email'] not in log.emails and y == m['batch']:
                         if not mf:
-                            message += '''\n\n<b>Members who didnt send status updates:</b> \n'''
+                            message += '''\n\n<b> &#128561; Members who didnt send status updates:</b> \n'''
                             mf = 1
                         if not yf:
                             message += '\n<b>' + str(y) + '</b>\n'
                             yf = 1
 
-
-                        message += m['first_name'] + ' '
+                        i = i + 1
+                        message += str(i) + '. ' + m['first_name'] + ' '
                         if type(m['last_name']) is str:
                             message += m['last_name']
                         obj = StatusRegister.objects.filter(member=m['user']).order_by('-timestamp')
                         if obj:
                             last = obj[0]
                             diff = d-last.timestamp.date()
+                            message += ' <i>['
                             if diff.days > 28:
-                                message += ' [1M+, '
+                                message += '&#9760; 1M+, '
                             elif diff.days > 21:
-                                message += ' [3W+, '
+                                message += '&#128128; 3W+ , '
                             elif diff.days > 14:
-                                message += ' [2W+, '
+                                message += '&#128123; 2W+ , '
                             elif diff.days > 7:
-                                message += ' [1W+, '
+                                message += '&#128125; 1W+ , '
                             else:
-                                message += ' [ ' + str(diff.days) + 'D, '
+                                if(diff.days>4):
+                                    message += '&#127755; '
+                                elif(diff.days>2):
+                                    message += '&#128163; '
+                                else:
+                                    message += '&#128164; '
+                                message += str(diff.days) + 'D, '
                             month_ago = d - timedelta(days=31)
                             count = obj.filter(timestamp__gt=month_ago).count()
-                            message += str(count) + '/31 ]'
+                            if (count < 10):
+                                message += '&#128148;'
+                            elif (count > 25):
+                                message += '&#128154;'
+                            else:
+                                message += '&#128155;'
+                            message += str(count) + '/31 ]</i>'
                         else:
-                            message += '[ NSB ]'
+                            message += ' <i>[ NSB &#128123; ]</i>'
                         message += '\n'
             if not mf:
                 message += '\n\n<b>Everyone has send their Status Updates today! &#128079;</b>\n'
