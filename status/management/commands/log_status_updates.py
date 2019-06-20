@@ -106,11 +106,11 @@ class Command(BaseCommand):
                             diff = d-last.timestamp.date()
                             if diff.days > 7:
                                 message += ' [1W+, '
-                            if diff.days > 14:
+                            elif diff.days > 14:
                                 message += ' [2W+, '
-                            if diff.days > 21:
+                            elif diff.days > 21:
                                 message += ' [3W+, '
-                            if diff.days > 28:
+                            elif diff.days > 28:
                                 message += ' [1M+, '
                             else:
                                 message += ' [ ' + str(diff.days) + 'D, '
