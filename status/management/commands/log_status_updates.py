@@ -68,7 +68,7 @@ class Command(BaseCommand):
                 '%d %B %Y') + ' | &#128228; ' + str(MembersSentCount) + '/' + str(MemberCount) + ' Members'
 
             # Send summary based on percentage of members sending status updates
-            if MembersSentCount / MemberCount.count() > 0.90:
+            if MembersSentCount / MemberCount > 0.90:
                 message += '''\n\n<b>More than 90% of members sent their status update today.</b>'''
 
             elif MembersSentCount / MemberCount > 0.75:
