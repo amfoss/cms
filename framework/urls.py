@@ -49,6 +49,3 @@ urlpatterns = [
 
 admin.site.index_title = 'Member Dashboard'
 admin.site.site_title = 'amFOSS CMS'
-
-handler404 = 'pages.views.handler404'
-handler500 = 'pages.views.handler500'
