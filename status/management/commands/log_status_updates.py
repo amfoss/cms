@@ -104,38 +104,26 @@ class Command(BaseCommand):
                         message += str(i) + '. ' + m['first_name'] + ' '
                         if type(m['last_name']) is str:
                             message += m['last_name']
-                        obj = StatusRegister.objects.filter(member=m['user']).order_by('-timestamp')
-                        if obj:
-                            last = obj[0]
+                        LastLog = StatusRegister.objects.filter(member=m['user']).order_by('-timestamp')
+                        if LastLog:
+                            last = LastLog[0]
                             diff = d-last.timestamp.date()
                             message += ' <i>['
                             if diff.days > 28:
-                                message += '&#9760; 1M+, '
+                                message += '1M+, '
                             elif diff.days > 21:
-                                message += '&#128128; 3W+ , '
+                                message += '3W+ , '
                             elif diff.days > 14:
-                                message += '&#128123; 2W+ , '
+                                message += '2W+ , '
                             elif diff.days > 7:
-                                message += '&#128125; 1W+ , '
+                                message += '1W+ , '
                             else:
-                                if(diff.days>4):
-                                    message += '&#127755; '
-                                elif(diff.days>2):
-                                    message += '&#128163; '
-                                else:
-                                    message += '&#128164; '
                                 message += str(diff.days) + 'D, '
                             month_ago = d - timedelta(days=31)
                             count = obj.filter(timestamp__gt=month_ago).count()
-                            if (count < 10):
-                                message += '&#128148;'
-                            elif (count > 25):
-                                message += '&#128154;'
-                            else:
-                                message += '&#128155;'
                             message += str(count) + '/31 ]</i>'
                         else:
-                            message += ' <i>[ NSB &#128123; ]</i>'
+                            message += ' <i>[ NSB ]</i>'
                         message += '\n'
             if not mf:
                 message += '\n\n<b>Everyone has send their Status Updates today! &#128079;</b>\n'
