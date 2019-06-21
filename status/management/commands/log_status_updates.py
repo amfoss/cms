@@ -134,7 +134,7 @@ class Command(BaseCommand):
                             yf = 1
 
                         i = i +1
-                        message += str(1) + '. ' + m['first_name'] + ' '
+                        message += str(i) + '. ' + m['first_name'] + ' '
                         # check if valide last_name exists
                         if type(m['last_name']) is str:
                             message += m['last_name']
