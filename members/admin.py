@@ -14,7 +14,7 @@ class ProfileAdmin(admin.ModelAdmin):
             'fields': [
                         'user',
                         ('first_name', 'last_name', 'avatar'),
-                        ('email', 'phone'),
+                        ('email', 'phone', 'telegram_username'),
                       ]
         }),
         ('Additional Details', {

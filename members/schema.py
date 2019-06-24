@@ -5,6 +5,9 @@ from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 from graphene_django.filter import DjangoFilterConnectionField
+from datetime import date, datetime
+from django.conf import settings
+
 
 #
 #       Mutations
@@ -30,9 +33,30 @@ class LogAttendance(graphene.Mutation):
             al = AttendanceLog.objects.create(member=user, timestamp=timestamp, ssids=ssids, ip=ip)
             return AtObj(id=al.id)
 
+class RecordLeaveToday(graphene.Mutation):
+    class Arguments:
+        username = graphene.String(required=True)
+        type = graphene.String(required=True)
+        reason = graphene.String(required=True)
+        bot_token = graphene.String(required=True)
+        token = graphene.String(required=True)
+
+    Output = AtObj
+
+    def mutate(self, info, username, type, reason, bot_token, token):
+        profile = Profile.objects.get(telegram_username=username)
+        user = User.objects.get(username=profile.user.username)
+        d =date.today()
+        if bot_token == settings.TELEGRAM_BOT_TOKEN:
+            lr = LeaveRecord.objects.create(member=user, start_date=d, end_date=d, type=type, reason=reason)
+            return AtObj(id=lr.id)
+        raise Exception('Invalid bot token')
+
 
 class Mutation(object):
     LogAttendance = LogAttendance.Field()
+    RecordLeaveToday = RecordLeaveToday.Field()
+
 
 #
 #       Queries
