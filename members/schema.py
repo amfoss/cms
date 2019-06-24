@@ -35,7 +35,7 @@ class LogAttendance(graphene.Mutation):
 
 class RecordLeaveToday(graphene.Mutation):
     class Arguments:
-        username = graphene.String(required=True)
+        user_id = graphene.String(required=True)
         type = graphene.String(required=True)
         reason = graphene.String(required=True)
         bot_token = graphene.String(required=True)
@@ -43,8 +43,8 @@ class RecordLeaveToday(graphene.Mutation):
 
     Output = AtObj
 
-    def mutate(self, info, username, type, reason, bot_token, token):
-        profile = Profile.objects.get(telegram_username=username)
+    def mutate(self, info, user_id, type, reason, bot_token, token):
+        profile = Profile.objects.get(telegram_id=user_id)
         user = User.objects.get(username=profile.user.username)
         d =date.today()
         if bot_token == settings.TELEGRAM_BOT_TOKEN:

@@ -106,7 +106,7 @@ class Profile(models.Model):
     )
 
     # Additional Details
-    telegram_username = models.CharField(max_length=50, null=True, blank=True)
+    telegram_id = models.CharField(max_length=50, null=True, blank=True)
     roll_number = models.CharField(max_length=25,null=True, blank=True)
     batch = models.IntegerField(null=True, help_text='Year of Admission', blank=True)
     location = models.CharField(max_length=150, null=True, blank=True)
