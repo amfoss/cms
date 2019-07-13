@@ -23,16 +23,25 @@ class Command(BaseCommand):
             help='Whether to send report on telegram group',
         )
 
+        parser.add_argument(
+            '--yesterday',
+            action='store_true',
+            dest='send_telegram_report',
+            help='Whether to log for yesterday',
+        )
+
     def handle(self, *args, **options):
 
         # Checks if specific date to fetch status update is provided
         if options['day'] and options['month'] and options['year']:
             d = date(options['year'], options['month'], options['day'])
+        elif options['yesterday']:
+            d = date.today() - timedelta(days=1)
         else:
             # On default todays date is used
             d = date.today()
 
-        # Fetch status Updates from GMAIL using helper class
+        # Fetch status Updates from GMail using helper class
         log = DailyStatus(d)
 
         # Filter profiles matching status update log

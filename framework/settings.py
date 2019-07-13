@@ -149,7 +149,7 @@ STATICFILES_FINDERS = [
     'sass_processor.finders.CssFinder',
 ]
 
-CORS_ORIGIN_WHITELIST =CORS_ORIGIN_WHITELIST = (
+CORS_ORIGIN_WHITELIST = (
     'amfoss.surge.sh',
     'amfoss.in',
     'localhost:5000',
