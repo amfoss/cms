@@ -2,7 +2,7 @@ import httplib2
 from oauth2client import file, client, tools
 from apiclient import errors, discovery
 from datetime import date, datetime
-
+from email.utils import parsedate_to_datetime
 
 class DailyStatus:
     def __init__(self, date):
@@ -67,15 +67,17 @@ class DailyStatus:
 
             for data in header_data:
                 if "Date" == data["name"]:
-                    date = datetime.strptime(data["value"], "%a, %d %b %Y %H:%M:%S %z")
+                    date = parsedate_to_datetime(data["value"])
                     member["time"] = date.isoformat()
                 if "From" == data["name"]:
+                    print(data["value"])
                     email_id = data["value"]
                     if '<' in email_id:
                         start = email_id.find('<')
                         end = email_id.find('>')
                         email_id = email_id[start + 1: end]
                     member["email"] = email_id
+            print(member)
             return member
 
         except errors.HttpError as error:
