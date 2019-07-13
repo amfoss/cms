@@ -4,8 +4,8 @@ from activity.models import *
 from .inlines import *
 from easy_select2 import select2_modelform
 from django.contrib.auth.models import User
-
-
+from django.db.models import F, ExpressionWrapper, DurationField
+import datetime
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
@@ -69,12 +69,40 @@ class AttendanceLogAdmin(admin.ModelAdmin):
     select2 = select2_modelform(AttendanceLog, attrs={'width': '250px'})
     form = select2
 
+class DurationFilter(admin.SimpleListFilter):
+    title='Duration'
+    parameter_name='calculated_duration'
+
+    def lookups(self, request, queryset):
+        return(
+            ('1','More than 3 hours'),
+            ('2','Less than 3 hours'),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == '1':
+            return queryset.filter(xduration__gt=datetime.timedelta(hours=3))
+        elif value == '2':
+            return queryset.exclude(xduration__gt=datetime.timedelta(hours=3))
+        return queryset
 
 @admin.register(Attendance)
 class AttendanceAdmin(admin.ModelAdmin):
     fields = ('member', ('session_start', 'session_end'),)
-    list_display = ('member', 'session_start', 'session_end', 'duration')
-    list_filter = ('member', 'session_start')
+    list_display = ('member', 'session_start', 'session_end', 'calculated_duration')
+    list_filter = ('member', 'session_start', DurationFilter)
+
+    def calculated_duration(self, obj):
+        return obj.xduration
+    calculated_duration.admin_order_field = 'xduration'
+    calculated_duration.short_description = ('duration')
+
+    def get_queryset(self, request):
+        qs = super(AttendanceAdmin, self).get_queryset(request)
+        qs = qs.annotate(xduration=ExpressionWrapper(F('session_end')-F('session_start'), output_field=DurationField())).order_by('xduration')
+        return qs
+
     select2 = select2_modelform(Attendance, attrs={'width': '250px'})
     form = select2
 
