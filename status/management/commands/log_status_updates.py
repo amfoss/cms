@@ -26,7 +26,7 @@ class Command(BaseCommand):
         parser.add_argument(
             '--yesterday',
             action='store_true',
-            dest='send_telegram_report',
+            dest='yesterday',
             help='Whether to log for yesterday',
         )
 
