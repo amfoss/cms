@@ -32,31 +32,36 @@ class Command(BaseCommand):
 
         message = '<b>Status Update Report</b> \n\n'
 
-
         message += '<b>Most Status Updates: </b>\n\n'
         i = 1
+        last_val = -1
         for member in desc:
             profile = Profile.objects.get(id=member)
             message +=  str(i) + ". " + str(profile.first_name)
             if(profile.last_name):
                 message +=  ' ' + str(profile.last_name)
             message += " - " + str(desc[member]) + '\n'
-            i = i+1
-            if i>10:
-                break
+            if(last_val > desc[member] or last_val<0):
+                i = i+1
+                last_val = desc[member]
+                if i>10:
+                    break
 
         message += '\n<b>Least Status Updates: </b>\n\n'
         i = 1
+        last_val = -1
         for member in asc:
             if asc[member] > 0:
                 profile = Profile.objects.get(id=member)
-                message += str(i) + ". " + str(profile.first_name)
+                message += str(profile.first_name)
                 if (profile.last_name):
                     message += ' ' + str(profile.last_name)
-                message += " - " + str(asc[member]) + '\n'
-                i = i + 1
-                if i > 10:
-                    break
+                message += " (" + str(asc[member]) + '), '
+                if (last_val > desc[member] or last_val < 0):
+                    i = i + 1
+                    last_val = desc[member]
+                    if i > 15:
+                        break
 
         message += '\n<i>This is an automatically generated message. Please send your status updates daily.</i>'
 
