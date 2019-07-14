@@ -40,12 +40,12 @@ class Command(BaseCommand):
                 i =  i+1
                 if i>10:
                     break
-                profile = Profile.objects.get(id=member)
-                message +=  str(i) + ". " + str(profile.first_name)
-                if profile.last_name:
-                    message +=  ' ' + str(profile.last_name)
-                message += " - " + str(desc[member]) + '\n'
-                last_val = desc[member]
+            profile = Profile.objects.get(id=member)
+            message +=  str(i) + ". " + str(profile.first_name)
+            if profile.last_name:
+                message +=  ' ' + str(profile.last_name)
+            message += " - " + str(desc[member]) + '\n'
+            last_val = desc[member]
 
         message += '\n<b>Least Status Updates: </b>\n\n'
         i = 0
@@ -56,12 +56,12 @@ class Command(BaseCommand):
                     i = i + 1
                     if i > 10:
                         break
-                    profile = Profile.objects.get(id=member)
-                    message += str(i) + ". " + str(profile.first_name)
-                    if profile.last_name:
-                        message += ' ' + str(profile.last_name)
-                    message += " - " + str(asc[member]) + '\n'
-                    last_val = asc[member]
+                profile = Profile.objects.get(id=member)
+                message += str(i) + ". " + str(profile.first_name)
+                if profile.last_name:
+                    message += ' ' + str(profile.last_name)
+                message += " - " + str(asc[member]) + '\n'
+                last_val = asc[member]
 
         message += '\n<i>This is an automatically generated message. Please send your status updates daily.</i>'
 
