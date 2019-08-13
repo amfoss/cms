@@ -152,9 +152,9 @@ STATICFILES_FINDERS = [
 # TODO: move to server settings once initial development is over
 CORS_ORIGIN_WHITELIST = (
     'my.amfoss.in',
-    'amfoss.in'
-    'localhost:5000',
-    '127.0.0.1:5000',
+    'amfoss.in',
+    'localhost:5000', # TODO: remove after initial development
+    '127.0.0.1:5000', # TODO: remove after initial development
 )
 
 
