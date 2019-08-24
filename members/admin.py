@@ -61,14 +61,6 @@ class ProfileAdmin(admin.ModelAdmin):
             kwargs["queryset"] = User.objects.filter(username=request.user.username)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-@admin.register(AttendanceLog)
-class AttendanceLogAdmin(admin.ModelAdmin):
-    fields  = (('member', 'timestamp','ip'), 'ssids')
-    list_display = ('member', 'timestamp', 'ssids', 'ip')
-    list_filter = ('member', 'timestamp')
-    select2 = select2_modelform(AttendanceLog, attrs={'width': '250px'})
-    form = select2
-
 class DurationFilter(admin.SimpleListFilter):
     title='Duration'
     parameter_name='calculated_duration'

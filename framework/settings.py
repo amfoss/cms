@@ -42,11 +42,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'members',
     'activity',
-    'blog',
-    'pages',
     'status',
-    'gsoc',
-    'gallery',
     'tasks'
 ]
 
@@ -156,5 +152,3 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:5000', # TODO: remove after initial development
     '127.0.0.1:5000', # TODO: remove after initial development
 )
-
-

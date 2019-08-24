@@ -1,11 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
-from gallery.models import Album
 from ckeditor.fields import RichTextField
 from members.models import Skill, Portal, Organization
 from datetime import date
 import uuid
-from gallery.validators import validate_file_size, processed_image_field_specs
+from members.validators import validate_file_size, processed_image_field_specs
 from imagekit.models import ProcessedImageField
 
 EVENT_TYPES = [
@@ -34,7 +33,6 @@ class Project(models.Model):
     topics = models.ManyToManyField(Skill, related_name='ProjectTopics', blank=True)
     detail = RichTextField(verbose_name='Details')
     links = models.ManyToManyField(Portal, related_name='ProjectLinks', through='ProjectLink')
-    album = models.ForeignKey(Album, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Projects"
@@ -138,7 +136,6 @@ class Event(models.Model):
     projects = models.ManyToManyField(Project, related_name='EventProject', blank=True)
     honours = models.ManyToManyField(Honour, related_name='EventHonours', blank=True)
     organizer = models.ForeignKey(Organization, on_delete=models.PROTECT, blank=True, null=True)
-    album = models.ForeignKey(Album, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Events"

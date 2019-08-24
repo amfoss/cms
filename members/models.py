@@ -4,7 +4,7 @@ from ckeditor.fields import RichTextField
 from status.models import Thread
 import uuid
 from datetime import date
-from gallery.validators import validate_file_size, processed_image_field_specs
+from members.validators import validate_file_size, processed_image_field_specs
 from imagekit.models import ProcessedImageField
 
 SKILL_TYPES = (('T', 'Technical'), ('A', 'Arts'), ('S', 'Social'), ('P', 'Sports'), ('O', 'Others'))
@@ -201,13 +201,6 @@ class EducationalQualification(models.Model):
         verbose_name = "Educational Qualification"
 
 
-class AttendanceLog(models.Model):
-    member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='AttendanceLog')
-    timestamp = models.DateTimeField()
-    ssids = models.TextField()
-    ip = models.CharField(max_length=200)
-
-
 class Attendance(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Attendance')
     session_start = models.DateTimeField()
@@ -305,7 +298,6 @@ __all__ = [
             'Team',
             'Responsibility',
             'Attendance',
-            'AttendanceLog',
             'EducationalQualification',
             'WorkExperience',
             'SocialProfile',

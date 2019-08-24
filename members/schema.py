@@ -16,23 +16,6 @@ from django.conf import settings
 class AtObj(graphene.ObjectType):
     id = graphene.String()
 
-class LogAttendance(graphene.Mutation):
-    class Arguments:
-        username = graphene.String(required=True)
-        password = graphene.String(required=True)
-        timestamp = graphene.types.datetime.DateTime(required=True)
-        ssids = graphene.String(required=True)
-        ip = graphene.String(required=True)
-
-
-    Output = AtObj
-
-    def mutate(self, info, username, password, timestamp, ssids, ip):
-        user = User.objects.get(username=username)
-        if check_password(password,user.password):
-            al = AttendanceLog.objects.create(member=user, timestamp=timestamp, ssids=ssids, ip=ip)
-            return AtObj(id=al.id)
-
 class RecordLeaveToday(graphene.Mutation):
     class Arguments:
         user_id = graphene.String(required=True)
