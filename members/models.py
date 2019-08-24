@@ -20,7 +20,7 @@ class Skill(models.Model):
     name = models.CharField(max_length=25)
     type = models.CharField(choices=SKILL_TYPES, default='O', max_length=1)
     icon = ProcessedImageField(
-        default='./pages/static/pages/defaults/members-skill-icon-default.png',
+        default='./static/pages/defaults/members-skill-icon-default.png',
         blank=True,
         verbose_name='Icon',
         upload_to=get_icon_path,
@@ -57,7 +57,7 @@ class Organization(models.Model):
 
     name = models.CharField(max_length=50)
     icon = ProcessedImageField(
-        default='./pages/static/pages/defaults/members-organization-icon-default.jpg',
+        default='./static/pages/defaults/members-organization-icon-default.jpg',
         blank=True,
         verbose_name='Logo/Icon',
         upload_to=get_icon_path,
@@ -97,7 +97,7 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=50, blank=True, null=True)
     avatar = ProcessedImageField(
-                default='./pages/static/pages/images/defaults/user-avatar.png',
+                default='./static/pages/images/defaults/user-avatar.png',
                 verbose_name='Profile Picture',
                 blank=True,
                 upload_to=get_dp_path,
@@ -235,7 +235,7 @@ class Responsibility(models.Model):
 class Team(models.Model):
     name = models.CharField(max_length=50)
     image = ProcessedImageField(
-        default='./pages/static/pages/defaults/members-team-image-default.png',
+        default='./static/pages/defaults/members-team-image-default.png',
         blank=True,
         **processed_image_field_specs
     )
