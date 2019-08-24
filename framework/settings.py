@@ -37,8 +37,6 @@ INSTALLED_APPS = [
     'hamlpy',
     'ckeditor',
     'easy_select2',
-    'imagekit',
-    'storages',
     'corsheaders',
     'members',
     'activity',
@@ -148,13 +146,3 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'sass_processor.finders.CssFinder',
 ]
-
-# TODO: move to server settings once initial development is over
-CORS_ORIGIN_WHITELIST = (
-    'my.amfoss.in',
-    'amfoss.in',
-    'localhost:5000', # TODO: remove after initial development
-    '127.0.0.1:5000', # TODO: remove after initial development
-)
-
-
