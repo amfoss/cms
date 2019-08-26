@@ -167,7 +167,7 @@ class TeamAdmin(admin.ModelAdmin):
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    fields = (('name', 'description'), 'members')
+    fields = (('name', 'description'), 'members', 'thread')
     search_fields = ['name', 'members']
     list_display = ('name', 'description')
     list_filter = ('name', 'members')

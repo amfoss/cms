@@ -262,6 +262,7 @@ class Group(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=150)
     members = models.ManyToManyField(User, related_name='Groups')
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, null=True)
 
     class Meta:
         verbose_name_plural = "Groups"

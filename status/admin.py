@@ -3,6 +3,19 @@ from .models import *
 from easy_select2 import select2_modelform
 
 
+@admin.register(Thread)
+class ThreadAdmin(admin.ModelAdmin):
+    fields = (
+        'name',
+        ( 'isActive', 'sendReport'),
+        ('telegramGroupID', 'threadEmail'),
+        'days',
+        ('generationTime', 'dueTime', 'logTime'),
+        'threadMessage'
+    )
+    select2 = select2_modelform(Thread, attrs={'width': '250px'})
+    form = select2
+
 @admin.register(Status)
 class StatusAdmin(admin.ModelAdmin):
     fields = ('date', ('thread', 'author'), 'subject', 'status')
@@ -23,11 +36,5 @@ class NotificationAdmin(admin.ModelAdmin):
     fields = (('title', 'date'), 'groups', 'description')
     select2 = select2_modelform(Notification, attrs={'width': '250px'})
     form = select2
-
-
-@admin.register(Thread)
-class ThreadAdmin(admin.ModelAdmin):
-    def has_module_permission(self, request):
-        return False
 
 
