@@ -1,5 +1,4 @@
 import telegram
-from status.management.fetch_status_updates import DailyStatus
 from datetime import date, datetime, timedelta
 from members.models import Profile, Group
 from status.models import Log
@@ -65,16 +64,14 @@ def getBatchName(y):
     elif y+3 == year:
         return 'Fourth Year Batch'
 
-def generateReport(d, log, MembersSentCount, mint, maxt, thread, groupID):
+def generateReport(d, log, MembersSentCount, mint, maxt, thread):
 
     groupMembers = Group.objects.filter(thread=thread).values('members')
     groupProfiles = Profile.objects.filter(user__in=groupMembers)
+    MemberCount =  groupProfiles.count()
 
     # Get member profile data from CMS
     members_list = groupProfiles.values('user', 'first_name', 'last_name', 'email', 'batch').order_by('batch')
-
-    # Get total count of members
-    MemberCount = groupProfiles.filter(batch__gt=d.year - 4).count()
 
     # Get All Status Update Entries for the Day
     updates = Log.objects.filter(timestamp__gt=mint, timestamp__lt=maxt, thread=thread).order_by('timestamp')
@@ -150,16 +147,18 @@ def generateReport(d, log, MembersSentCount, mint, maxt, thread, groupID):
     if not mf:
         message += '\n\n<b>Everyone has send their Status Updates today! &#128079;</b>\n'
 
-    message += '\n<i>This is an automatically generated message. Please send your status updates daily.</i>'
+    if thread.footerMessage:
+        message += '\n<i>'+ thread.footerMessage +'</i>'
 
     # Log message
     print(message)
 
+    group = Group.objects.get(thread=thread)
+
     # Send Message through Telegram Bot
-    bot = telegram.Bot(
-        token=settings.TELEGRAM_BOT_TOKEN)
+    bot = telegram.Bot(token=group.telegramBot)
     bot.send_message(
-        chat_id=groupID,
+        chat_id=group.telegramGroup,
         text=message,
         parse_mode=telegram.ParseMode.HTML
     )

@@ -61,14 +61,6 @@ class ProfileAdmin(admin.ModelAdmin):
             kwargs["queryset"] = User.objects.filter(username=request.user.username)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-@admin.register(AttendanceLog)
-class AttendanceLogAdmin(admin.ModelAdmin):
-    fields  = (('member', 'timestamp','ip'), 'ssids')
-    list_display = ('member', 'timestamp', 'ssids', 'ip')
-    list_filter = ('member', 'timestamp')
-    select2 = select2_modelform(AttendanceLog, attrs={'width': '250px'})
-    form = select2
-
 class DurationFilter(admin.SimpleListFilter):
     title='Duration'
     parameter_name='calculated_duration'
@@ -86,25 +78,6 @@ class DurationFilter(admin.SimpleListFilter):
         elif value == '2':
             return queryset.exclude(xduration__gt=datetime.timedelta(hours=3))
         return queryset
-
-@admin.register(Attendance)
-class AttendanceAdmin(admin.ModelAdmin):
-    fields = ('member', ('session_start', 'session_end'),)
-    list_display = ('member', 'session_start', 'session_end', 'calculated_duration')
-    list_filter = ('member', 'session_start', DurationFilter)
-
-    def calculated_duration(self, obj):
-        return obj.xduration
-    calculated_duration.admin_order_field = 'xduration'
-    calculated_duration.short_description = ('duration')
-
-    def get_queryset(self, request):
-        qs = super(AttendanceAdmin, self).get_queryset(request)
-        qs = qs.annotate(xduration=ExpressionWrapper(F('session_end')-F('session_start'), output_field=DurationField())).order_by('xduration')
-        return qs
-
-    select2 = select2_modelform(Attendance, attrs={'width': '250px'})
-    form = select2
 
 
 @admin.register(LeaveRecord)
@@ -156,22 +129,28 @@ class ResponsibilityAdmin(admin.ModelAdmin):
     form = select2
 
 
-@admin.register(Team)
-class TeamAdmin(admin.ModelAdmin):
-    search_fields = ['name', 'members']
-    list_display = ('name', 'thread')
-    list_filter = ('name', 'members')
-    select2 = select2_modelform(Team, attrs={'width': '250px'})
-    form = select2
-
-
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    fields = (('name', 'description'), 'members', 'thread')
+    fieldsets = (
+        (None, {
+            'fields': (
+                ('name','description'),
+                'members'
+            )
+        }),
+        ('Attendance Management', {
+            'fields': (('attendanceEnabled', 'attendanceToken'), 'trustedList')
+        }),
+        ('Status Update Management', {
+            'fields': (('thread', 'email'),)
+        }),
+        ('Telegram Integration', {
+            'fields': (('telegramBot', 'telegramGroup'),)
+        }),
+    )
     search_fields = ['name', 'members']
     list_display = ('name', 'description')
-    list_filter = ('name', 'members')
-    select2 = select2_modelform(Group, attrs={'width': '250px'})
+    select2 = select2_modelform(Group, attrs={'width': '800px', 'max-width': '100%'})
     form = select2
 
 

@@ -1,7 +1,7 @@
 import graphene
 import graphql_jwt
 import members.schema
-import blog.schema
+import attendance.schema
 import activity.schema
 import tasks.schema
 from django.contrib.auth.models import User
@@ -16,8 +16,8 @@ class UserObj(DjangoObjectType):
         'date_joined', 'groups', 'email')
 
 
-class Query(members.schema.Query, activity.schema.Query, blog.schema.Query, tasks.schema.Query, graphene.ObjectType):
-    user = graphene.List(UserObj, username=graphene.String(required=True), token=graphene.String(required=True))
+class Query(members.schema.Query, activity.schema.Query, tasks.schema.Query, graphene.ObjectType):
+    user = graphene.List(UserObj, username=graphene.String(required=True), secret=graphene.String(required=True))
 
     def resolve_user(self, info, **kwargs):
         username = kwargs.get('username')
@@ -26,7 +26,7 @@ class Query(members.schema.Query, activity.schema.Query, blog.schema.Query, task
         raise Exception('Username is a required parameter')
 
 
-class Mutation(members.schema.Mutation, graphene.ObjectType):
+class Mutation(members.schema.Mutation, attendance.schema.Mutation, graphene.ObjectType):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()

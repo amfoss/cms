@@ -200,31 +200,6 @@ class EducationalQualification(models.Model):
         verbose_name_plural = "Educational Qualifications"
         verbose_name = "Educational Qualification"
 
-
-class AttendanceLog(models.Model):
-    member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='AttendanceLog')
-    timestamp = models.DateTimeField()
-    ssids = models.TextField()
-    ip = models.CharField(max_length=200)
-
-
-class Attendance(models.Model):
-    member = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Attendance')
-    session_start = models.DateTimeField()
-    session_end = models.DateTimeField()
-
-    class Meta:
-        verbose_name_plural = "Attendance"
-        verbose_name = "Attendance"
-
-    @property
-    def duration(self):
-        return self.session_end-self.session_start
-
-    def __str__(self):
-        return self.member.username
-
-
 class Responsibility(models.Model):
     title = models.CharField(max_length=100)
     about = RichTextField(max_length=2000, null=True, blank=True)
@@ -239,30 +214,20 @@ class Responsibility(models.Model):
         return self.title
 
 
-class Team(models.Model):
-    name = models.CharField(max_length=50)
-    image = ProcessedImageField(
-        default='./pages/static/pages/defaults/members-team-image-default.png',
-        blank=True,
-        **processed_image_field_specs
-    )
-    about = RichTextField(max_length=2000, null=True, blank=True)
-    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, null=True)
-    members = models.ManyToManyField(User, related_name='Team')
-
-    class Meta:
-        verbose_name_plural = "Teams"
-        verbose_name = "Team"
-
-    def __str__(self):
-        return self.name
-
-
 class Group(models.Model):
-    name = models.CharField(max_length=50)
-    description = models.CharField(max_length=150)
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=250, null=True)
     members = models.ManyToManyField(User, related_name='Groups')
-    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, null=True)
+
+    attendanceEnabled = models.BooleanField(default=False)
+    attendanceToken = models.CharField(max_length=1000,verbose_name="Token to be Authenticated", default="placeholdertoken")
+    trustedList = models.TextField()
+
+    thread = models.OneToOneField(Thread, on_delete=models.CASCADE)
+    email = models.EmailField(max_length=250, verbose_name="Email to Send Thread")
+
+    telegramBot = models.CharField(max_length=500, verbose_name="Telegram Bot Token")
+    telegramGroup= models.CharField(max_length=250, verbose_name="Telegram Group ID")
 
     class Meta:
         verbose_name_plural = "Groups"
@@ -303,10 +268,7 @@ __all__ = [
             'LeaveRecord',
             'MentorGroup',
             'Group',
-            'Team',
             'Responsibility',
-            'Attendance',
-            'AttendanceLog',
             'EducationalQualification',
             'WorkExperience',
             'SocialProfile',

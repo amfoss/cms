@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class StatusConfig(AppConfig):
     name = 'status'
-    verbose_name = "Status Update Management"
+    verbose_name = "Status Update Module"

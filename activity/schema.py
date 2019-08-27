@@ -28,17 +28,6 @@ class CourseObj(DjangoObjectType):
         exclude_fields = ('id')
 
 
-class HonourObj(DjangoObjectType):
-    class Meta:
-        model = Honour
-        exclude_fields = ('id')
-
-
-class TalkObj(DjangoObjectType):
-    class Meta:
-        model = Talk
-        exclude_fields = ('id')
-
 
 class Query(object):
     projects = graphene.List(ProjectObj, username=graphene.String(required=False))

@@ -16,23 +16,6 @@ from django.conf import settings
 class AtObj(graphene.ObjectType):
     id = graphene.String()
 
-class LogAttendance(graphene.Mutation):
-    class Arguments:
-        username = graphene.String(required=True)
-        password = graphene.String(required=True)
-        timestamp = graphene.types.datetime.DateTime(required=True)
-        ssids = graphene.String(required=True)
-        ip = graphene.String(required=True)
-
-
-    Output = AtObj
-
-    def mutate(self, info, username, password, timestamp, ssids, ip):
-        user = User.objects.get(username=username)
-        if check_password(password,user.password):
-            al = AttendanceLog.objects.create(member=user, timestamp=timestamp, ssids=ssids, ip=ip)
-            return AtObj(id=al.id)
-
 class RecordLeaveToday(graphene.Mutation):
     class Arguments:
         user_id = graphene.String(required=True)
@@ -54,7 +37,6 @@ class RecordLeaveToday(graphene.Mutation):
 
 
 class Mutation(object):
-    LogAttendance = LogAttendance.Field()
     RecordLeaveToday = RecordLeaveToday.Field()
 
 
@@ -95,24 +77,19 @@ class WorkExperienceObj(DjangoObjectType):
     class Meta:
         model = WorkExperience
 
-class AttendanceObj(DjangoObjectType):
-    class Meta:
-        model = Attendance
-        exclude_fields = ('id',)
-        filter_fields = {
-            'member': ['exact'],
-            'session_start': ['exact','gte']
-        }
-        interfaces = (graphene.relay.Node,)
+# class AttendanceObj(DjangoObjectType):
+#     class Meta:
+#         model = Attendance
+#         exclude_fields = ('id',)
+#         filter_fields = {
+#             'member': ['exact'],
+#             'session_start': ['exact','gte']
+#         }
+#         interfaces = (graphene.relay.Node,)
 
 class ResponsibilityObj(DjangoObjectType):
     class Meta:
         model = Responsibility
-        exclude_fields = ('id')
-
-class TeamObj(DjangoObjectType):
-    class Meta:
-        model = Team
         exclude_fields = ('id')
 
 class MentorGroupObj(DjangoObjectType):
@@ -125,7 +102,7 @@ class Query(object):
     profiles = graphene.List(ProfileObj, token=graphene.String(required=True))
     profile = graphene.Field(ProfileObj, username=graphene.String(required=True), token=graphene.String(required=True))
 
-    attendance = DjangoFilterConnectionField(AttendanceObj)
+    # attendance = DjangoFilterConnectionField(AttendanceObj)
 
     def resolve_profiles(self, info, **kwargs):
         return Profile.objects.all()

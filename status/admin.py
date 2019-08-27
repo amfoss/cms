@@ -5,15 +5,28 @@ from easy_select2 import select2_modelform
 
 @admin.register(Thread)
 class ThreadAdmin(admin.ModelAdmin):
-    fields = (
-        'name',
-        ( 'isActive', 'sendReport'),
-        ('telegramGroupID', 'threadEmail'),
-        'days',
-        ('generationTime', 'dueTime', 'logTime'),
-        'threadMessage'
+    fieldsets = (
+        (None, {
+            'fields': ('name',)
+        }),
+        ('Control Panel', {
+            'fields': (('enabled', 'enableGroupNotification'),)
+        }),
+        ('Timings', {
+            'fields': (
+                        'days',
+                        ('generationTime', 'dueTime', 'logTime'),
+                      )
+        }),
+        ('Gmail Thread', {
+            'fields': ('threadMessage',)
+        }),
+
+        ('Telegram Report', {
+            'fields': ('footerMessage',)
+        }),
     )
-    list_display = ('name', 'threadEmail', 'isActive', 'generationTime', 'dueTime', 'logTime')
+    list_display = ('name', 'enabled', 'generationTime', 'dueTime', 'logTime')
     search_fields =  ['name']
     select2 = select2_modelform(Thread, attrs={'width': '250px'})
     form = select2

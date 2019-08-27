@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from blog.models import Tag, Category
 import uuid
 from datetime import date
 from .validators import validate_file_size, processed_image_field_specs
@@ -31,8 +30,6 @@ class Album(models.Model) :
     uploader = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField(default=date.today)
     description = models.TextField(null=True, blank=True)
-    tags = models.ManyToManyField(Tag, blank=True)
-    category = models.ManyToManyField(Category, blank=True)
     featured = models.BooleanField(default=False)
     cover = models.ForeignKey(Photo, on_delete=models.SET_NULL, null=True, related_name='featured_image')
     photos = models.ManyToManyField(Photo, related_name='album')

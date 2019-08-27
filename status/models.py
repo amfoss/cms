@@ -5,15 +5,18 @@ from datetime import date
 
 class Thread(models.Model):
     name = models.CharField(max_length=200,  verbose_name="Name of Thread")
-    isActive = models.BooleanField(verbose_name="Whether the thread is Active?")
-    sendReport = models.BooleanField(verbose_name="Should Send Report to Group?")
-    threadEmail = models.EmailField(max_length=254, verbose_name="Email to Send Thread")
-    telegramGroupID = models.CharField(max_length=200, verbose_name="Telegram Group ID")
+
+    enabled = models.BooleanField(verbose_name="Whether the thread is Active?", default=True)
+    enableGroupNotification = models.BooleanField(verbose_name="Should Send Report to Group?", default=True)
+
     days = models.CharField(max_length=50, null=True, blank=True, verbose_name="Days # to be active, leave blank for all days")
     generationTime = models.CharField(max_length=50, verbose_name="Generation Time")
     dueTime = models.CharField(max_length=50, verbose_name="Due Time")
     logTime = models.CharField(max_length=50, verbose_name="Log Time")
-    threadMessage = RichTextField(max_length=2000, verbose_name="Thread Message")
+    threadMessage = RichTextField(max_length=2000, verbose_name="Thread Email Message")
+
+
+    footerMessage = models.CharField(max_length=500, verbose_name="Telegram Footer Message", null=True, blank=True)
 
     def __str__(self):
         return self.name

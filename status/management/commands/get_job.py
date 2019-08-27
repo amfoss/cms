@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from datetime import date, datetime, timedelta
-from members.models import Profile
+from members.models import Profile, Group
 from status.models import Log, Thread
 from django.core.mail import EmailMultiAlternatives, send_mail
 from framework import settings
@@ -14,12 +14,28 @@ now = datetime.now()
 day = now.strftime("%w")
 time = now.strftime("%H%M")
 
+def getThreadDateTime(thread):
+    d = now
+    if thread.generationTime > thread.logTime:
+        d = d - timedelta(days=1)
+    return d
+
+def calcMinTime(thread):
+    genTime = thread.generationTime
+    d = getThreadDateTime(thread)
+    return d.replace(hour=int(genTime[:2]), minute=int(genTime[2:]))
+
+def calcMaxTime(thread):
+    dueTime = thread.dueTime
+    d = getThreadDateTime(thread)
+    return d.replace(hour=int(dueTime[:2]), minute=int(dueTime[2:]))
+
 def generateThread(thread):
     send_mail(
         thread.name + ' [%s]' % now.strftime('%d-%m-%Y'),
         strip_tags(thread.threadMessage),
         from_email,
-        [thread.threadEmail],
+        [Group.objects.get(thread=thread).email],
         html_message=thread.threadMessage,
         fail_silently=False,
     )
@@ -36,30 +52,24 @@ def logStatus(thread):
     MembersSentCount = 0
     for profile in profiles:
         if profile.user.is_active:
-            Log.objects.create(
-                member=profile.user,
-                timestamp=log.members[profile.email],
-                thread=thread
-            )
+            mint = calcMinTime(thread)
+            query = Log.objects.filter(member=profile.user, timestamp__gte=mint, thread=thread)
+            if query.count() == 0:
+                Log.objects.create(
+                    member=profile.user,
+                    timestamp=log.members[profile.email],
+                    thread=thread
+                )
             MembersSentCount += 1
 
-    if thread.sendReport:
+    if thread.enableGroupNotification:
        sendReport(thread, log, MembersSentCount, d)
 
 def sendReport(thread, log, MembersSentCount, d):
-    d = now
-    if thread.generationTime > thread.logTime:
-        d = d - timedelta(days=1)
+    mint = calcMinTime(thread)
+    maxt = calcMaxTime(thread)
 
-    genTime = thread.generationTime
-    mint = d.replace(hour=int(genTime[:2]), minute=int(genTime[2:]))
-
-    dueTime = thread.dueTime
-    maxt = d.replace(hour=int(dueTime[:2]), minute=int(dueTime[2:]))
-
-    groupID = thread.telegramGroupID
-
-    generateReport(d, log, MembersSentCount, mint, maxt, thread, groupID)
+    generateReport(d, log, MembersSentCount, mint, maxt, thread)
 
 
 class Command(BaseCommand):
@@ -68,11 +78,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         # SENDS STATUS UPDATE THREAD VIA GMAIL
-        threads = Thread.objects.filter(isActive=True, generationTime=time, days__contains=day)
+        threads = Thread.objects.filter(enabled=True, generationTime=time, days__contains=day)
         for thread in threads:
             generateThread(thread)
 
         # LOG STATUS UPDATES & SENDS TELEGRAM REPORT
-        threads = Thread.objects.filter(isActive=True, logTime=time, days__contains=day)
+        threads = Thread.objects.filter(enabled=True, logTime=time, days__contains=day)
         for thread in threads:
             logStatus(thread)

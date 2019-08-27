@@ -39,10 +39,10 @@ INSTALLED_APPS = [
     'easy_select2',
     'corsheaders',
     'members',
+    'attendance',
     'activity',
-    'blog',
     'pages',
-    'status',
+    'status.apps.StatusConfig',
     'gallery',
     'tasks'
 ]

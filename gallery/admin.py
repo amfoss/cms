@@ -26,12 +26,10 @@ class AlbumAdmin(admin.ModelAdmin):
                 'title',
                 ('slug', 'uploader', 'date'),
                 'description',
-                ('tags', 'category', 'cover'),
+                 'cover',
                 'photos',
                 'featured'
             ]
     list_display = ('title', 'uploader', 'date')
-    list_filter = ('date', 'tags', 'category')
-    search_fields = ['uploader', 'tags', 'category']
     select2 = select2_modelform(Album, attrs={'width': '250px'})
     form = select2
