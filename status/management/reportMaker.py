@@ -2,15 +2,67 @@ import telegram
 from status.management.fetch_status_updates import DailyStatus
 from datetime import date, datetime, timedelta
 from members.models import Profile
-from status.models import StatusRegister
+from status.models import Log
 from framework import settings
 from pytz import timezone
 from operator import itemgetter
 
+
 from pytz import timezone
 
-def sendReport(maxt, mint, thread, groupID):
+def getPercentageSummary(Count, Total):
+    if Count / Total > 0.90:
+        return 'More than 90% of members sent their status update today.'
+    elif Count / Total > 0.75:
+        return 'More than 75% of members sent their status update today.'
+    elif Count / Total < 0.50:
+        return 'Less than 50% of members sent their status update today.'
+    elif Count / Total < 0.25:
+        return 'Less than 25% of members sent their status update today.'
+    elif Count / Total < 0.10:
+        return 'Less than 10% of members sent their status update today.'
 
+
+def getFirstPerson(updates):
+    person = Profile.objects.get(user=updates.first().member)
+    ft = updates.first().timestamp
+    fn = person.first_name
+    ln = person.last_name
+    return fn + ' ' + ln + ' (' + ft.astimezone(timezone('Asia/Kolkata')).strftime('%I:%M %p') + ')'
+
+def getLastPerson(updates):
+    return getFirstPerson(list(reversed(updates)))
+
+def getLateLogs(thread, members, maxt):
+    now = datetime.now()
+    # Find status updates send between due time and now
+    lateLogs = Log.objects.filter(timestamp__gt=maxt, timestamp__lt=now, thread=thread).order_by('timestamp')
+    print(lateLogs)
+
+    message = ''
+    i = 0
+    if lateLogs.count() > 0:
+        message += '''\n\n<b>&#8987; LATE: </b> \n'''
+        for m in members:
+            obj = lateLogs.filter(member=m['user'])
+            if obj:
+                i = i + 1
+                message += str(i) + '. ' + m['first_name'] + ' ' + m['last_name'] +  ' [' + obj[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime('%I:%M %p') + '] \n'
+    return message
+
+def getBatchName(y):
+    now = datetime.now()
+    year = int(now.strftime("%Y"))
+    if y == year:
+        return 'First Year Batch'
+    elif y+1 == year:
+        return 'Second Year Batch'
+    elif y+2 == year:
+        return 'Third Year Batch'
+    elif y+3 == year:
+        return 'Fourth Year Batch'
+
+def generateReport(d, log, MembersSentCount, maxt, mint, thread, groupID):
     # Get member profile data from CMS
     members_list = Profile.objects.values('user', 'first_name', 'last_name', 'email', 'batch').order_by('batch')
 
@@ -18,58 +70,22 @@ def sendReport(maxt, mint, thread, groupID):
     MemberCount = Profile.objects.filter(batch__gt=d.year - 4).count()
 
     # Get All Status Update Entries for the Day
-    updates = StatusRegister.objects.filter(timestamp__gt=mint, timestamp__lt=maxt, thread=thread).order_by('timestamp')
+    updates = Log.objects.filter(timestamp__gt=mint, timestamp__lt=maxt, thread=thread).order_by('timestamp')
 
     # Title for the Status Update Report for Telegram
     message = '<b>Daily Status Update Report</b> \n\n &#128197; ' + d.strftime(
         '%d %B %Y') + ' | &#128228; ' + str(MembersSentCount) + '/' + str(MemberCount) + ' Members'
 
     # Send summary based on percentage of members sending status updates
-    if MembersSentCount / MemberCount > 0.90:
-        message += '''\n\n<b>More than 90% of members sent their status update today.</b>'''
+    message += '\n\n<b>' + getPercentageSummary(MembersSentCount,MemberCount) + '</b>'
 
-    elif MembersSentCount / MemberCount > 0.75:
-        message += '''\n\n<b>More than 75% of members sent their status update today.</b>'''
-
-    elif MembersSentCount / MemberCount < 0.25:
-        message += '''\n\n<b>Less than 25% of members sent their status update today.</b>'''
-
-    elif MembersSentCount / MemberCount < 0.10:
-        message += '''\n\n<b>Less than 10% of members sent their status update today.</b>'''
-
-    if MembersSentCount > 0:
-        # Find the first person and his/her time to send status update
-        first = Profile.objects.get(user=updates[0].member)
-        fn = first.first_name
-        ft = updates[0].timestamp
-
-        # Find the last person and his/her to send status update
-        u = list(reversed(updates))
-        last = Profile.objects.get(user=u[0].member)
-        ln = last.first_name
-        lt = u[0].timestamp
-
+    if updates.count() > 0:
         ## Add Names of First and Last Person to status updates to the message
-        message += '''\n\n<b>&#11088; First : </b>'''
-        message += fn + ' (' + ft.astimezone(timezone('Asia/Kolkata')).strftime('%I:%M %p') + ')\n'
-        message += '''<b>&#128012; Last : </b>'''
-        message += ln + ' (' + lt.astimezone(timezone('Asia/Kolkata')).strftime('%I:%M %p') + ')\n'
+        message += '\n\n<b>&#11088; First : </b>' + getFirstPerson(updates) + '\n'
+        message += '<b>&#128012; Last : </b>' + getLastPerson(updates) + '\n'
 
     # Generate Report for members who have send status update lately
-    # Find current time
-    now = datetime.now()
-    # Find status updates send between due time and now
-    lateLogs = StatusRegister.objects.filter(timestamp__gt=maxt, timestamp__lt=now).order_by('timestamp')
-
-    i = 0
-    if lateLogs.count() > 0:
-        message += '''\n\n<b>&#8987; LATE: </b> \n'''
-    for m in members_list:
-        obj = lateLogs.filter(member=m['user'])
-        if obj:
-            i = i + 1
-            message += str(i) + '. ' + m['first_name'] + ' [' + str(
-                obj[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime('%I:%M %p')) + '] \n'
+    message += getLateLogs(thread, members_list, maxt)
 
     # Reports are generated only for the last 4 batches from current year
     mf = 0  # member flag
@@ -86,7 +102,7 @@ def sendReport(maxt, mint, thread, groupID):
                     message += '''\n\n<b>&#128561; DID NOT SEND: </b> \n'''
                     mf = 1
                 if not yf:
-                    message += '\n<b>' + str(y + 4) + ' Batch </b>\n\n'
+                    message += '\n<b>' + getBatchName(y) + '</b>\n\n'
                     yf = 1
 
                 i = i + 1
@@ -96,7 +112,7 @@ def sendReport(maxt, mint, thread, groupID):
                     message += m['last_name']
 
                 # Get previous history of member
-                memberHistory = StatusRegister.objects.filter(member=m['user']).order_by('-timestamp')
+                memberHistory = Log.objects.filter(member=m['user'], thread=thread).order_by('-timestamp')
 
                 if memberHistory:
                     # find the last time the member send a status update
@@ -120,7 +136,7 @@ def sendReport(maxt, mint, thread, groupID):
 
                 # if member has no previous history
                 else:
-                    message += '[ NSB ]'
+                    message += ' [ NSB ]'
 
                 message += '\n'
 

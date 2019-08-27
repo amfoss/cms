@@ -4,6 +4,6 @@ python:
 install:
   - pip install -r requirements.txt
 script:
-  - python manage.py makemigrations activity blog gsoc members gallery status pages tasks
+  - python manage.py makemigrations activity blog members gallery status tasks
   - python manage.py migrate
   - python manage.py test

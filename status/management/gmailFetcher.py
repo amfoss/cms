@@ -3,8 +3,11 @@ from oauth2client import file, client, tools
 from apiclient import errors, discovery
 from datetime import date, datetime
 from email.utils import parsedate_to_datetime
+import email
+import base64
 
-class DailyStatus:
+
+class fetchStatusLog:
     def __init__(self, date, subject):
         self.date = date
         self.emails = []
@@ -48,7 +51,14 @@ class DailyStatus:
     def get_member_details(self, id):
         member = {}
         try:
-            message = self.service.users().messages().get(userId='me', id=id, format='metadata').execute()
+
+            message = self.service.users().messages().get(userId='me', id=id, format='raw').execute()
+            msg_str = message['raw'].decode('utf-8')
+            mime_msg = email.message_from_string(msg_str)
+
+            print(mime_msg['body'])
+
+            message = self.service.users().messages().get(userId='me', id=id, format='full').execute()
 
             header_data = message["payload"]["headers"]
 
@@ -73,7 +83,6 @@ class DailyStatus:
                         end = email_id.find('>')
                         email_id = email_id[start + 1: end]
                     member["email"] = email_id
-            print(member)
             return member
 
         except errors.HttpError as error:

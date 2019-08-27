@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 from status.management.fetch_status_updates import DailyStatus
 from datetime import date, datetime, timedelta
 from members.models import Profile
-from status.models import StatusRegister
+from status.models import Log
 from framework import settings
 from django.utils import timezone
 
@@ -28,9 +28,9 @@ class Command(BaseCommand):
         print(StartTime)
         print(EndTime)
 
-        StartCount = StatusRegister.objects.filter(timestamp__gt=StartTime, timestamp__lt=EndTime).count()
-        StatusRegister.objects.filter(timestamp__gt=StartTime, timestamp__lt=EndTime).delete()
-        EndCount = StatusRegister.objects.filter(timestamp__gt=StartTime, timestamp__lt=EndTime).count()
+        StartCount = Log.objects.filter(timestamp__gt=StartTime, timestamp__lt=EndTime).count()
+        Log.objects.filter(timestamp__gt=StartTime, timestamp__lt=EndTime).delete()
+        EndCount = Log.objects.filter(timestamp__gt=StartTime, timestamp__lt=EndTime).count()
 
         if EndCount == 0:
             print(str(StartCount) + " status logs successfully deleted from " + str(d))

@@ -13,28 +13,12 @@ class ThreadAdmin(admin.ModelAdmin):
         ('generationTime', 'dueTime', 'logTime'),
         'threadMessage'
     )
+    list_display = ('name', 'threadEmail', 'isActive', 'generationTime', 'dueTime', 'logTime')
+    search_fields =  ['name']
     select2 = select2_modelform(Thread, attrs={'width': '250px'})
     form = select2
 
-@admin.register(Status)
-class StatusAdmin(admin.ModelAdmin):
-    fields = ('date', ('thread', 'author'), 'subject', 'status')
-    readonly_fields = ('date',)
-    list_display = ('author', 'thread', 'date')
-    list_filter = ('thread', 'author')
-    search_fields = ['author__user', 'thread__name', 'subject', 'date']
-    select2 = select2_modelform(Status, attrs={'width': '250px'})
-    form = select2
-
-@admin.register(StatusRegister)
-class StatusRegisterAmdin(admin.ModelAdmin):
+@admin.register(Log)
+class LogAdmin(admin.ModelAdmin):
     list_display = ('member', 'timestamp')
-
-
-@admin.register(Notification)
-class NotificationAdmin(admin.ModelAdmin):
-    fields = (('title', 'date'), 'groups', 'description')
-    select2 = select2_modelform(Notification, attrs={'width': '250px'})
-    form = select2
-
 

@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'blog',
     'pages',
     'status',
-    'gsoc',
     'gallery',
     'tasks'
 ]
