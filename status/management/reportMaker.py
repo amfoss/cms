@@ -74,7 +74,7 @@ def generateReport(d, log, MembersSentCount, mint, maxt, thread, groupID):
     members_list = groupProfiles.values('user', 'first_name', 'last_name', 'email', 'batch').order_by('batch')
 
     # Get total count of members
-    MemberCount = Profile.objects.filter(batch__gt=d.year - 4).count()
+    MemberCount = groupProfiles.filter(batch__gt=d.year - 4).count()
 
     # Get All Status Update Entries for the Day
     updates = Log.objects.filter(timestamp__gt=mint, timestamp__lt=maxt, thread=thread).order_by('timestamp')
