@@ -20,5 +20,5 @@ class ThreadAdmin(admin.ModelAdmin):
 
 @admin.register(Log)
 class LogAdmin(admin.ModelAdmin):
-    list_display = ('member', 'timestamp')
+    list_display = ('member', 'timestamp', 'thread')
 

@@ -52,15 +52,19 @@ class fetchStatusLog:
         member = {}
         try:
 
-            message = self.service.users().messages().get(userId='me', id=id, format='raw').execute()
-            msg_str = message['raw'].decode('utf-8')
-            mime_msg = email.message_from_string(msg_str)
-
-            print(mime_msg['body'])
+            # message = self.service.users().messages().get(userId='me', id=id, format='raw').execute()
+            # msg_str = str(base64.urlsafe_b64decode(message['raw'].encode('ASCII')))
+            # mime_msg = email.message_from_string(msg_str)
+            #
+            # print(mime_msg.get_body())
 
             message = self.service.users().messages().get(userId='me', id=id, format='full').execute()
 
             header_data = message["payload"]["headers"]
+
+            # part_one = message["payload"]["parts"][0]['body']
+            # if data in part_one:
+            #     print(base64.b64decode (bytes(part_one['data'], 'UTF-8')))
 
             correct_subject = False
 
@@ -76,7 +80,6 @@ class fetchStatusLog:
                     date = parsedate_to_datetime(data["value"])
                     member["time"] = date.isoformat()
                 if "From" == data["name"]:
-                    print(data["value"])
                     email_id = data["value"]
                     if '<' in email_id:
                         start = email_id.find('<')

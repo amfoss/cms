@@ -15,15 +15,12 @@ day = now.strftime("%w")
 time = now.strftime("%H%M")
 
 def generateThread(thread):
-    subject = thread.name + ' [%s]' % now.strftime('%d-%m-%Y')
-    message = strip_tags(thread.threadMessage)
-    mailing_list = thread.threadEmail
     send_mail(
-        subject,
-        message,
+        thread.name + ' [%s]' % now.strftime('%d-%m-%Y'),
+        strip_tags(thread.threadMessage),
         from_email,
-        [mailing_list],
-        html_message=message,
+        [thread.threadEmail],
+        html_message=thread.threadMessage,
         fail_silently=False,
     )
 
@@ -59,9 +56,6 @@ def sendReport(thread, log, MembersSentCount, d):
 
     dueTime = thread.dueTime
     maxt = d.replace(hour=int(dueTime[:2]), minute=int(dueTime[2:]))
-
-    print(mint)
-    print(maxt)
 
     groupID = thread.telegramGroupID
 
