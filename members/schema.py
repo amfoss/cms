@@ -106,10 +106,10 @@ class MentorGroupObj(DjangoObjectType):
 class Query(object):
     profiles = graphene.List(ProfileObj, token=graphene.String(required=True))
     profile = graphene.Field(ProfileObj, username=graphene.String(required=True), token=graphene.String(required=True))
-    GetLeaveRecords = graphene.List(LeaveRecordObj,date = graphene.types.datetime.DateTime(required=True),token=graphene.String(required=True))
+    getLeaveRecords = graphene.List(LeaveRecordObj,date = graphene.types.datetime.DateTime(required=True),token=graphene.String(required=True))
     # attendance = DjangoFilterConnectionField(AttendanceObj)
 
-    def resolve_GetLeaveRecords(self, info, **kwargs):
+    def resolve_getLeaveRecords(self, info, **kwargs):
         date = kwargs.get('date')
         return LeaveRecord.objects.filter(start_date = date)
 
