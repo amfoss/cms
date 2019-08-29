@@ -44,6 +44,11 @@ class Mutation(object):
 #       Queries
 #
 
+class LeaveRecordObj(DjangoObjectType):
+    class Meta:
+        model = LeaveRecord
+        exclude_fields = ('id')
+
 class PortalObj(DjangoObjectType):
     class Meta:
         model = Portal
@@ -101,8 +106,11 @@ class MentorGroupObj(DjangoObjectType):
 class Query(object):
     profiles = graphene.List(ProfileObj, token=graphene.String(required=True))
     profile = graphene.Field(ProfileObj, username=graphene.String(required=True), token=graphene.String(required=True))
-
+    GetTodaysLeaves = graphene.List(LeaveRecordObj, token=graphene.String(required=True))
     # attendance = DjangoFilterConnectionField(AttendanceObj)
+
+    def resolve_GetTodaysLeaves(self, info, **kwargs):
+        return LeaveRecord.objects.filter(start_date = date.today())
 
     def resolve_profiles(self, info, **kwargs):
         return Profile.objects.all()
@@ -120,3 +128,4 @@ class Query(object):
             user = User.objects.get(username=username)
             return Profile.objects.get(user=user)
         raise Exception('Username is a required parameter')
+
