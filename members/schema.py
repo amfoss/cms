@@ -106,11 +106,12 @@ class MentorGroupObj(DjangoObjectType):
 class Query(object):
     profiles = graphene.List(ProfileObj, token=graphene.String(required=True))
     profile = graphene.Field(ProfileObj, username=graphene.String(required=True), token=graphene.String(required=True))
-    GetTodaysLeaves = graphene.List(LeaveRecordObj, token=graphene.String(required=True))
+    GetLeaveRecords = graphene.List(LeaveRecordObj,date = graphene.types.datetime.DateTime(required=True),token=graphene.String(required=True))
     # attendance = DjangoFilterConnectionField(AttendanceObj)
 
-    def resolve_GetTodaysLeaves(self, info, **kwargs):
-        return LeaveRecord.objects.filter(start_date = date.today())
+    def resolve_GetLeaveRecords(self, info, **kwargs):
+        date = kwargs.get('date')
+        return LeaveRecord.objects.filter(start_date = date)
 
     def resolve_profiles(self, info, **kwargs):
         return Profile.objects.all()
