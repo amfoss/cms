@@ -20,6 +20,7 @@ def getPercentageSummary(Count, Total):
         return 'Less than 25% of members sent their status update today.'
     elif Count / Total < 0.10:
         return 'Less than 10% of members sent their status update today.'
+    return ''
 
 
 def getName(first, last):
