@@ -10,7 +10,7 @@ from operator import itemgetter
 from pytz import timezone
 
 def getPercentageSummary(Count, Total):
-    if Count / Total > 0.90:
+    if Count / Total > 0.90 and Count / Total < 1:
         return 'More than 90% of members sent their status update today.'
     elif Count / Total > 0.75:
         return 'More than 75% of members sent their status update today.'
