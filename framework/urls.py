@@ -24,7 +24,6 @@ from django.views.decorators.csrf import csrf_exempt
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', csrf_exempt(GraphQLView.as_view(graphiql=True))),
-    #path('', include('pages.urls')),
     path(
         'admin/password_reset/',
         auth_views.PasswordResetView.as_view( html_email_template_name='registration/password_reset_email.html'),

@@ -5,14 +5,26 @@ from status.models import Log, Thread
 from django.core.mail import EmailMultiAlternatives, send_mail
 from framework import settings
 from django.utils.html import strip_tags
+from django.utils import timezone
 
-from status.management.gmailFetcher import fetchStatusLog
-from status.management.reportMaker import generateReport
+from attendance.generateSSID import refreshSSID
+
+from status.gmailFetcher import fetchStatusLog
+from status.reportMaker import generateReport
+
+to_tz = timezone.get_default_timezone()
 
 from_email = settings.EMAIL_HOST_USER
-now = datetime.now()
+
+now = datetime.now().astimezone(to_tz)
 day = now.strftime("%w")
 time = now.strftime("%H%M")
+
+
+def generateSSIDName():
+    groups = Group.objects.filter(attendanceEnabled=True)
+    for group in groups:
+        refreshSSID(group.attendanceThread)
 
 def getThreadDateTime(thread):
     d = now
@@ -76,6 +88,9 @@ class Command(BaseCommand):
     help = 'Run Status Cron Jobs'
 
     def handle(self, *args, **options):
+
+        # REGENERATE WIFI NAME
+        generateSSIDName()
 
         # SENDS STATUS UPDATE THREAD VIA GMAIL
         threads = Thread.objects.filter(enabled=True, generationTime=time, days__contains=day)

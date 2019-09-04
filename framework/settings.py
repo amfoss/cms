@@ -41,9 +41,7 @@ INSTALLED_APPS = [
     'members',
     'attendance',
     'activity',
-    'pages',
     'status.apps.StatusConfig',
-    'gallery',
     'tasks'
 ]
 

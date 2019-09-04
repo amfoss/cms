@@ -33,7 +33,7 @@ class ProjectLinkInline(admin.TabularInline):
 class ProjectAdmin(admin.ModelAdmin):
     fields = [
                 ('name', 'slug'),
-                ('members', 'album'),
+                'members',
                 ('tagline', 'topics'),
                 ('published', 'cover'),
                 'detail',

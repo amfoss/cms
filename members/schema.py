@@ -106,7 +106,9 @@ class MentorGroupObj(DjangoObjectType):
 class Query(object):
     profiles = graphene.List(ProfileObj, token=graphene.String(required=True))
     profile = graphene.Field(ProfileObj, username=graphene.String(required=True), token=graphene.String(required=True))
-    getLeaveRecords = graphene.List(LeaveRecordObj,date = graphene.types.datetime.DateTime(required=True),token=graphene.String(required=True))
+    getLeaveRecords = graphene.List(LeaveRecordObj, date = graphene.types.datetime.DateTime(required=True),token=graphene.String(required=True))
+    getResponsibilities = graphene.List(ResponsibilityObj)
+    getUserResponsibilities = graphene.List(ResponsibilityObj)
     # attendance = DjangoFilterConnectionField(AttendanceObj)
 
     def resolve_getLeaveRecords(self, info, **kwargs):
@@ -115,6 +117,14 @@ class Query(object):
 
     def resolve_profiles(self, info, **kwargs):
         return Profile.objects.all()
+
+    @login_required
+    def resolve_getResponsibilities(self, info, **kwargs):
+        return Responsibility.objects.all()
+
+    @login_required
+    def resolve_getUserResponsibilities(self, info, **kwargs):
+        return Responsibility.objects.filter(members=info.context.user)
 
     # def resolve_attendance(self,info,**kwargs):
     #     username = kwargs.get('username')

@@ -1,10 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
-from status.models import Thread
+
+from status.models import Thread as StatusThread
+from attendance.models import Thread as AttendanceThread
+
 import uuid
 from datetime import date
-from gallery.validators import validate_file_size, processed_image_field_specs
+from framework.validators import validate_file_size, processed_image_field_specs
 from imagekit.models import ProcessedImageField
 
 SKILL_TYPES = (('T', 'Technical'), ('A', 'Arts'), ('S', 'Social'), ('P', 'Sports'), ('O', 'Others'))
@@ -203,7 +206,7 @@ class EducationalQualification(models.Model):
 class Responsibility(models.Model):
     title = models.CharField(max_length=100)
     about = RichTextField(max_length=2000, null=True, blank=True)
-    thread = models.OneToOneField(Thread, on_delete=models.CASCADE, null=True, blank=True)
+    thread = models.OneToOneField(StatusThread, on_delete=models.CASCADE, null=True, blank=True)
     members = models.ManyToManyField(User, related_name='Responsibility', blank=True)
 
     class Meta:
@@ -220,10 +223,9 @@ class Group(models.Model):
     members = models.ManyToManyField(User, related_name='Groups')
 
     attendanceEnabled = models.BooleanField(default=False)
-    attendanceToken = models.CharField(max_length=1000,verbose_name="Token to be Authenticated", default="placeholdertoken")
-    trustedList = models.TextField()
+    attendanceThread = models.ForeignKey(AttendanceThread, on_delete=models.CASCADE)
 
-    thread = models.OneToOneField(Thread, on_delete=models.CASCADE)
+    thread = models.OneToOneField(StatusThread, on_delete=models.CASCADE)
     email = models.EmailField(max_length=250, verbose_name="Email to Send Thread")
 
     telegramBot = models.CharField(max_length=500, verbose_name="Telegram Bot Token")

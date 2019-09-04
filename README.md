@@ -1,12 +1,12 @@
 
 ![amfoss-cms-cover](https://user-images.githubusercontent.com/21276922/51844359-12628580-233b-11e9-891a-d4d826bd1d6e.png)
-# amFOSS CMS
+# CMS
 [![Watchers][watchers-badge]][watchers]
 [![Star Gazers][stars-badge]][stargazers]
 [![Forks][forks-badge]][forks]
 
 [![Travis CI][build-badge]][build]
-![Version 0.1](https://img.shields.io/badge/Version-0.1_(Alpha)-green.svg) 
+![Version 0.5](https://img.shields.io/badge/Version-0.5_(Beta)-green.svg) 
 [![GNU][license-badge]][license]
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/amfoss/cms.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/amfoss/cms/alerts/) [![Join the chat at https://gitter.im/amfoss/cms](https://badges.gitter.im/amfoss/cms.svg)](https://gitter.im/amfoss/cms?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Open Issues][issues-badge]][issues]
@@ -24,13 +24,10 @@ work with the project without an virtual environment,  it is recommended to use 
 as to avoid conflicts with other projects.
 
 1. Make sure that you have `Python 3` and `pip` installed. 
-   Install `virtualenvwrapper`, and add it to your terminal path. Restart your terminal, to make the changes live.
+   Create a python3 virtual environment.
    
     ```
-       $ sudo pip install virtualenvwrapper
-       $ echo 'export WORKON_HOME=~/Envs' >> ~/.bashrc
-       $ echo 'mkdir -p $WORKON_HOME' >> ~/.bashrc   
-       $ echo 'source /usr/local/bin/virtualenvwrapper.sh' >> ~/.bashrc   
+       $ virtualenv -p python3 .
     ```
     
 2. Clone the repository, and create a virtual environment for the project, 
@@ -73,22 +70,10 @@ The activity app tracks the activities of the club members.
 6. **Publications** - records publications made by club members
 7. **Talks** - records talks given by club members
 
-### :postbox: Blog
-The blog app manages the blog of the club
-
-1. **External Posts** - manages external posts published by club members by including them through links
-2. **Posts** - contains posts published by club members, with tags and categories.
-
-### :pencil: Pages
-The pages app manages the content and templates for the foss-website. 
-
-*Opitionally, it can also be used as a fallback to amfoss-webapp. It can used to server a minimal read-only version of the amfoss-webapp*
-
 ### :girl: Members
 The members app manages the profile and data of the club members
 
-1. **Attendance** - records and tracks attendance of club members inside FOSSLab
-2. **Groups** - manages groups inside the club
+1. **Groups** - manages groups inside the club
 2. **Leave Records** - records and manages the leave requests of club members
 3. **Mentor Groups** - manages mentor-menteee relationship of club members
 4. **Profiles** - manages the member profile
@@ -98,29 +83,30 @@ The members app manages the profile and data of the club members
 ### :incoming_envelope: Status
 The status app manages the reporting system in the club
  
-1. **Status** - holds status updates posted by members, under different threads, for various subjects. 
-2. **Notifications** - manages notifications
+1. **Log** - holds status updates posted by members, under different threads, for various subjects. 
+2. **Thread** - manages status update threads
 
 ## :dizzy: API
 
-The amFOSS CMS ships with GraphQL-based APIs, which can be accessed at `/graphql`. To help developers, GraphiQL, a tabbed interface (playground) for editing and testing our GraphQL queries/mutations, also has been furnished .
+The amFOSS CMS ships with GraphQL-based APIs. To help developers, GraphiQL, a tabbed interface (playground) for editing and testing our GraphQL queries/mutations, also has been furnished .
 
 Documentation on the supported APIs has been provided in the [wiki page](https://github.com/amfoss/cms/wiki/APIs).
 
 ## :satellite: Integrations
 
 1. **Attendance Module** - the amFOSS attendance module is a raspberry-pi which live records the attendance of club members when they are in the FOSSLab. The AmFOSS CMS fetches attendance details from it and logs it.
-2. **Telegram Bot** - the amFOSS Telegram Bot is the bot assistant of the AmFOSS Telegram group. The AmFOSS CMS triggers the bot to send notifications, statistics etc. to the group.
+2. **Telegram Bot** - the amFOSS Telegram Bot is the bot assistant of the amFOSS Telegram group. The AmFOSS CMS triggers the bot to send notifications, statistics etc. to the group.
 4. **GitHub** - Integrates with GitHub to actively track the FOSS contributions made by club members
 
 ## :wrench: Tech Stack
 
-* **Language:**  Python 3
-* **Framework:** Django 2.1
+* **Language:**  Python 3.7
+* **Framework:** Django 2.2
 * **API:** GraphQL (Graphene + JWT)
 
 ## :gem: Contributors
 Developed with :hearts: by the amFOSS WebTeam from 2018.
+
 1. [Ashwin S Shenoy](https://github.com/aswinshenoy) - Core Developer, Maintainer
 
 ### How to Contribute?
@@ -130,8 +116,6 @@ Developed with :hearts: by the amFOSS WebTeam from 2018.
 
 ## :black_nib: License
 This repository is licensed under  GNU General Public License V3. Though it was tailor-made for amFOSS, you are welcome to adapt it, make it yours. Just make sure that you credit us too.
-
-Icons in the app by <a href="https://icons8.com/">Icons8</a> are licensed under Creative Commons Attribution-NoDerivs 3.0.
 
 [build-badge]:https://api.travis-ci.org/amfoss/cms.svg?branch=master
 [build]:https://travis-ci.org/amfoss/cms

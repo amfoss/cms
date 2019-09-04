@@ -2,7 +2,7 @@ import uuid
 from django.db import models
 from ckeditor.fields import RichTextField
 from datetime import date, datetime
-from gallery.validators import validate_file_size, processed_image_field_specs
+from framework.validators import validate_file_size, processed_image_field_specs
 from imagekit.models import ProcessedImageField
 from django.contrib.auth.models import User
 

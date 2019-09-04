@@ -124,7 +124,6 @@ class LeaveRecordAdmin(admin.ModelAdmin):
 class ResponsibilityAdmin(admin.ModelAdmin):
     search_fields = ['title', 'members']
     list_display = ('title', 'thread')
-    list_filter = ('title','members')
     select2 = select2_modelform(Responsibility, attrs={'width': '250px'})
     form = select2
 
@@ -139,13 +138,16 @@ class GroupAdmin(admin.ModelAdmin):
             )
         }),
         ('Attendance Management', {
-            'fields': (('attendanceEnabled', 'attendanceToken'), 'trustedList')
+            'fields': (
+                'attendanceEnabled',
+                'attendanceThread',
+            )
         }),
         ('Status Update Management', {
             'fields': (('thread', 'email'),)
         }),
         ('Telegram Integration', {
-            'fields': (('telegramBot', 'telegramGroup'),)
+            'fields': (('telegramBot', 'telegramGroup'),),
         }),
     )
     search_fields = ['name', 'members']

@@ -13,10 +13,7 @@ class ThreadAdmin(admin.ModelAdmin):
             'fields': (('enabled', 'enableGroupNotification'),)
         }),
         ('Timings', {
-            'fields': (
-                        'days',
-                        ('generationTime', 'dueTime', 'logTime'),
-                      )
+            'fields': (('days', 'generationTime', 'dueTime', 'logTime'),)
         }),
         ('Gmail Thread', {
             'fields': ('threadMessage',)
