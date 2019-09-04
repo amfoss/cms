@@ -11,7 +11,7 @@ from pytz import timezone
 
 def getPercentageSummary(Count, Total):
     if Count / Total >= 1:
-        return ''
+        return 'Everyone has send their Status Updates today! &#128079;'
     elif Count / Total > 0.90:
         return 'More than 90% of members sent their status update today.'
     elif Count / Total > 0.75:
@@ -146,9 +146,6 @@ def generateReport(d, log, MembersSentCount, mint, maxt, thread):
                     message += ' [ NSB ]'
 
                 message += '\n'
-
-    if not mf:
-        message += '\n\n<b>Everyone has send their Status Updates today! &#128079;</b>\n'
 
     if thread.footerMessage:
         message += '\n<i>'+ thread.footerMessage +'</i>'
