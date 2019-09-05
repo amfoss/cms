@@ -7,7 +7,7 @@ from .models import *
 class ProjectObj(DjangoObjectType):
     class Meta:
         model = Project
-        exclude_fields = ('id')
+        exclude_fields = ('id',)
 
 
 class ProjectLinkObj(DjangoObjectType):
@@ -19,13 +19,13 @@ class ProjectLinkObj(DjangoObjectType):
 class CertificateObj(DjangoObjectType):
     class Meta:
         model = Certificate
-        exclude_fields = ('id')
+        exclude_fields = ('id',)
 
 
 class CourseObj(DjangoObjectType):
     class Meta:
         model = Course
-        exclude_fields = ('id')
+        exclude_fields = ('id',)
 
 
 

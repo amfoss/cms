@@ -1,29 +1,20 @@
 from django.contrib import admin
-from .models import *
 from easy_select2 import select2_modelform
-
+from datetime import datetime
+from django.utils import timezone
+from .models import *
 from .generatorScript import generatorScript
 
-@admin.register(Thread)
-class AttendanceThreadAdmin(admin.ModelAdmin):
-    fieldsets = (
-        (None, {
-            'fields': ('name',)
-        }),
-        ('Secrets', {
-            'fields': (
-                ('seed', 'SSID'),
-            )
-        }),
-        ('Timings', {
-            'fields': (
-                ('seedRefreshInterval', 'lastRefreshTime'),
-            )
-        }),
+@admin.register(Module)
+class AttendanceModuleAdmin(admin.ModelAdmin):
+    fields = (
+        'name',
+        ('seed', 'SSID'),
+        ('seedRefreshInterval', 'lastRefreshTime')
     )
     list_display = ('name', 'SSID', 'lastRefreshTime', 'seedRefreshInterval')
     readonly_fields = ['SSID', 'lastRefreshTime']
-    select2 = select2_modelform(Thread, attrs={'width': '250px'})
+    select2 = select2_modelform(Module, attrs={'width': '250px'})
     form = select2
 
     def save_model(self, request, obj, form, change):
@@ -31,13 +22,14 @@ class AttendanceThreadAdmin(admin.ModelAdmin):
             newSeed = generatorScript(obj.seed)
             obj.SSID = 'amFOSS_' + str(newSeed)
             obj.seed = newSeed
-        super(AttendanceThreadAdmin, self).save_model(request, obj, form, change)
+            obj.lastRefreshTime = timezone.now()
+        super(AttendanceModuleAdmin, self).save_model(request, obj, form, change)
 
 @admin.register(Log)
 class AttendanceLogAdmin(admin.ModelAdmin):
     fields = (
         ('member', 'date', 'duration'),
-        'threads',
+        'modules',
         'sessions'
     )
     list_display = ('member', 'date', 'duration')

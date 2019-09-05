@@ -6,7 +6,6 @@ from datetime import date
 class Thread(models.Model):
     name = models.CharField(max_length=200,  verbose_name="Name of Thread")
 
-    enabled = models.BooleanField(verbose_name="Whether the thread is Active?", default=True)
     enableGroupNotification = models.BooleanField(verbose_name="Should Send Report to Group?", default=True)
 
     days = models.CharField(max_length=50, null=True, blank=True, verbose_name="Days # to be active, leave blank for all days")

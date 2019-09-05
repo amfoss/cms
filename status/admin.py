@@ -7,10 +7,7 @@ from easy_select2 import select2_modelform
 class ThreadAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('name',)
-        }),
-        ('Control Panel', {
-            'fields': (('enabled', 'enableGroupNotification'),)
+            'fields': ('name', 'enableGroupNotification')
         }),
         ('Timings', {
             'fields': (('days', 'generationTime', 'dueTime', 'logTime'),)
@@ -18,12 +15,11 @@ class ThreadAdmin(admin.ModelAdmin):
         ('Gmail Thread', {
             'fields': ('threadMessage',)
         }),
-
         ('Telegram Report', {
             'fields': ('footerMessage',)
         }),
     )
-    list_display = ('name', 'enabled', 'generationTime', 'dueTime', 'logTime')
+    list_display = ('name', 'enableGroupNotification', 'generationTime', 'dueTime', 'logTime')
     search_fields =  ['name']
     select2 = select2_modelform(Thread, attrs={'width': '250px'})
     form = select2
@@ -31,4 +27,5 @@ class ThreadAdmin(admin.ModelAdmin):
 @admin.register(Log)
 class LogAdmin(admin.ModelAdmin):
     list_display = ('member', 'timestamp', 'thread')
-
+    search_fields = ('member','thread')
+    filter = ('thread',)

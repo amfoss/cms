@@ -1,6 +1,6 @@
 import graphene
 from graphql_jwt.decorators import permission_required, login_required
-from graphene_django.types import DjangoObjectType
+from graphene_django_extras import DjangoObjectType
 from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
@@ -47,24 +47,24 @@ class Mutation(object):
 class LeaveRecordObj(DjangoObjectType):
     class Meta:
         model = LeaveRecord
-        exclude_fields = ('id')
+        exclude_fields = ('id',)
 
 class PortalObj(DjangoObjectType):
     class Meta:
         model = Portal
-        exclude_fields = ('id')
+        exclude_fields = ('id',)
 
 
 class SkillObj(DjangoObjectType):
     class Meta:
         model = Skill
-        exclude_fields = ('id')
+        exclude_fields = ('id',)
 
 
 class OrganizationObj(DjangoObjectType):
     class Meta:
         model = Organization
-        exclude_fields = ('id')
+        exclude_fields = ('id',)
 
 class ProfileObj(DjangoObjectType):
     class Meta:
@@ -95,12 +95,12 @@ class WorkExperienceObj(DjangoObjectType):
 class ResponsibilityObj(DjangoObjectType):
     class Meta:
         model = Responsibility
-        exclude_fields = ('id')
+        only_fields = ( 'title', 'about', 'members' )
 
 class MentorGroupObj(DjangoObjectType):
     class Meta:
         model = MentorGroup
-        exclude_fields = ('id')
+        exclude_fields = ('id',)
 
 
 class Query(object):

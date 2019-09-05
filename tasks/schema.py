@@ -6,7 +6,7 @@ from .models import *
 class StreamObj(DjangoObjectType):
     class Meta:
         model = Stream
-        exclude_fields = ('id')
+        exclude_fields = ('id',)
 
 
 class TaskObj(DjangoObjectType):
@@ -17,7 +17,7 @@ class TaskObj(DjangoObjectType):
 class TaskLogObj(DjangoObjectType):
     class Meta:
         model = TaskLog
-        exclude_fields = ('id')
+        exclude_fields = ('id',)
 
 
 class streamProgressObj(graphene.ObjectType):

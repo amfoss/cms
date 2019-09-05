@@ -5,26 +5,25 @@ import attendance.schema
 import activity.schema
 import tasks.schema
 from django.contrib.auth.models import User
-from graphene_django.types import DjangoObjectType
+from graphene_django_extras import DjangoObjectField, DjangoListObjectType, DjangoObjectType
+from graphql_jwt.decorators import permission_required, login_required
 
 
-class UserObj(DjangoObjectType):
+class UserType(DjangoObjectType):
     class Meta:
+        description = "Type definition for User Object"
         model = User
-        exclude_fields = (
-        'id', 'username', 'first_name', 'last_name', 'password', 'is_staff', 'is_active', 'is_superuser', 'last_login',
-        'date_joined', 'groups', 'email')
-
+        exclude_fields = ( 'id', 'password')
 
 class Query(members.schema.Query, activity.schema.Query, tasks.schema.Query, graphene.ObjectType):
-    user = graphene.List(UserObj, username=graphene.String(required=True), secret=graphene.String(required=True))
+    user = graphene.Field(UserType, username=graphene.String(required=False))
 
+    @login_required
     def resolve_user(self, info, **kwargs):
         username = kwargs.get('username')
-        if username is not None:
-            return User.objects.get(username=username)
-        raise Exception('Username is a required parameter')
-
+        if username is None:
+            username = info.context.user
+        return User.objects.get(username=username)
 
 class Mutation(members.schema.Mutation, attendance.schema.Mutation, graphene.ObjectType):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()

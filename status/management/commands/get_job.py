@@ -21,44 +21,41 @@ day = now.strftime("%w")
 time = now.strftime("%H%M")
 
 
-def generateSSIDName():
-    groups = Group.objects.filter(attendanceEnabled=True)
-    for group in groups:
-        refreshSSID(group.attendanceThread)
+def getSubject(thread, d):
+    return thread.name + ' [%s]' % d.strftime('%d-%m-%Y')
 
-def getThreadDateTime(thread):
-    d = now
-    if thread.generationTime > thread.logTime:
-        d = d - timedelta(days=1)
-    return d
 
-def calcMinTime(thread):
-    genTime = thread.generationTime
-    d = getThreadDateTime(thread)
-    return d.replace(hour=int(genTime[:2]), minute=int(genTime[2:]))
+#
+#
+# Generating Status Update Thread
+#
+#
 
-def calcMaxTime(thread):
-    dueTime = thread.dueTime
-    d = getThreadDateTime(thread)
-    return d.replace(hour=int(dueTime[:2]), minute=int(dueTime[2:]))
-
-def generateThread(thread):
+def generateThread(thread, email):
     send_mail(
-        thread.name + ' [%s]' % now.strftime('%d-%m-%Y'),
+        getSubject(thread, now),
         strip_tags(thread.threadMessage),
         from_email,
-        [Group.objects.get(thread=thread).email],
+        [email],
         html_message=thread.threadMessage,
         fail_silently=False,
     )
+
+#
+#
+# Logging Status Updates
+#
+#
 
 def logStatus(thread):
     d = date.today()
     if thread.generationTime > thread.logTime:
         d = d - timedelta(days=1)
-    subject = thread.name + ' [%s]' % d.strftime('%d-%m-%Y')
+
+    subject = getSubject(thread,d)
 
     log = fetchStatusLog(d, subject)
+
     profiles = Profile.objects.filter(email__in=log.emails)
 
     MembersSentCount = 0
@@ -77,6 +74,28 @@ def logStatus(thread):
     if thread.enableGroupNotification:
        sendReport(thread, log, MembersSentCount, d)
 
+#
+#
+# Reporting Status Updates
+#
+#
+
+def getThreadDateTime(thread):
+    d = now
+    if thread.generationTime > thread.logTime:
+        d = d - timedelta(days=1)
+    return d
+
+def calcMinTime(thread):
+    genTime = thread.generationTime
+    d = getThreadDateTime(thread)
+    return d.replace(hour=int(genTime[:2]), minute=int(genTime[2:]))
+
+def calcMaxTime(thread):
+    dueTime = thread.dueTime
+    d = getThreadDateTime(thread)
+    return d.replace(hour=int(dueTime[:2]), minute=int(dueTime[2:]))
+
 def sendReport(thread, log, MembersSentCount, d):
     mint = calcMinTime(thread)
     maxt = calcMaxTime(thread)
@@ -85,19 +104,34 @@ def sendReport(thread, log, MembersSentCount, d):
 
 
 class Command(BaseCommand):
-    help = 'Run Status Cron Jobs'
+    help = 'Runs all tasks of CMS required to be done at the moment'
 
     def handle(self, *args, **options):
 
-        # REGENERATE WIFI NAME
-        generateSSIDName()
+        # get all groups
+        groups = Group.objects.all()
 
-        # SENDS STATUS UPDATE THREAD VIA GMAIL
-        threads = Thread.objects.filter(enabled=True, generationTime=time, days__contains=day)
-        for thread in threads:
-            generateThread(thread)
+        # for each group
+        for group in groups:
 
-        # LOG STATUS UPDATES & SENDS TELEGRAM REPORT
-        threads = Thread.objects.filter(enabled=True, logTime=time, days__contains=day)
-        for thread in threads:
-            logStatus(thread)
+            # If the group has attendance enabled
+            if group.attendanceEnabled:
+
+                # generate new SSID name if refreshing is required
+                refreshSSID(group.attendanceModule)
+
+            # If the group has Status Update Enabled
+            if group.statusUpdateEnabled:
+
+                # If today is an active day
+                if day in group.thread.days:
+
+                    # If its the generation time
+                    if group.thread.generationTime == time:
+                        # generate new thread for the group
+                        generateThread(group.thread, group.email)
+
+                    # If its the logging time
+                    if group.thread.logTime == time:
+                        # log status updates from the group's thread
+                        logStatus(group.thread)

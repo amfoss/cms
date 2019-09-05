@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 
 from status.models import Thread as StatusThread
-from attendance.models import Thread as AttendanceThread
+from attendance.models import Module
 
 import uuid
 from datetime import date
@@ -219,12 +219,14 @@ class Responsibility(models.Model):
 
 class Group(models.Model):
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=250, null=True)
-    members = models.ManyToManyField(User, related_name='Groups')
 
-    attendanceEnabled = models.BooleanField(default=False)
-    attendanceThread = models.ForeignKey(AttendanceThread, on_delete=models.CASCADE)
+    admins = models.ManyToManyField(User, related_name='GroupAdmins')
+    members = models.ManyToManyField(User, related_name='GroupMembers')
 
+    attendanceEnabled = models.BooleanField(default=False, verbose_name="Attendance Enabled")
+    attendanceModule = models.ForeignKey(Module, on_delete=models.CASCADE, verbose_name="Attendance Module")
+
+    statusUpdateEnabled = models.BooleanField(default=False, verbose_name="Status Updates Enabled")
     thread = models.OneToOneField(StatusThread, on_delete=models.CASCADE)
     email = models.EmailField(max_length=250, verbose_name="Email to Send Thread")
 
@@ -240,8 +242,11 @@ class Group(models.Model):
 
 
 class MentorGroup(models.Model):
-    mentor = models.OneToOneField(User, on_delete=models.CASCADE, related_name='Mentor', verbose_name='Mentor Name')
-    mentees = models.ManyToManyField(User, related_name='Mentees')
+    mentor = models.OneToOneField(User, on_delete=models.CASCADE, related_name='Mentor', verbose_name="Mentor Name")
+    mentees = models.ManyToManyField(User, related_name="Mentees")
+
+    sendReport = models.BooleanField(default=False, verbose_name="Send Reports")
+    forwardStatusUpdates = models.BooleanField(default=False, verbose_name="Forward Status Updates")
 
     class Meta:
         verbose_name_plural = "Mentor Groups"
@@ -253,7 +258,7 @@ class MentorGroup(models.Model):
 
 class LeaveRecord(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User', related_name='LeaveRecord')
-    approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='Approved By (Faculty/Mentor)', related_name="Allover", null=True, blank=True)
+    approver = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='Approved By', related_name="LeaveApprover", null=True, blank=True)
     start_date = models.DateField(default=date.today, null=True, help_text='YYYY-MM-DD', verbose_name="From")
     end_date = models.DateField(default=date.today, null=True, help_text='YYYY-MM-DD', verbose_name="To", blank=True)
     type = models.CharField(choices=LEAVE_TYPE, default='T', max_length=2, verbose_name='Type')

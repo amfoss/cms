@@ -36,12 +36,12 @@ class LogAttendance(graphene.Mutation):
                 # check if member is part of any group, that has attendance enabled
                 if groups.count() > 0:
                     for group in groups:
-                        thread = group.attendanceThread
+                        module = group.attendanceModule
 
                         # get details from thread
-                        ssid = thread.SSID
+                        ssid = module.SSID
 
-                        refreshInterval = thread.seedRefreshInterval
+                        refreshInterval = module.seedRefreshInterval
 
                         #convert refresh interval to minutes
                         refreshMins = refreshInterval.seconds / 60
@@ -81,8 +81,8 @@ class LogAttendance(graphene.Mutation):
                                     log.duration += refreshInterval
 
                                     ## Add thread if not in days thread
-                                    if thread not in log.threads.all():
-                                        log.threads.add(thread)
+                                    if module not in log.modules.all():
+                                        log.modules.add(module)
 
                                     log.save()
 
@@ -96,7 +96,7 @@ class LogAttendance(graphene.Mutation):
                                     sessions=json.dumps([session]),
                                     duration=refreshInterval,
                                 )
-                                log.threads.add(thread)
+                                log.modules.add(module)
                                 log.save()
                                 return AttendanceLogObj(id=log.id)
                         else:
