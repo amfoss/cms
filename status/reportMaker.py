@@ -11,7 +11,7 @@ from pytz import timezone
 
 def getPercentageSummary(Count, Total):
     if Count / Total >= 1:
-        return 'Everyone has send their Status Updates today! &#128079;'
+        return 'Everyone has sent their Status Updates today! &#128079;'
     elif Count / Total > 0.90:
         return 'More than 90% of members sent their status update today.'
     elif Count / Total > 0.75:
