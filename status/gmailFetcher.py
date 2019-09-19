@@ -5,6 +5,7 @@ from datetime import date, datetime
 from email.utils import parsedate_to_datetime
 import email
 import base64
+from bs4 import BeautifulSoup
 
 
 class fetchStatusLog:
@@ -59,8 +60,18 @@ class fetchStatusLog:
             # print(mime_msg.get_body())
 
             message = self.service.users().messages().get(userId='me', id=id, format='full').execute()
-
+            payload = message["payload"]
             header_data = message["payload"]["headers"]
+            member['snippet'] = message['snippet']
+            mssg_parts = payload['parts']  # fetching the message parts
+            part_one = mssg_parts[0]  # fetching first element of the part
+            part_body = part_one['body']  # fetching body of the message
+            part_data = part_body['data']  # fetching data from the body
+            clean_one = part_data.replace("-", "+")  # decoding from Base64 to UTF-8
+            clean_one = clean_one.replace("_", "/")  # decoding from Base64 to UTF-8
+            clean_two = base64.b64decode(bytes(clean_one, 'UTF-8'))  # decoding from Base64 to UTF-8
+            soup = BeautifulSoup(clean_two, "html.parser")
+            member["message"] = soup.prettify()
 
             # part_one = message["payload"]["parts"][0]['body']
             # if data in part_one:

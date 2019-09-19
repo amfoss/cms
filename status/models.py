@@ -25,6 +25,7 @@ class Log(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField()
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
+    body = RichTextField(max_length=2000, verbose_name="Email Body")
 
     class Meta:
         verbose_name_plural = "Logs"
