@@ -2,12 +2,9 @@ import telegram
 from datetime import date, datetime, timedelta
 from members.models import Profile, Group
 from status.models import Log
-from framework import settings
-from pytz import timezone
-from operator import itemgetter
-
 
 from pytz import timezone
+
 
 def getPercentageSummary(Count, Total):
     if Count / Total >= 1:
@@ -31,13 +28,17 @@ def getName(first, last):
         name += ' ' + last
     return name
 
+
 def getFirstPerson(updates):
     person = Profile.objects.get(user=updates[0].member)
     ft = updates[0].timestamp
-    return getName(person.first_name, person.last_name) + ' (' + ft.astimezone(timezone('Asia/Kolkata')).strftime('%I:%M %p') + ')'
+    return getName(person.first_name, person.last_name) + ' (' + ft.astimezone(timezone('Asia/Kolkata')).strftime(
+        '%I:%M %p') + ')'
+
 
 def getLastPerson(updates):
     return getFirstPerson(list(reversed(updates)))
+
 
 def getLateLogs(thread, members, maxt):
     now = datetime.now()
@@ -52,26 +53,28 @@ def getLateLogs(thread, members, maxt):
             obj = lateLogs.filter(member=m['user'])
             if obj:
                 i = i + 1
-                message += str(i) + '. ' + getName(m['first_name'], m['last_name']) +  ' [' + obj[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime('%I:%M %p') + '] \n'
+                message += str(i) + '. ' + getName(m['first_name'], m['last_name']) + ' [' + obj[
+                    0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime('%I:%M %p') + '] \n'
     return message
+
 
 def getBatchName(y):
     now = datetime.now()
     year = int(now.strftime("%Y"))
     if y == year:
         return 'First Year Batch'
-    elif y+1 == year:
+    elif y + 1 == year:
         return 'Second Year Batch'
-    elif y+2 == year:
+    elif y + 2 == year:
         return 'Third Year Batch'
-    elif y+3 == year:
+    elif y + 3 == year:
         return 'Fourth Year Batch'
 
-def generateReport(d, log, MembersSentCount, mint, maxt, thread):
 
+def generateReport(d, log, MembersSentCount, mint, maxt, thread):
     groupMembers = Group.objects.filter(thread=thread).values('members')
     groupProfiles = Profile.objects.filter(user__in=groupMembers)
-    MemberCount =  groupProfiles.count()
+    MemberCount = groupProfiles.count()
 
     # Get member profile data from CMS
     members_list = groupProfiles.values('user', 'first_name', 'last_name', 'email', 'batch').order_by('batch')
@@ -84,10 +87,10 @@ def generateReport(d, log, MembersSentCount, mint, maxt, thread):
         '%d %B %Y') + ' | &#128228; ' + str(MembersSentCount) + '/' + str(MemberCount) + ' Members'
 
     # Send summary based on percentage of members sending status updates
-    message += '\n\n<b>' + getPercentageSummary(MembersSentCount,MemberCount) + '</b>'
+    message += '\n\n<b>' + getPercentageSummary(MembersSentCount, MemberCount) + '</b>'
 
     if updates.count() > 0:
-        ## Add Names of First and Last Person to status updates to the message
+        # Add Names of First and Last Person to status updates to the message
         message += '\n\n<b>&#11088; First : </b>' + getFirstPerson(updates) + '\n'
         message += '<b>&#128012; Last : </b>' + getLastPerson(updates) + '\n'
 
@@ -124,7 +127,7 @@ def generateReport(d, log, MembersSentCount, mint, maxt, thread):
                 if memberHistory:
                     # find the last time the member send a status update
                     last = memberHistory[0]
-                    diff = date.today() - last.timestamp.date()
+                    diff = date.today() - timedelta(days=1) - last.timestamp.date()
                     if diff.days > 28:
                         message += ' [ 1M+, '
                     elif diff.days > 21:
@@ -148,7 +151,7 @@ def generateReport(d, log, MembersSentCount, mint, maxt, thread):
                 message += '\n'
 
     if thread.footerMessage:
-        message += '\n<i>'+ thread.footerMessage +'</i>'
+        message += '\n<i>' + thread.footerMessage + '</i>'
 
     # Log message
     print(message)
