@@ -7,10 +7,22 @@ from .generatorScript import generatorScript
 
 @admin.register(Module)
 class AttendanceModuleAdmin(admin.ModelAdmin):
-    fields = (
-        'name',
-        ('seed', 'SSID'),
-        ('seedRefreshInterval', 'lastRefreshTime')
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'enableGroupNotification')
+        }),
+        ('Timings', {
+            'fields': (('generationTime', 'logTime'),)
+        }),
+        ('Module', {
+            'fields': (
+                ('seed', 'SSID'),
+                ('seedRefreshInterval', 'lastRefreshTime')
+            )
+        }),
+        ('Telegram Report', {
+            'fields': ('footerMessage',)
+        }),
     )
     list_display = ('name', 'SSID', 'lastRefreshTime', 'seedRefreshInterval')
     readonly_fields = ['SSID', 'lastRefreshTime']

@@ -7,7 +7,9 @@ from framework import settings
 from django.utils.html import strip_tags
 from django.utils import timezone
 
+from attendance.models import Log as AttendanceLog
 from attendance.generateSSID import refreshSSID
+from attendance.attendanceReport import generateAttendanceReport
 
 from status.gmailFetcher import fetchStatusLog
 from status.reportMaker import generateReport
@@ -41,6 +43,7 @@ def generateThread(thread, email):
         fail_silently=False,
     )
 
+
 #
 #
 # Logging Status Updates
@@ -52,7 +55,7 @@ def logStatus(thread):
     if thread.generationTime > thread.logTime:
         d = d - timedelta(days=1)
 
-    subject = getSubject(thread,d)
+    subject = getSubject(thread, d)
 
     log = fetchStatusLog(d, subject)
 
@@ -72,7 +75,7 @@ def logStatus(thread):
             MembersSentCount += 1
 
     if thread.enableGroupNotification:
-       sendReport(thread, log, MembersSentCount, d)
+        sendReport(thread, log, MembersSentCount, d)
 
 #
 #
@@ -86,21 +89,36 @@ def getThreadDateTime(thread):
         d = d - timedelta(days=1)
     return d
 
+
 def calcMinTime(thread):
     genTime = thread.generationTime
     d = getThreadDateTime(thread)
     return d.replace(hour=int(genTime[:2]), minute=int(genTime[2:]))
+
 
 def calcMaxTime(thread):
     dueTime = thread.dueTime
     d = getThreadDateTime(thread)
     return d.replace(hour=int(dueTime[:2]), minute=int(dueTime[2:]))
 
+
 def sendReport(thread, log, MembersSentCount, d):
     mint = calcMinTime(thread)
     maxt = calcMaxTime(thread)
 
     generateReport(d, log, MembersSentCount, mint, maxt, thread)
+
+
+def logAttendance(module):
+    d = date.today()
+    log = AttendanceLog.objects.filter(date=d)
+    MembersCount = log.count()
+    if module.enableGroupNotification:
+        sendAttendanceReport(module, log, MembersCount, d)
+        
+
+def sendAttendanceReport(module, log, MembersCount, d):
+    generateAttendanceReport(d, log, MembersCount, module)
 
 
 class Command(BaseCommand):
@@ -116,10 +134,11 @@ class Command(BaseCommand):
 
             # If the group has attendance enabled
             if group.attendanceEnabled:
-
                 # generate new SSID name if refreshing is required
                 refreshSSID(group.attendanceModule)
 
+                if group.module.logTime == time:
+                    logAttendance(group.module)
             # If the group has Status Update Enabled
             if group.statusUpdateEnabled:
 
