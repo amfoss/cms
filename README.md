@@ -14,7 +14,7 @@
 [![Contributors][contributors-badge]][contributors]
 
 
-amFOSS Club Management System (CMS) is django-based web-app which lays framework for the amfoss website, the amfoss webapp, and the amfoss app. 
+Club Management System (CMS) is django-based web-app which lays framework for the amfoss website, the amfoss webapp, and the amfoss app. 
 
 
 ## :minidisc: [Installation Instructions](https://github.com/amfoss/cms/wiki/Installation)
@@ -23,23 +23,18 @@ python environment with django and other project dependencies installed. Though 
 work with the project without an virtual environment,  it is recommended to use one so 
 as to avoid conflicts with other projects.
 
-1. Make sure that you have `Python 3` and `pip` installed. 
-   Create a python3 virtual environment.
-   
-    ```
-       $ virtualenv -p python3 .
-    ```
-    
-2. Clone the repository, and create a virtual environment for the project, 
-   and work on the newly set up environment.
+0. Make sure that you have `Python 3`, `python-3-devel`, `gcc`, `virtualenv`, and `pip` installed.     
+1. Clone the repository
    
     ```
         $ git clone https://github.com/amfoss/cms.git
         $ cd cms
-        $ mkvirtualenv --python=python3 amfoss
-        $ workon amfoss
     ```
-    
+2. Create a python 3 virtualenv, and activate the environment.
+    ```bash
+        $ virtualenv -p python3 .
+        $ source bin/activate
+    ```   
 3. Install the project dependencies from `requirements.txt`
     ```
         $ pip install -r requirements.txt
@@ -48,7 +43,7 @@ as to avoid conflicts with other projects.
 You have now successfully set up the project on your environment. If you encounter any problems during installation, you can refer to [installation page on our wiki](https://github.com/amfoss/cms/wiki/Installation).
 
 ### After Setting Up
-From now when you start your work, run ``workon amfoss`` inside the project repository and you can work with the django application as usual - 
+From now when you start your work, run ``source bin/activate`` inside the project repository and you can work with the django application as usual - 
 
 * `python manage.py migrate` - set up database
 * `python manage.py createsuperuser` - create admin user
