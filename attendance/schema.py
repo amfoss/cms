@@ -65,7 +65,7 @@ class LogAttendance(graphene.Mutation):
                             session = { "start": startTime.isoformat(), "end": endTime.isoformat() }
 
                             # Checks if logs exist already for today
-                            logs = Log.objects.filter(member=user, date=now.date())
+                            logs = Log.objects.filter(member=user, date=now.date(), lastSeen=now)
 
                             # if logs exist for today, update existing log adding the current session
                             if logs.count() != 0:
@@ -73,6 +73,8 @@ class LogAttendance(graphene.Mutation):
 
                                 prevSessions = log.sessions
                                 prev = json.loads(prevSessions)
+
+                                log.lastSeen = now
 
                                 # check if session is not already marked
                                 if prev[-1] != session:
@@ -84,7 +86,7 @@ class LogAttendance(graphene.Mutation):
                                     if module not in log.modules.all():
                                         log.modules.add(module)
 
-                                    log.save()
+                                log.save()
 
                                 return AttendanceLogObj(id=log.id)
 
@@ -95,6 +97,7 @@ class LogAttendance(graphene.Mutation):
                                     date=now.date(),
                                     sessions=json.dumps([session]),
                                     duration=refreshInterval,
+                                    lastSeen=now
                                 )
                                 log.modules.add(module)
                                 log.save()
@@ -108,3 +111,23 @@ class LogAttendance(graphene.Mutation):
 
 class Mutation(object):
     LogAttendance = LogAttendance.Field()
+
+class attendanceModuleObj(graphene.ObjectType):
+    SSID = graphene.String()
+    lastRefreshTime = graphene.types.datetime.DateTime()
+    lastRefresh = graphene.String()
+
+    def resolve_lastRefreshTime(self, info):
+        return self['lastRefreshTime'].astimezone(to_tz)
+
+    def resolve_lastRefresh(self, info):
+        time = self['lastRefreshTime'].astimezone(to_tz)
+        return time.strftime("%H:%M:%S:%f")
+
+class Query(object):
+    attendanceModule = graphene.Field(attendanceModuleObj, id=graphene.Int(required=True))
+
+    def resolve_attendanceModule(self, info, **kwargs):
+        id = kwargs.get('id')
+        return Module.objects.values().get(id=id)
+

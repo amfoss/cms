@@ -8,6 +8,8 @@ from graphene_django.filter import DjangoFilterConnectionField
 from datetime import date, datetime
 from django.conf import settings
 
+from .api.profile import Query as profileQuery
+from .api.group import Query as groupQuery
 
 #
 #       Mutations
@@ -44,99 +46,6 @@ class Mutation(object):
 #       Queries
 #
 
-class LeaveRecordObj(DjangoObjectType):
-    class Meta:
-        model = LeaveRecord
-        exclude_fields = ('id',)
-
-class PortalObj(DjangoObjectType):
-    class Meta:
-        model = Portal
-        exclude_fields = ('id',)
-
-
-class SkillObj(DjangoObjectType):
-    class Meta:
-        model = Skill
-        exclude_fields = ('id',)
-
-
-class OrganizationObj(DjangoObjectType):
-    class Meta:
-        model = Organization
-        exclude_fields = ('id',)
-
-class ProfileObj(DjangoObjectType):
-    class Meta:
-        model = Profile
-        exclude_fields = ('id', 'user', 'links', 'experiences')
-
-    def resolve_id(self, info):
-        raise Exception('You dont have access to view id of profile.')
-
-class SocialProfileObj(DjangoObjectType):
-    class Meta:
-        model = SocialProfile
-
-class WorkExperienceObj(DjangoObjectType):
-    class Meta:
-        model = WorkExperience
-
-# class AttendanceObj(DjangoObjectType):
-#     class Meta:
-#         model = Attendance
-#         exclude_fields = ('id',)
-#         filter_fields = {
-#             'member': ['exact'],
-#             'session_start': ['exact','gte']
-#         }
-#         interfaces = (graphene.relay.Node,)
-
-class ResponsibilityObj(DjangoObjectType):
-    class Meta:
-        model = Responsibility
-        only_fields = ( 'title', 'about', 'members' )
-
-class MentorGroupObj(DjangoObjectType):
-    class Meta:
-        model = MentorGroup
-        exclude_fields = ('id',)
-
-
-class Query(object):
-    profiles = graphene.List(ProfileObj, token=graphene.String(required=True))
-    profile = graphene.Field(ProfileObj, username=graphene.String(required=True), token=graphene.String(required=True))
-    getLeaveRecords = graphene.List(LeaveRecordObj, date = graphene.types.datetime.DateTime(required=True),token=graphene.String(required=True))
-    getResponsibilities = graphene.List(ResponsibilityObj)
-    getUserResponsibilities = graphene.List(ResponsibilityObj)
-    # attendance = DjangoFilterConnectionField(AttendanceObj)
-
-    def resolve_getLeaveRecords(self, info, **kwargs):
-        date = kwargs.get('date')
-        return LeaveRecord.objects.filter(start_date = date)
-
-    def resolve_profiles(self, info, **kwargs):
-        return Profile.objects.all()
-
-    @login_required
-    def resolve_getResponsibilities(self, info, **kwargs):
-        return Responsibility.objects.all()
-
-    @login_required
-    def resolve_getUserResponsibilities(self, info, **kwargs):
-        return Responsibility.objects.filter(members=info.context.user)
-
-    # def resolve_attendance(self,info,**kwargs):
-    #     username = kwargs.get('username')
-    #     if username is not None:
-    #         user = User.objects.get(username=username)
-    #         return Attendance.objects.get(user=user)
-    #     raise Exception('Username is a required parameter')
-
-    def resolve_profile(self, info, **kwargs):
-        username = kwargs.get('username')
-        if username is not None:
-            user = User.objects.get(username=username)
-            return Profile.objects.get(user=user)
-        raise Exception('Username is a required parameter')
+class Query(profileQuery, groupQuery):
+    pass
 

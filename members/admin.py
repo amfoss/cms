@@ -13,7 +13,7 @@ class ProfileAdmin(admin.ModelAdmin):
         ('Basic Details', {
             'fields': [
                         'user',
-                        ('first_name', 'last_name', 'avatar'),
+                        ('first_name', 'last_name'),
                         ('email', 'phone', 'telegram_id'),
                       ]
         }),

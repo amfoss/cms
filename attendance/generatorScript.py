@@ -1,11 +1,10 @@
-RANDOM_MAX = 2147483647
+a = 656550107
+c = 8849371
+m = 9850349
 
 def generatorScript(seed):
-    if seed == 0:
-        seed = 123459876
-    hi = seed // 127773
-    lo = seed % 127773
-    seed = 16807 * lo - 2836 * hi
-    if seed < 0:
-        seed += RANDOM_MAX
-    return seed % (RANDOM_MAX + 1)
+    seed = (seed % m) * (a % m)
+    seed = seed % m
+    seed = seed + c
+    seed = seed % m
+    return seed

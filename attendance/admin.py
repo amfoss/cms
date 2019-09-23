@@ -22,17 +22,17 @@ class AttendanceModuleAdmin(admin.ModelAdmin):
             newSeed = generatorScript(obj.seed)
             obj.SSID = 'amFOSS_' + str(newSeed)
             obj.seed = newSeed
-            obj.lastRefreshTime = timezone.now()
+            obj.lastRefreshTime = timezone.now().replace(second=0, microsecond=0)
         super(AttendanceModuleAdmin, self).save_model(request, obj, form, change)
 
 @admin.register(Log)
 class AttendanceLogAdmin(admin.ModelAdmin):
     fields = (
         ('member', 'date', 'duration'),
-        'modules',
+        ('modules', 'lastSeen'),
         'sessions'
     )
-    list_display = ('member', 'date', 'duration')
+    list_display = ('member', 'date', 'lastSeen', 'duration')
     select2 = select2_modelform(Log, attrs={'width': '250px'})
     form = select2
 

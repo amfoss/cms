@@ -99,18 +99,10 @@ class Profile(models.Model):
     phone = models.CharField(max_length=12, blank=True, null=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=50, blank=True, null=True)
-    avatar = ProcessedImageField(
-                default='./pages/static/pages/images/defaults/user-avatar.png',
-                verbose_name='Profile Picture',
-                blank=True,
-                upload_to=get_dp_path,
-                validators=[validate_file_size],
-                **processed_image_field_specs
-    )
 
     # Additional Details
     telegram_id = models.CharField(max_length=50, null=True, blank=True)
-    roll_number = models.CharField(max_length=25,null=True, blank=True)
+    roll_number = models.CharField(max_length=25, null=True, blank=True)
     batch = models.IntegerField(null=True, help_text='Year of Admission', blank=True)
     location = models.CharField(max_length=150, null=True, blank=True)
     birthday = models.DateField(null=True, help_text='YYYY-MM-DD', blank=True)

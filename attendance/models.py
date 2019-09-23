@@ -15,7 +15,8 @@ class Module(models.Model):
 class Log(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Member", related_name='memberAttendance')
     date = models.DateField(verbose_name="Date", default=timezone.now)
-    duration =  models.DurationField(verbose_name="Duration", null=True, blank=True)
+    lastSeen = models.DateTimeField(verbose_name="Last Seen", default=timezone.now, null=True, blank=True)
+    duration = models.DurationField(verbose_name="Duration", null=True, blank=True)
     sessions = models.TextField(null=True, blank=True, verbose_name="Session JSON data")
     modules = models.ManyToManyField(Module)
 

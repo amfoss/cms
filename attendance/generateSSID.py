@@ -9,10 +9,11 @@ now = datetime.now().astimezone(to_tz)
 
 def refreshSSID(thread):
     lastTime = thread.lastRefreshTime.astimezone(to_tz)
-    if now - lastTime > thread.seedRefreshInterval:
+    if now - lastTime >= thread.seedRefreshInterval:
         seed = thread.seed
         newSeed = generatorScript(seed)
         thread.SSID = 'amFOSS_' + str(newSeed)
-        thread.seed = int(newSeed)
-        thread.lastRefreshTime = now
+        thread.seed = newSeed
+        thread.lastRefreshTime = now.replace(second=0, microsecond=0)
         thread.save()
+
