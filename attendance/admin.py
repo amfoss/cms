@@ -9,16 +9,16 @@ from .generatorScript import generatorScript
 class AttendanceModuleAdmin(admin.ModelAdmin):
     fields = (
         'name',
-        ('seed', 'SSID'),
+        ('seed', 'SSID', 'isPaused'),
         ('seedRefreshInterval', 'lastRefreshTime')
     )
-    list_display = ('name', 'SSID', 'lastRefreshTime', 'seedRefreshInterval')
+    list_display = ('name', 'SSID', 'lastRefreshTime', 'isPaused', 'seedRefreshInterval')
     readonly_fields = ['SSID', 'lastRefreshTime']
     select2 = select2_modelform(Module, attrs={'width': '250px'})
     form = select2
 
     def save_model(self, request, obj, form, change):
-        if 'seed' in form.changed_data:
+        if 'seed' in form.changed_data and obj.isPaused is False:
             newSeed = generatorScript(obj.seed)
             obj.SSID = 'amFOSS_' + str(newSeed)
             obj.seed = newSeed

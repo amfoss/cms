@@ -2,15 +2,18 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+
 class Module(models.Model):
     name = models.CharField(max_length=200, verbose_name="Name of Module")
     SSID = models.CharField(max_length=1000, verbose_name="Current WiFi SSID", default="amfoss_")
     seed = models.IntegerField(verbose_name="Current Seed", default=1000)
     seedRefreshInterval = models.DurationField(verbose_name="Seed Refresh Min")
     lastRefreshTime = models.DateTimeField(verbose_name="Last Seed Refresh Time", default=timezone.now)
+    isPaused = models.BooleanField(verbose_name="Is Seed Refresh Paused", default=True)
 
     def __str__(self):
         return self.name
+
 
 class Log(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Member", related_name='memberAttendance')

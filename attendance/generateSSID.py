@@ -7,13 +7,13 @@ from .generatorScript import generatorScript
 to_tz = timezone.get_default_timezone()
 now = datetime.now().astimezone(to_tz)
 
-def refreshSSID(thread):
-    lastTime = thread.lastRefreshTime.astimezone(to_tz)
-    if now - lastTime >= thread.seedRefreshInterval:
-        seed = thread.seed
+def refreshSSID(module):
+    lastTime = module.lastRefreshTime.astimezone(to_tz)
+    if module.isPaused is False and now - lastTime >= module.seedRefreshInterval:
+        seed = module.seed
         newSeed = generatorScript(seed)
-        thread.SSID = 'amFOSS_' + str(newSeed)
-        thread.seed = newSeed
-        thread.lastRefreshTime = now.replace(second=0, microsecond=0)
-        thread.save()
+        module.SSID = 'amFOSS_' + str(newSeed)
+        module.seed = newSeed
+        module.lastRefreshTime = now.replace(second=0, microsecond=0)
+        module.save()
 

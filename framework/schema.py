@@ -1,25 +1,27 @@
 import graphene
 import graphql_jwt
+from datetime import date, datetime, timedelta
+from graphql_jwt.decorators import permission_required, login_required
+from django.contrib.auth.models import User
+
 import attendance.schema
 import activity.schema
 import tasks.schema
 import status.schema
-
-from django.contrib.auth.models import User
-from graphene_django_extras import DjangoObjectField, DjangoListObjectType, DjangoObjectType
-from graphql_jwt.decorators import permission_required, login_required
-
 
 from members.schema import Query as MembersQuery, Mutation as membersMutation
 from members.api.profile import ProfileObj
 from members.api.group import GroupObj
 from members.models import Profile, Group
 
+from attendance.models import Log
+
 from .api.user import UserBasicObj
 
 class UserObj(UserBasicObj, graphene.ObjectType):
     profile = graphene.Field(ProfileObj)
     groups = graphene.List(GroupObj)
+    isInLab = graphene.Boolean()
 
     def resolve_profile(self, info):
         return Profile.objects.values().get(user__username=self['username'])
@@ -27,6 +29,14 @@ class UserObj(UserBasicObj, graphene.ObjectType):
     @login_required
     def resolve_groups(self, info):
         return Group.objects.filter(members__username=self['username']).values()
+
+    @login_required
+    def resolve_isInLab(self, info):
+        time = datetime.now() - timedelta(minutes=5)
+        if Log.objects.filter(member__username=self['username'], lastSeen__gte=time).count() > 0:
+            return True
+        else:
+            return False
 
 
 class Query(MembersQuery, attendance.schema.Query, activity.schema.Query, tasks.schema.Query, status.schema.Query, graphene.ObjectType):

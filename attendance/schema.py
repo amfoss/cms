@@ -9,12 +9,17 @@ from datetime import date, datetime, timedelta
 from django.conf import settings
 from members.models import Group
 import json
+
 from django.utils import timezone
+
+from .api.log import Query as logQuery
 
 to_tz = timezone.get_default_timezone()
 
+
 class AttendanceLogObj(graphene.ObjectType):
     id = graphene.String()
+
 
 class LogAttendance(graphene.Mutation):
     class Arguments:
@@ -43,7 +48,7 @@ class LogAttendance(graphene.Mutation):
 
                         refreshInterval = module.seedRefreshInterval
 
-                        #convert refresh interval to minutes
+                        # convert refresh interval to minutes
                         refreshMins = refreshInterval.seconds / 60
 
                         # check for matching ssid from list
@@ -62,7 +67,7 @@ class LogAttendance(graphene.Mutation):
                             endTime = startTime + refreshInterval
 
                             # create session object
-                            session = { "start": startTime.isoformat(), "end": endTime.isoformat() }
+                            session = {"start": startTime.isoformat(), "end": endTime.isoformat()}
 
                             # Checks if logs exist already for today
                             logs = Log.objects.filter(member=user, date=now.date(), lastSeen=now)
@@ -82,7 +87,7 @@ class LogAttendance(graphene.Mutation):
                                     log.sessions = json.dumps(prev)
                                     log.duration += refreshInterval
 
-                                    ## Add thread if not in days thread
+                                    # Add thread if not in days thread
                                     if module not in log.modules.all():
                                         log.modules.add(module)
 
@@ -104,7 +109,6 @@ class LogAttendance(graphene.Mutation):
                                 return AttendanceLogObj(id=log.id)
                         else:
                             raise Exception('Matching SSID Not Found')
-                        raise Exception('interval should be processed.')
                 raise Exception('User not member of any group, or attendance for the group is not enabled')
             raise Exception('Wrong Password')
         raise Exception('User does not exist')
@@ -124,9 +128,10 @@ class attendanceModuleObj(graphene.ObjectType):
         time = self['lastRefreshTime'].astimezone(to_tz)
         return time.strftime("%H:%M:%S:%f")
 
-class Query(object):
+class Query(logQuery):
     attendanceModule = graphene.Field(attendanceModuleObj, id=graphene.Int(required=True))
 
+    @login_required
     def resolve_attendanceModule(self, info, **kwargs):
         id = kwargs.get('id')
         return Module.objects.values().get(id=id)
