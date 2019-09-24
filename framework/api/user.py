@@ -6,7 +6,7 @@ class UserBasicObj(graphene.ObjectType):
     firstName = graphene.String()
     lastName = graphene.String()
     email = graphene.String()
-    isActive = graphene.Boolean()
+    isMembershipActive = graphene.Boolean()
     isAdmin = graphene.Boolean()
     joinDateTime = graphene.types.datetime.DateTime()
 
@@ -22,7 +22,7 @@ class UserBasicObj(graphene.ObjectType):
     def resolve_joinDateTime(self, info):
         return self['date_joined']
 
-    def resolve_isActive(self, info):
+    def resolve_isMembershipActive(self, info):
         return self['is_active']
 
     def resolve_isAdmin(self, info):
