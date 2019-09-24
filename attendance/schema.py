@@ -70,7 +70,7 @@ class LogAttendance(graphene.Mutation):
                             session = {"start": startTime.isoformat(), "end": endTime.isoformat()}
 
                             # Checks if logs exist already for today
-                            logs = Log.objects.filter(member=user, date=now.date(), lastSeen=now)
+                            logs = Log.objects.filter(member=user, date=now.date())
 
                             # if logs exist for today, update existing log adding the current session
                             if logs.count() != 0:

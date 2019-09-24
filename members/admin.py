@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.db.models import F, ExpressionWrapper, DurationField
 import datetime
 
+
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     fieldsets = [

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'members',
     'attendance',
     'activity',
+    'college.apps.CollegeConfig',
     'status.apps.StatusConfig',
     'tasks'
 ]

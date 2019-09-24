@@ -3,10 +3,12 @@ from hashlib import md5
 from ..models import Profile, SocialProfile, Portal
 from graphql_jwt.decorators import login_required
 
+
 class PortalObj(graphene.ObjectType):
     name = graphene.String()
     color = graphene.String()
     icon = graphene.String()
+
 
 class SocialProfileObj(graphene.ObjectType):
     link = graphene.String()
@@ -14,6 +16,7 @@ class SocialProfileObj(graphene.ObjectType):
 
     def resolve_portal(self, info):
         return Portal.objects.values().get(id=self['portal'])
+
 
 class ProfileObj(graphene.ObjectType):
     firstName = graphene.String()

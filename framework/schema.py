@@ -1,6 +1,7 @@
 import graphene
 import graphql_jwt
 from datetime import date, datetime, timedelta
+from django.utils import timezone
 from graphql_jwt.decorators import permission_required, login_required
 from django.contrib.auth.models import User
 
@@ -8,6 +9,8 @@ import attendance.schema
 import activity.schema
 import tasks.schema
 import status.schema
+
+from college.schema import Query as collegeQuery
 
 from members.schema import Query as MembersQuery, Mutation as membersMutation
 from members.api.profile import ProfileObj
@@ -18,10 +21,15 @@ from attendance.models import Log
 
 from .api.user import UserBasicObj
 
+
+to_tz = timezone.get_default_timezone()
+
+
 class UserObj(UserBasicObj, graphene.ObjectType):
     profile = graphene.Field(ProfileObj)
     groups = graphene.List(GroupObj)
     isInLab = graphene.Boolean()
+    lastSeenInLab = graphene.types.datetime.DateTime()
 
     def resolve_profile(self, info):
         return Profile.objects.values().get(user__username=self['username'])
@@ -38,8 +46,21 @@ class UserObj(UserBasicObj, graphene.ObjectType):
         else:
             return False
 
+    @login_required
+    def resolve_lastSeenInLab(self, info):
+        log = Log.objects.filter(member__username=self['username']).order_by('-lastSeen').values().first()
+        return log['lastSeen'].astimezone(to_tz)
 
-class Query(MembersQuery, attendance.schema.Query, activity.schema.Query, tasks.schema.Query, status.schema.Query, graphene.ObjectType):
+
+class Query(
+    MembersQuery,
+    collegeQuery,
+    attendance.schema.Query,
+    activity.schema.Query,
+    tasks.schema.Query,
+    status.schema.Query,
+    graphene.ObjectType
+):
     user = graphene.Field(UserObj, username=graphene.String(required=True))
     users = graphene.List(UserObj)
 
