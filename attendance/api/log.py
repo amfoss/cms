@@ -14,15 +14,16 @@ class attendanceStatObj(graphene.ObjectType):
     count = graphene.Int()
     members = graphene.List(UserBasicObj)
 
+    def resolve_members(self, info):
+        return User.objects.values().filter(username__in=self['members'])
 
 class liveAttendanceObj(graphene.ObjectType):
     membersPresent = graphene.Field(attendanceStatObj)
     membersAbsent = graphene.Field(attendanceStatObj)
 
     def resolve_membersPresent(self, info):
-        members = User.objects.filter(username__in=self)
         count = len(self)
-        return {'count': count, 'members': members}
+        return {'count': count, 'members': self}
 
     def resolve_membersAbsent(self, info):
         groups = Group.objects.filter(attendanceEnabled=True).values('members__username')
@@ -31,10 +32,8 @@ class liveAttendanceObj(graphene.ObjectType):
             username = member['members__username']
             if username not in self:
                 usernames.append(username)
-        members = User.objects.filter(username__in=usernames)
         count = len(usernames)
-        print({'count': count, 'members': members})
-        return {'count': count, 'members': members}
+        return {'count': count, 'members': usernames}
 
 
 class Query(object):

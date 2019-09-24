@@ -11,6 +11,8 @@ import tasks.schema
 import status.schema
 
 from college.schema import Query as collegeQuery
+from college.api.profile import StudentProfileObj
+from college.models import Profile as CollegeProfile
 
 from members.schema import Query as MembersQuery, Mutation as membersMutation
 from members.api.profile import ProfileObj
@@ -30,9 +32,13 @@ class UserObj(UserBasicObj, graphene.ObjectType):
     groups = graphene.List(GroupObj)
     isInLab = graphene.Boolean()
     lastSeenInLab = graphene.types.datetime.DateTime()
+    collegeProfile = graphene.Field(StudentProfileObj)
 
     def resolve_profile(self, info):
         return Profile.objects.values().get(user__username=self['username'])
+
+    def resolve_collegeProfile(self, info):
+        return CollegeProfile.objects.values().get(user__username=self['username'])
 
     @login_required
     def resolve_groups(self, info):
@@ -62,7 +68,7 @@ class Query(
     graphene.ObjectType
 ):
     user = graphene.Field(UserObj, username=graphene.String(required=True))
-    users = graphene.List(UserObj)
+    users = graphene.List(UserObj, sort=graphene.String(required=False))
 
     def resolve_user(self, info, **kwargs):
         username = kwargs.get('username')
@@ -71,8 +77,11 @@ class Query(
         else:
             raise Exception('Username is a required parameter')
 
-    def resolve_users(self, info):
-        return User.objects.values().all()
+    def resolve_users(self, info, **kwargs):
+        sort = kwargs.get('sort')
+        if sort is None:
+            sort = 'username'
+        return User.objects.values().all().order_by(sort)
 
 
 class Mutation(membersMutation, attendance.schema.Mutation, graphene.ObjectType):
