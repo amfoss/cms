@@ -4,6 +4,7 @@ from graphql_jwt.decorators import login_required
 
 
 class StudentProfileObj(graphene.ObjectType):
+    username = graphene.String()
     rollNo = graphene.String()
     admissionYear = graphene.Int()
     branch = graphene.String()

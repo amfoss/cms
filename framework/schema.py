@@ -4,6 +4,7 @@ from datetime import date, datetime, timedelta
 from django.utils import timezone
 from graphql_jwt.decorators import permission_required, login_required
 from django.contrib.auth.models import User
+from django.db.models import Avg
 
 import attendance.schema
 import activity.schema
@@ -20,6 +21,7 @@ from members.api.group import GroupObj
 from members.models import Profile, Group
 
 from attendance.models import Log
+from attendance.api.log import userAttendanceObj
 
 from .api.user import UserBasicObj
 
@@ -30,6 +32,7 @@ to_tz = timezone.get_default_timezone()
 class UserObj(UserBasicObj, graphene.ObjectType):
     profile = graphene.Field(ProfileObj)
     groups = graphene.List(GroupObj)
+    attendance = graphene.Field(userAttendanceObj)
     isInLab = graphene.Boolean()
     lastSeenInLab = graphene.types.datetime.DateTime()
     collegeProfile = graphene.Field(StudentProfileObj)
@@ -43,6 +46,14 @@ class UserObj(UserBasicObj, graphene.ObjectType):
     @login_required
     def resolve_groups(self, info):
         return Group.objects.filter(members__username=self['username']).values()
+
+    @login_required
+    def resolve_attendance(self, info):
+        logs = Log.objects.filter(member__username=self['username'])
+        data = {}
+        data['logs'] = logs.values()
+        data['avgDuration'] = logs.aggregate(Avg('duration'))
+        return data
 
     @login_required
     def resolve_isInLab(self, info):
