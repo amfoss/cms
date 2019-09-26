@@ -52,6 +52,7 @@ class attendanceDateObj(timePeriodObj, graphene.ObjectType):
         else:
             return None
 
+
 class userAttendanceObj(graphene.ObjectType):
     daysPresent = graphene.Int()
     avgDuration = graphene.String()
@@ -65,6 +66,48 @@ class userAttendanceObj(graphene.ObjectType):
 
     def resolve_dailyLog(self, info):
         return self['logs']
+
+
+class userDailyAttendanceObj(attendanceDateObj):
+    user = graphene.Field(UserBasicObj)
+
+    def resolve_user(self, info):
+        return User.objects.values().get(id=self['member_id'])
+
+
+class dailyAttendanceObj(graphene.ObjectType):
+    date = graphene.types.datetime.Date()
+    membersPresent = graphene.Int()
+    avgDuration = graphene.String()
+    members = graphene.List(userDailyAttendanceObj)
+
+    def def_date(self, info):
+        return self['date']
+
+    def resolve_membersPresent(self, info):
+        return len(self['log'])
+
+    def resolve_avgDuration(self, info):
+        return self['log'].aggregate(Avg('duration'))['duration__avg']
+
+    def resolve_members(self, info):
+        return self['log'].values()
+
+
+class clubAttendanceObj(graphene.ObjectType):
+    avgDuration = graphene.String()
+    dailyLog = graphene.List(dailyAttendanceObj)
+
+    def resolve_avgDuration(self, info):
+        return self['avgDuration']['duration__avg']
+
+    def resolve_dailyLog(self, info):
+        days = self['logs'].values_list('date', flat=True).distinct()
+        logs = []
+        for day in days:
+            logs.append({"date": day, "log": self['logs'].filter(date=day)})
+        return logs
+
 
 class attendanceStatObj(graphene.ObjectType):
     count = graphene.Int()
@@ -95,7 +138,10 @@ class liveAttendanceObj(graphene.ObjectType):
 
 class Query(object):
     liveAttendance = graphene.Field(liveAttendanceObj)
-    userAttendance = graphene.Field(userAttendanceObj, username=graphene.String(required=True))
+    clubAttendance = graphene.Field(clubAttendanceObj,
+                                    startDate=graphene.types.datetime.Date(),
+                                    endDate=graphene.types.datetime.Date()
+                                    )
 
     @login_required
     def resolve_liveAttendance(self, info):
@@ -107,10 +153,13 @@ class Query(object):
         return u
 
     @login_required
-    def resolve_userAttendance(self, info, **kwargs):
-        username = kwargs.get('username')
-        logs = Log.objects.filter(member__username=username)
-        data = {}
-        data['logs'] = logs.values()
-        data['avgDuration'] = logs.aggregate(Avg('duration'))
+    def resolve_clubAttendance(self, info, **kwargs):
+        start = kwargs.get('startDate')
+        end = kwargs.get('endDate')
+        logs = Log.objects.all()
+        if start is not None:
+            logs = logs.filter(date__gte=start)
+        if end is not None:
+            logs = logs.filter(date__lte=end)
+        data = {'logs': logs, 'avgDuration': logs.aggregate(Avg('duration'))}
         return data

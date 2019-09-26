@@ -32,7 +32,11 @@ to_tz = timezone.get_default_timezone()
 class UserObj(UserBasicObj, graphene.ObjectType):
     profile = graphene.Field(ProfileObj)
     groups = graphene.List(GroupObj)
-    attendance = graphene.Field(userAttendanceObj)
+    attendance = graphene.Field(
+        userAttendanceObj,
+        startDate=graphene.types.datetime.Date(),
+        endDate=graphene.types.datetime.Date()
+    )
     isInLab = graphene.Boolean()
     lastSeenInLab = graphene.types.datetime.DateTime()
     collegeProfile = graphene.Field(StudentProfileObj)
@@ -48,11 +52,15 @@ class UserObj(UserBasicObj, graphene.ObjectType):
         return Group.objects.filter(members__username=self['username']).values()
 
     @login_required
-    def resolve_attendance(self, info):
+    def resolve_attendance(self, info, **kwargs):
         logs = Log.objects.filter(member__username=self['username'])
-        data = {}
-        data['logs'] = logs.values()
-        data['avgDuration'] = logs.aggregate(Avg('duration'))
+        start = kwargs.get('startDate')
+        end = kwargs.get('endDate')
+        if start is not None:
+            logs = logs.filter(date__gte=start)
+        if end is not None:
+            logs = logs.filter(date__lte=end)
+        data = {'logs': logs.values(), 'avgDuration': logs.aggregate(Avg('duration'))}
         return data
 
     @login_required
@@ -66,7 +74,10 @@ class UserObj(UserBasicObj, graphene.ObjectType):
     @login_required
     def resolve_lastSeenInLab(self, info):
         log = Log.objects.filter(member__username=self['username']).order_by('-lastSeen').values().first()
-        return log['lastSeen'].astimezone(to_tz)
+        if log is not None:
+            return log['lastSeen'].astimezone(to_tz)
+        else:
+            return None
 
 
 class Query(
@@ -79,7 +90,7 @@ class Query(
     graphene.ObjectType
 ):
     user = graphene.Field(UserObj, username=graphene.String(required=True))
-    users = graphene.List(UserObj, sort=graphene.String(required=False))
+    users = graphene.List(UserObj, sort=graphene.String())
 
     def resolve_user(self, info, **kwargs):
         username = kwargs.get('username')
