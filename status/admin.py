@@ -20,12 +20,16 @@ class ThreadAdmin(admin.ModelAdmin):
         }),
     )
     list_display = ('name', 'enableGroupNotification', 'generationTime', 'dueTime', 'logTime')
-    search_fields =  ['name']
+    search_fields = ['name']
     select2 = select2_modelform(Thread, attrs={'width': '250px'})
     form = select2
 
 @admin.register(Log)
 class LogAdmin(admin.ModelAdmin):
-    list_display = ('member', 'timestamp', 'thread')
-    search_fields = ('member','thread')
+    fields = [
+        ('member', 'thread'),
+        ('date', 'timestamp'),
+    ]
+    list_display = ('member', 'date', 'timestamp', 'thread')
+    search_fields = ('member', 'thread')
     filter = ('thread',)

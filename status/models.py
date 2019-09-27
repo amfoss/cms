@@ -24,6 +24,7 @@ class Thread(models.Model):
 class Log(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField()
+    date = models.DateField()
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
 
     class Meta:

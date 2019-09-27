@@ -1,6 +1,5 @@
 import graphene
 from graphql_jwt.decorators import login_required
-from django.db.models import F
 from datetime import date, datetime, timedelta
 from django.db.models import Avg
 import dateutil.parser
