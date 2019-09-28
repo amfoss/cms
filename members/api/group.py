@@ -11,8 +11,10 @@ class GroupObj(graphene.ObjectType):
     attendanceEnabled = graphene.Boolean()
     admins = graphene.List(UserBasicObj)
     members = graphene.List(UserBasicObj)
+    membersCount = graphene.Int()
 
-
+    def resolve_membersCount(self, info):
+        return len(self['members'])
 
     def resolve_admins(self, info):
         return Group.objects.annotate(

@@ -67,6 +67,7 @@ def logStatus(thread):
                 Log.objects.create(
                     member=profile.user,
                     timestamp=log.members[profile.email],
+                    date=mint.date(),
                     thread=thread
                 )
             MembersSentCount += 1
