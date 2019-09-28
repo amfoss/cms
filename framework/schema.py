@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.db.models import Avg
 
 import attendance.schema
+from registration.schema import Mutation as registrationMutation, Query as registrationQuery
 import activity.schema
 import tasks.schema
 import status.schema
@@ -83,6 +84,7 @@ class UserObj(UserBasicObj, graphene.ObjectType):
 class Query(
     MembersQuery,
     collegeQuery,
+    registrationQuery,
     attendance.schema.Query,
     activity.schema.Query,
     tasks.schema.Query,
@@ -106,7 +108,7 @@ class Query(
         return User.objects.values().all().order_by(sort)
 
 
-class Mutation(membersMutation, attendance.schema.Mutation, graphene.ObjectType):
+class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation, graphene.ObjectType):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()

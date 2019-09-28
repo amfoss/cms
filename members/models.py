@@ -195,6 +195,7 @@ class EducationalQualification(models.Model):
         verbose_name_plural = "Educational Qualifications"
         verbose_name = "Educational Qualification"
 
+
 class Responsibility(models.Model):
     title = models.CharField(max_length=100)
     about = RichTextField(max_length=2000, null=True, blank=True)
