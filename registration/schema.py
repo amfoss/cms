@@ -1,10 +1,11 @@
 import graphene
 from .models import *
 from datetime import datetime
+from graphql_jwt.decorators import permission_required, login_required
 from django.db.models import Q
+import ast
 
-
-class applicationObj(graphene.ObjectType):
+class responseObj(graphene.ObjectType):
     id = graphene.String()
 
 
@@ -16,7 +17,7 @@ class submitApplication(graphene.Mutation):
         phone = graphene.String()
         formData = graphene.types.JSONString()
 
-    Output = applicationObj
+    Output = responseObj
 
     def mutate(self, info, formID, name, email=None, phone=None, formData=None):
         form = Form.objects.get(id=formID)
@@ -32,7 +33,7 @@ class submitApplication(graphene.Mutation):
                     formData=formData
                 )
                 app.save()
-                return applicationObj(id=app.id)
+                return responseObj(id=app.id)
             else:
                 raise Exception('Registered already with the same email or phone number.')
         else:
@@ -52,9 +53,55 @@ class formDetailsObj(graphene.ObjectType):
         return Application.objects.filter(form_id=self.id).count()
 
 
+class formDataObj(graphene.ObjectType):
+    key = graphene.String()
+    value = graphene.String()
+
+    def resolve_key(self, info):
+        return self[0]
+
+    def resolve_value(self, info):
+        return self[1]
+
+
+class applicationObj(graphene.ObjectType):
+    name = graphene.String()
+    submissionTime = graphene.String()
+    phone = graphene.String()
+    email = graphene.String()
+    formData = graphene.List(formDataObj)
+
+    def resolve_formData(self, info):
+        list = []
+        if self['formData'] is not None:
+            obj = ast.literal_eval(self['formData'])
+            for key in obj:
+                list.append([key, obj[key]])
+            return list
+        else:
+            return None
+
+
+class applicationsListObj(graphene.ObjectType):
+    applicationCount = graphene.Int()
+    applications = graphene.List(applicationObj)
+
+    def resolve_applicationCount(self, info):
+        return len(self)
+
+    def resolve_applications(self, info):
+        return self
+
+
 class Query(object):
     registrationForm = graphene.Field(formDetailsObj, formID=graphene.Int())
+    viewApplications = graphene.Field(applicationsListObj, formID=graphene.Int())
 
     def resolve_registrationForm(self, info, **kwargs):
         formID = kwargs.get('formID')
         return Form.objects.get(id=formID)
+
+    @login_required
+    def resolve_viewApplications(self, info, **kwargs):
+        formID = kwargs.get('formID')
+        return Application.objects.values().filter(form_id=formID)

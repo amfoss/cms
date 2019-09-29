@@ -3,8 +3,10 @@ from django.db import models
 
 class Form(models.Model):
     name = models.CharField(max_length=100)
+    isActive = models.BooleanField(default=True)
     allowMultiple = models.BooleanField(default=False)
-
+    submissionDeadline = models.DateTimeField(null=True, blank=True)
+    applicationLimit = models.IntegerField(null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Registration Forms"
