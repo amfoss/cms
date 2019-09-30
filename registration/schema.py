@@ -7,15 +7,16 @@ import ast
 import json
 
 class APIException(Exception):
-    def __init__(self, message, status=None):
+    def __init__(self, message, code=None):
         self.context = {}
-        if status:
-            self.context['status'] = status
+        if code:
+            self.context['errorCode'] = code
         super().__init__(message)
 
 
 class responseObj(graphene.ObjectType):
     id = graphene.String()
+    status = graphene.String()
 
 
 class submitApplication(graphene.Mutation):
@@ -30,23 +31,38 @@ class submitApplication(graphene.Mutation):
 
     def mutate(self, info, formID, name, email=None, phone=None, formData=None):
         form = Form.objects.get(id=formID)
-        if email is not None or phone is not None:
-            apps = Application.objects.filter(Q(email=email) | Q(phone=phone) & Q(form_id=formID))
-            if form.allowMultiple or apps.count() == 0:
-                app = Application.objects.create(
-                    name=name,
-                    submissionTime=datetime.now(),
-                    form_id=formID,
-                    email=email,
-                    phone=phone,
-                    formData=formData
-                )
-                app.save()
-                return responseObj(id=app.id)
+        if form.isActive:
+            if form.submissionDeadline is None or datetime.now() < form.submissionDeadline:
+                regCount = Application.objects.filter(form_id=formID).count()
+                if form.applicationLimit is None or regCount < form.applicationLimit or form.onSubmitAfterMax == 'W':
+                    status = 'W'
+                    if form.applicationLimit is None or regCount < form.applicationLimit :
+                        status = 'U'
+                    if email is not None or phone is not None:
+                        apps = Application.objects.filter((Q(email=email) & Q(phone=phone)) & Q(form_id=formID))
+                        apps.count()
+                        if form.allowMultiple or apps.count() == 0:
+                            app = Application.objects.create(
+                                name=name,
+                                submissionTime=datetime.now(),
+                                form_id=formID,
+                                email=email,
+                                phone=phone,
+                                formData=formData,
+                                status=status
+                            )
+                            app.save()
+                            return responseObj(id=app.id, status=status)
+                        else:
+                            raise APIException('Registered already with the same email or phone number.', code='ALREADY_REGISTERED')
+                    else:
+                        raise APIException('Either Name or Phone Number is required.', code='REQUIRED_FIELD_MISSING')
+                else:
+                    raise APIException('Maximum possible applications already received for this form.', code='MAX_APPLICATIONS_EXCEDED')
             else:
-                raise Exception('Registered already with the same email or phone number.')
+                raise APIException('Submission deadline has passed', code='SUBMISSION_DEADLINE_ENDED')
         else:
-            raise APIException('Either Name or Phone Number is required.', status=300)
+            raise APIException('Applications are not accepted for this form right now.', code='INACTIVE_FORM')
 
 
 class Mutation(object):
