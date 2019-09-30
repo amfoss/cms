@@ -7,10 +7,11 @@ class Form(models.Model):
     allowMultiple = models.BooleanField(default=False)
     submissionDeadline = models.DateTimeField(null=True, blank=True)
     applicationLimit = models.IntegerField(null=True, blank=True)
+    formFields = models.TextField(blank=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Registration Forms"
-        verbose_name = "Registration Form"
+        verbose_name_plural = "Forms"
+        verbose_name = "Form"
 
     def __str__(self):
         return self.name
@@ -25,8 +26,8 @@ class Application(models.Model):
     formData = models.TextField(blank=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Registration Applications"
-        verbose_name = "Registration Application"
+        verbose_name_plural = "Applications"
+        verbose_name = "Application"
 
     def __str__(self):
         return self.name

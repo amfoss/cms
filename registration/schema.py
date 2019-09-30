@@ -4,6 +4,15 @@ from datetime import datetime
 from graphql_jwt.decorators import permission_required, login_required
 from django.db.models import Q
 import ast
+import json
+
+class APIException(Exception):
+    def __init__(self, message, status=None):
+        self.context = {}
+        if status:
+            self.context['status'] = status
+        super().__init__(message)
+
 
 class responseObj(graphene.ObjectType):
     id = graphene.String()
@@ -37,7 +46,7 @@ class submitApplication(graphene.Mutation):
             else:
                 raise Exception('Registered already with the same email or phone number.')
         else:
-            raise Exception('Either Name or Phone Number is required.')
+            raise APIException('Either Name or Phone Number is required.', status=300)
 
 
 class Mutation(object):
@@ -75,8 +84,13 @@ class applicationObj(graphene.ObjectType):
         list = []
         if self['formData'] is not None:
             obj = ast.literal_eval(self['formData'])
-            for key in obj:
-                list.append([key, obj[key]])
+            form = Form.objects.values().get(id=self['form_id'])
+            fields = json.loads(form["formFields"])
+            for field in fields:
+                if field["key"] in obj:
+                    list.append([field["key"], obj[field["key"]]])
+                else:
+                    list.append([field["key"], None])
             return list
         else:
             return None
