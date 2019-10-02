@@ -28,6 +28,7 @@ class ProfileObj(graphene.ObjectType):
     about = graphene.String()
     gravatar = graphene.String()
     links = graphene.List(SocialProfileObj)
+    githubUsername = graphene.String()
     # fields that require login
     phone = graphene.String()
     birthDay = graphene.types.datetime.Date()
@@ -52,6 +53,9 @@ class ProfileObj(graphene.ObjectType):
 
     def resolve_links(self, info):
         return SocialProfile.objects.values('link', 'portal').filter(profile__id=self['id'])
+
+    def resolve_githubUsername(self, info):
+        return self['githubUsername']
 
     @login_required
     def resolve_birthDay(self, info):

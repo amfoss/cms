@@ -13,24 +13,25 @@ class ProfileAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Basic Details', {
             'fields': [
-                        'user',
-                        ('first_name', 'last_name'),
-                        ('email', 'phone', 'telegram_id'),
-                      ]
+                'user',
+                ('first_name', 'last_name'),
+                ('email', 'phone'),
+                ('telegram_id', 'githubUsername')
+            ]
         }),
         ('Additional Details', {
             'fields': [
-                        ('roll_number', 'batch', 'birthday'),
-                        ('resume', 'system_no', 'typing_speed'),
-                        ('location', 'languages'),
-                        ('cover', 'accent', 'tagline'),
-                        'about'
-                      ]
+                ('roll_number', 'batch', 'birthday'),
+                ('resume', 'system_no', 'typing_speed'),
+                ('location', 'languages'),
+                ('cover', 'accent', 'tagline'),
+                'about'
+            ]
         }),
         ('Interests & Expertise', {
             'fields': [
-                        ('interests', 'expertise'),
-                      ]
+                ('interests', 'expertise'),
+            ]
         }),
 
     ]
@@ -62,6 +63,7 @@ class ProfileAdmin(admin.ModelAdmin):
             kwargs["queryset"] = User.objects.filter(username=request.user.username)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+
 # class DurationFilter(admin.SimpleListFilter):
 #     title='Duration'
 #     parameter_name='calculated_duration'
@@ -84,12 +86,12 @@ class ProfileAdmin(admin.ModelAdmin):
 @admin.register(LeaveRecord)
 class LeaveRecordAdmin(admin.ModelAdmin):
     fields = [
-                ('member', 'approver', 'type'),
-                ('start_date', 'end_date'),
-                'reason'
-             ]
+        ('member', 'approver', 'type'),
+        ('start_date', 'end_date'),
+        'reason'
+    ]
     list_display = ('member', 'approver', 'type', 'start_date', 'end_date')
-    list_filter = ('type', )
+    list_filter = ('type',)
     select2 = select2_modelform(LeaveRecord, attrs={'width': '250px'})
     form = select2
 
@@ -134,7 +136,7 @@ class GroupAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                ('name','admins'),
+                ('name', 'admins'),
                 'members'
             )
         }),
@@ -161,6 +163,7 @@ class GroupAdmin(admin.ModelAdmin):
 
     def members_count(self, obj):
         return obj.members.all().count()
+
     members_count.verbose_name = 'No. of Mentees'
 
 
@@ -174,12 +177,14 @@ class MentorGroupAdmin(admin.ModelAdmin):
 
     def mentees_count(self, obj):
         return obj.mentees.all().count()
+
     mentees_count.verbose_name = 'No. of Mentees'
 
     def mentees_display(self, obj):
         return ", ".join([
             mentee.username for mentee in obj.mentees.all()
         ])
+
     mentees_display.verbose_name = 'Mentees'
 
 
