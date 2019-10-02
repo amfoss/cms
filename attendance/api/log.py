@@ -101,7 +101,11 @@ class clubAttendanceObj(graphene.ObjectType):
         return self['avgDuration']['duration__avg']
 
     def resolve_dailyLog(self, info):
-        days = self['logs'].values_list('date', flat=True).distinct()
+        sdate = self['start']
+        delta = self['end'] - sdate
+        days = []
+        for i in range(delta.days + 1):
+            days.append(sdate + timedelta(days=i))
         logs = []
         for day in days:
             logs.append({"date": day, "log": self['logs'].filter(date=day)})
@@ -138,7 +142,7 @@ class liveAttendanceObj(graphene.ObjectType):
 class Query(object):
     liveAttendance = graphene.Field(liveAttendanceObj)
     clubAttendance = graphene.Field(clubAttendanceObj,
-                                    startDate=graphene.types.datetime.Date(),
+                                    startDate=graphene.types.datetime.Date(required=True),
                                     endDate=graphene.types.datetime.Date()
                                     )
 
@@ -158,7 +162,16 @@ class Query(object):
         logs = Log.objects.all()
         if start is not None:
             logs = logs.filter(date__gte=start)
+        else:
+            raise Exception('Start date required')
         if end is not None:
             logs = logs.filter(date__lte=end)
-        data = {'logs': logs, 'avgDuration': logs.aggregate(Avg('duration'))}
+        else:
+            end = date.today()
+        data = {
+            'logs': logs,
+            'avgDuration': logs.aggregate(Avg('duration')),
+            'start': start,
+            'end': end
+        }
         return data
