@@ -1,7 +1,8 @@
 import graphene
 from graphql_jwt.decorators import login_required
 from datetime import date, datetime, timedelta
-from django.db.models import Avg
+from django.db.models import Avg, Count, Sum
+
 import dateutil.parser
 from django.utils import timezone
 from framework.api.user import UserBasicObj
@@ -67,6 +68,16 @@ class userAttendanceObj(graphene.ObjectType):
         return self['logs']
 
 
+class userAttStatObj(graphene.ObjectType):
+    user = graphene.Field(UserBasicObj)
+    presentCount = graphene.String()
+    avgDuration = graphene.String()
+    totalDuration = graphene.String()
+
+    def resolve_user(self, info):
+        return User.objects.values().get(id=self['member'])
+
+
 class userDailyAttendanceObj(attendanceDateObj):
     user = graphene.Field(UserBasicObj)
 
@@ -95,10 +106,15 @@ class dailyAttendanceObj(graphene.ObjectType):
 
 class clubAttendanceObj(graphene.ObjectType):
     avgDuration = graphene.String()
+    workingDaysCount = graphene.String()
     dailyLog = graphene.List(dailyAttendanceObj)
+    memberStats = graphene.List(userAttStatObj, order=graphene.String())
 
     def resolve_avgDuration(self, info):
         return self['avgDuration']['duration__avg']
+
+    def resolve_workingDaysCount(self, info):
+        return len(self['logs'].values_list('date').distinct())
 
     def resolve_dailyLog(self, info):
         sdate = self['start']
@@ -110,6 +126,15 @@ class clubAttendanceObj(graphene.ObjectType):
         for day in days:
             logs.append({"date": day, "log": self['logs'].filter(date=day)})
         return logs
+
+    def resolve_memberStats(self, info, **kwargs):
+        order = kwargs.get('order')
+        if order is None:
+            order = '-presentCount'
+        return self['logs'].values('member').annotate(
+            presentCount=Count('member'),
+            avgDuration=Avg('duration'),
+            totalDuration=Sum('duration')).order_by(order, '-presentCount', '-totalDuration')
 
 
 class attendanceStatObj(graphene.ObjectType):
