@@ -1,4 +1,6 @@
 import graphene
+from members.api.profile import AvatarObj
+from members.models import Profile
 
 
 class UserBasicObj(graphene.ObjectType):
@@ -6,6 +8,7 @@ class UserBasicObj(graphene.ObjectType):
     firstName = graphene.String()
     lastName = graphene.String()
     email = graphene.String()
+    avatar = graphene.Field(AvatarObj)
     isMembershipActive = graphene.Boolean()
     isAdmin = graphene.Boolean()
     joinDateTime = graphene.types.datetime.DateTime()
@@ -27,3 +30,6 @@ class UserBasicObj(graphene.ObjectType):
 
     def resolve_isAdmin(self, info):
         return self['is_superuser']
+
+    def resolve_avatar(self, info):
+        return Profile.objects.values().get(user__username=self['username'])

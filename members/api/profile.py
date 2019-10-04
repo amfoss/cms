@@ -66,12 +66,20 @@ class ProfileObj(graphene.ObjectType):
         return self['phone']
 
 
+class AvatarObj(graphene.ObjectType):
+    githubUsername = graphene.String()
+
+    def resolve_githubUsername(self, info):
+        return self['githubUsername']
+
+
 class Query(object):
     profile = graphene.Field(
         ProfileObj,
         username=graphene.String(required=True)
     )
     profiles = graphene.List(ProfileObj)
+    getAvatar = graphene.Field(AvatarObj, username=graphene.String(required=True))
 
     def resolve_profile(self, info, **kwargs):
         username = kwargs.get('username')
@@ -81,3 +89,9 @@ class Query(object):
 
     def resolve_profiles(self, info, **kwargs):
         return Profile.objects.values().all()
+
+    def resolve_getAvatar(self, info, **kwargs):
+        username = kwargs.get('username')
+        if username is not None:
+            return Profile.objects.values().get(user__username=username)
+        raise Exception('Username is a required parameter')
