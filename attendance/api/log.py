@@ -4,7 +4,6 @@ from datetime import date, datetime, timedelta
 from django.db.models import Avg, Count, Sum
 
 import dateutil.parser
-from django.utils import timezone
 from framework.api.user import UserBasicObj
 from django.contrib.auth.models import User
 
@@ -12,6 +11,8 @@ import json
 
 from ..models import Log
 from members.models import Group
+
+from .dailyAttendance import Query as dailyAttendanceQuery
 
 
 class timePeriodObj(graphene.ObjectType):
@@ -140,6 +141,7 @@ class clubAttendanceObj(graphene.ObjectType):
 class attendanceUserObj(UserBasicObj):
     firstSeenToday = graphene.String()
     lastSeen = graphene.String()
+    duration = graphene.String()
 
     def resolve_firstSeenToday(self, info):
         today = date.today()
@@ -157,6 +159,13 @@ class attendanceUserObj(UserBasicObj):
         else:
             return None
 
+    def resolve_duration(self, info):
+        obj = Log.objects.filter(member__username=self['username']).order_by('-date').first()
+        if obj:
+            return obj.duration
+        else:
+            return None
+
 
 class attendanceStatObj(graphene.ObjectType):
     count = graphene.Int()
@@ -168,24 +177,13 @@ class attendanceStatObj(graphene.ObjectType):
 
 class liveAttendanceObj(graphene.ObjectType):
     membersPresent = graphene.Field(attendanceStatObj)
-    membersAbsent = graphene.Field(attendanceStatObj)
 
     def resolve_membersPresent(self, info):
         count = len(self)
         return {'count': count, 'members': self}
 
-    def resolve_membersAbsent(self, info):
-        groups = Group.objects.filter(attendanceEnabled=True).values('members__username')
-        usernames = []
-        for member in groups:
-            username = member['members__username']
-            if username not in self:
-                usernames.append(username)
-        count = len(usernames)
-        return {'count': count, 'members': usernames}
 
-
-class Query(object):
+class Query(dailyAttendanceQuery, object):
     liveAttendance = graphene.Field(liveAttendanceObj)
     clubAttendance = graphene.Field(clubAttendanceObj,
                                     startDate=graphene.types.datetime.Date(required=True),
