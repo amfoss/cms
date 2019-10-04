@@ -30,6 +30,9 @@ class LogAttendance(graphene.Mutation):
     Output = AttendanceLogObj
 
     def mutate(self, info, username, password, list):
+        time = datetime.now() - timedelta(minutes=5)
+        recentLogsCount = Log.objects.filter(lastSeen__gte=time).count()
+
         user = User.objects.get(username=username)
         if user:
             if check_password(password, user.password):
@@ -51,8 +54,20 @@ class LogAttendance(graphene.Mutation):
                         # convert refresh interval to minutes
                         refreshMins = refreshInterval.seconds / 60
 
+                        bypassSSID = 0
+                        if recentLogsCount == 0:
+                            newSSID = [i for i in list if i.startswith('amFOSS_')]
+                            if len(newSSID) > 0:
+                                bypassSSID = 1
+                                module.SSID = newSSID[0]
+                                module.seed = newSSID[0].strip('amFOSS_')
+                                module.lastRefreshTime = datetime.now()
+                                module.save()
+                            else:
+                                bypassSSID = 0
+
                         # check for matching ssid from list
-                        if ssid in list:
+                        if ssid in list or bypassSSID:
 
                             # Compute start time & end time for the current session
 

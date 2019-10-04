@@ -137,9 +137,30 @@ class clubAttendanceObj(graphene.ObjectType):
             totalDuration=Sum('duration')).order_by(order, '-presentCount', '-totalDuration')
 
 
+class attendanceUserObj(UserBasicObj):
+    firstSeenToday = graphene.String()
+    lastSeen = graphene.String()
+
+    def resolve_firstSeenToday(self, info):
+        today = date.today()
+        obj = Log.objects.filter(date=today, member__username=self['username'])[0]
+        if obj:
+            sessions = json.loads(obj.sessions)
+            return sessions[0]['start']
+        else:
+            return None
+
+    def resolve_lastSeen(self, info):
+        obj = Log.objects.filter(member__username=self['username']).order_by('-date').first()
+        if obj:
+            return obj.lastSeen
+        else:
+            return None
+
+
 class attendanceStatObj(graphene.ObjectType):
     count = graphene.Int()
-    members = graphene.List(UserBasicObj)
+    members = graphene.List(attendanceUserObj)
 
     def resolve_members(self, info):
         return User.objects.values().filter(username__in=self['members'])
