@@ -12,7 +12,7 @@ class FormAdmin(admin.ModelAdmin):
                         'name',
                         'submissionDeadline',
                         ('isActive', 'allowMultiple'),
-                        ('applicationLimit', 'onSubmitAfterMax')
+                        ('applicationLimit', 'onSubmitAfterMax'),
                       ]
         }),
         ('Form Fields', {
@@ -29,6 +29,6 @@ class FormAdmin(admin.ModelAdmin):
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'form', 'status', 'submissionTime', 'email', 'phone')
+    list_display = ('name', 'form', 'status', 'submissionTime', 'rsvp', 'email', 'phone')
     select2 = select2_modelform(Form, attrs={'width': '250px'})
     form = select2

@@ -29,6 +29,7 @@ class Application(models.Model):
     email = models.EmailField(max_length=254, blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
     formData = models.TextField(blank=True, null=True)
+    rsvp = models.BooleanField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Applications"
