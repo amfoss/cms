@@ -13,6 +13,9 @@ class FormAdmin(admin.ModelAdmin):
                         'submissionDeadline',
                         ('isActive', 'allowMultiple'),
                         ('applicationLimit', 'onSubmitAfterMax'),
+                        'formHash',
+                        'rsvpSubject',
+                        'rsvpMessage'
                       ]
         }),
         ('Form Fields', {

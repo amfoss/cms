@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 
 APPLICATION_STATUS = (('A', 'Accepted'), ('R', 'Rejected'), ('W', 'Waitlisted'), ('U', 'Under Review'))
 ONFILL_OPTIONS = (('W', 'Waitlist'), ('D', 'Don\'t Accept'))
@@ -12,6 +13,9 @@ class Form(models.Model):
     applicationLimit = models.IntegerField(null=True, blank=True, verbose_name='Application Limit')
     formFields = models.TextField(blank=True, null=True, verbose_name='Form Fields')
     onSubmitAfterMax = models.CharField(choices=ONFILL_OPTIONS, max_length=1, blank=True, null=True, verbose_name='On Submit after limit?')
+    formHash = models.CharField(max_length=500, blank=True, null=True, verbose_name='Security hash for the form')
+    rsvpSubject = models.TextField(blank=True, null=True)
+    rsvpMessage = RichTextField(max_length=5000, verbose_name="RSVP Email Message")
 
     class Meta:
         verbose_name_plural = "Forms"
@@ -30,6 +34,7 @@ class Application(models.Model):
     phone = models.CharField(max_length=15, blank=True, null=True)
     formData = models.TextField(blank=True, null=True)
     rsvp = models.BooleanField(blank=True, null=True)
+
 
     class Meta:
         verbose_name_plural = "Applications"

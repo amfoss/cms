@@ -5,6 +5,15 @@ from graphql_jwt.decorators import permission_required, login_required
 from django.db.models import Q
 import ast
 import json
+import hashlib
+
+from django.template import Template, Context
+from django.utils.html import strip_tags
+from django.core.mail import EmailMultiAlternatives, send_mail
+
+from framework import settings
+from_email = settings.EMAIL_HOST_USER
+
 
 class APIException(Exception):
     def __init__(self, message, code=None):
@@ -65,8 +74,44 @@ class submitApplication(graphene.Mutation):
             raise APIException('Applications are not accepted for this form right now.', code='INACTIVE_FORM')
 
 
+class rsvpResponseObj(graphene.ObjectType):
+    status = graphene.String()
+
+
+class submitRSVP(graphene.Mutation):
+    class Arguments:
+        response = graphene.Boolean(required=True)
+        hash = graphene.String(required=True)
+        formID = graphene.Int(required=True)
+        phone = graphene.String(required=True)
+        formData = graphene.types.JSONString()
+
+    Output = rsvpResponseObj
+
+    def mutate(self, info, response, hash, formID, phone=None, formData=None):
+        form = Form.objects.get(id=formID)
+        if form:
+            formHash = form.formHash
+            application = Application.objects.get(phone=phone, form__id=formID)
+            if application:
+                hashStr = formHash + application.phone
+                hashStrEncoded = hashlib.md5(hashStr.encode())
+                hexHash = hashStrEncoded.hexdigest()
+                if hash == hexHash:
+                    application.rsvp = response
+                    application.save()
+                    return rsvpResponseObj(status='success')
+                else:
+                    raise APIException('Your token doesn\'t seem to be valid', code='INVALID_HASH')
+            else:
+                raise APIException('No application found with this phone number', code='INVALID_PHONE')
+        else:
+            raise APIException('This form is not found', code='INVALID_FORM')
+
+
 class Mutation(object):
     submitApplication = submitApplication.Field()
+    submitRSVP = submitRSVP.Field()
 
 
 class formDetailsObj(graphene.ObjectType):
@@ -126,6 +171,7 @@ class applicationsListObj(graphene.ObjectType):
 class Query(object):
     registrationForm = graphene.Field(formDetailsObj, formID=graphene.Int())
     viewApplications = graphene.Field(applicationsListObj, formID=graphene.Int())
+    sendRSVPEmail = graphene.Field(rsvpResponseObj, applicationID=graphene.Int())
 
     def resolve_registrationForm(self, info, **kwargs):
         formID = kwargs.get('formID')
@@ -135,3 +181,31 @@ class Query(object):
     def resolve_viewApplications(self, info, **kwargs):
         formID = kwargs.get('formID')
         return Application.objects.values().filter(form_id=formID)
+
+    @login_required
+    def resolve_sendRSVPEmail(self, info, **kwargs):
+        applicationID = kwargs.get('applicationID')
+        app = Application.objects.get(id=applicationID)
+        form = app.form
+        name = app.name
+        email = app.email
+        phone = app.phone
+        formHash = form.formHash
+        str = formHash + phone
+        hashEncoded = hashlib.md5(str.encode())
+        hash = hashEncoded.hexdigest()
+
+        temp = Template(form.rsvpMessage)
+        context = Context({'name': name, 'hash': hash})
+        htmlMessage = temp.render(context)
+
+        send_mail(
+            form.rsvpSubject,
+            strip_tags(htmlMessage),
+            from_email,
+            [email],
+            html_message=htmlMessage,
+            fail_silently=True,
+        )
+
+        return rsvpResponseObj(status="mails send")
