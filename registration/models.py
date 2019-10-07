@@ -27,14 +27,15 @@ class Form(models.Model):
 
 class Application(models.Model):
     name = models.CharField(max_length=100)
+    hash = models.CharField(max_length=1000, blank=True, null=True)
     form = models.ForeignKey(Form, on_delete=models.CASCADE)
     submissionTime = models.DateTimeField()
-    status = models.CharField(choices=APPLICATION_STATUS, default='U', max_length=1)
     email = models.EmailField(max_length=254, blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
     formData = models.TextField(blank=True, null=True)
+    status = models.CharField(choices=APPLICATION_STATUS, default='U', max_length=1)
     rsvp = models.BooleanField(blank=True, null=True)
-
+    checkIn = models.BooleanField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Applications"

@@ -135,6 +135,7 @@ class formDataObj(graphene.ObjectType):
 
 
 class applicationObj(graphene.ObjectType):
+    id = graphene.Int()
     name = graphene.String()
     submissionTime = graphene.String()
     phone = graphene.String()
@@ -172,6 +173,8 @@ class Query(object):
     registrationForm = graphene.Field(formDetailsObj, formID=graphene.Int())
     viewApplications = graphene.Field(applicationsListObj, formID=graphene.Int())
     sendRSVPEmail = graphene.Field(rsvpResponseObj, applicationID=graphene.Int())
+    getApplicant = graphene.Field(applicationObj, hash=graphene.String())
+
 
     def resolve_registrationForm(self, info, **kwargs):
         formID = kwargs.get('formID')
@@ -209,3 +212,8 @@ class Query(object):
         )
 
         return rsvpResponseObj(status="mails send")
+
+    @login_required
+    def resolve_getApplicant(self, info, **kwargs):
+        hashCode = kwargs.get('hash')
+        return Application.objects.values().get(hash=hashCode)

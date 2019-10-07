@@ -32,6 +32,28 @@ class FormAdmin(admin.ModelAdmin):
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'form', 'status', 'submissionTime', 'rsvp', 'email', 'phone')
+    fieldsets = [
+        ('Basic Details', {
+            'fields': [
+                'name',
+                ('form', 'submissionTime'),
+                ('email', 'phone'),
+                'hash'
+            ]
+        }),
+        ('Form Fields', {
+            'fields': [
+                'formData'
+            ]
+        }),
+        ('Status', {
+            'fields': [
+                ('status', 'rsvp', 'checkIn')
+            ]
+        }),
+
+    ]
+    list_display = ('name', 'form', 'status', 'submissionTime', 'rsvp', 'checkIn')
+    list_filter = ('status', 'rsvp', 'checkIn')
     select2 = select2_modelform(Form, attrs={'width': '250px'})
     form = select2
