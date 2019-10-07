@@ -22,14 +22,14 @@ class Command(BaseCommand):
         email = options['email']
         formID = options['formID']
         apps = Application.objects.filter(form_id=formID)
-        fieldList = ['id', 'name', 'submissionTime', 'email', 'phone']
+        fieldList = ['id', 'name', 'submissionTime', 'email', 'phone', 'rsvp']
         form = Form.objects.values().get(id=formID)
         formFields = json.loads(form["formFields"])
         for field in formFields:
             fieldList.append(field["key"])
         appData = [fieldList]
         for app in apps:
-            logRow = [app.id, app.name, app.submissionTime, app.email, app.phone]
+            logRow = [app.id, app.name, app.submissionTime, app.email, app.phone, app.rsvp]
             if app.formData is not None:
                 formData = ast.literal_eval(app.formData)
             else:

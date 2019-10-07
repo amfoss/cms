@@ -6,6 +6,8 @@ from django.db.models import Q
 import ast
 import json
 import hashlib
+from django.core.exceptions import ObjectDoesNotExist
+
 
 from django.template import Template, Context
 from django.utils.html import strip_tags
@@ -109,9 +111,26 @@ class submitRSVP(graphene.Mutation):
             raise APIException('This form is not found', code='INVALID_FORM')
 
 
+class checkIn(graphene.Mutation):
+    class Arguments:
+        appID = graphene.Int(required=True)
+
+    Output = rsvpResponseObj
+
+    def mutate(self, info, appID):
+        try:
+            app = Application.objects.get(id=appID)
+            app.checkIn = True
+            app.save()
+            return rsvpResponseObj(status='success')
+        except ObjectDoesNotExist:
+            rsvpResponseObj(status="Applicant Not found")
+
+
 class Mutation(object):
     submitApplication = submitApplication.Field()
     submitRSVP = submitRSVP.Field()
+    checkIn = checkIn.Field()
 
 
 class formDetailsObj(graphene.ObjectType):
@@ -217,3 +236,4 @@ class Query(object):
     def resolve_getApplicant(self, info, **kwargs):
         hashCode = kwargs.get('hash')
         return Application.objects.values().get(hash=hashCode)
+
