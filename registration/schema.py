@@ -8,12 +8,12 @@ import json
 import hashlib
 from django.core.exceptions import ObjectDoesNotExist
 
-
 from django.template import Template, Context
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives, send_mail
 
 from framework import settings
+
 from_email = settings.EMAIL_HOST_USER
 
 
@@ -47,7 +47,7 @@ class submitApplication(graphene.Mutation):
                 regCount = Application.objects.filter(form_id=formID).count()
                 if form.applicationLimit is None or regCount < form.applicationLimit or form.onSubmitAfterMax == 'W':
                     status = 'W'
-                    if form.applicationLimit is None or regCount < form.applicationLimit :
+                    if form.applicationLimit is None or regCount < form.applicationLimit:
                         status = 'U'
                     if email is not None or phone is not None:
                         apps = Application.objects.filter((Q(email=email) & Q(phone=phone)) & Q(form_id=formID))
@@ -65,11 +65,13 @@ class submitApplication(graphene.Mutation):
                             app.save()
                             return responseObj(id=app.id, status=status)
                         else:
-                            raise APIException('Registered already with the same email or phone number.', code='ALREADY_REGISTERED')
+                            raise APIException('Registered already with the same email or phone number.',
+                                               code='ALREADY_REGISTERED')
                     else:
                         raise APIException('Either Name or Phone Number is required.', code='REQUIRED_FIELD_MISSING')
                 else:
-                    raise APIException('Maximum possible applications already received for this form.', code='MAX_APPLICATIONS_EXCEDED')
+                    raise APIException('Maximum possible applications already received for this form.',
+                                       code='MAX_APPLICATIONS_EXCEDED')
             else:
                 raise APIException('Submission deadline has passed', code='SUBMISSION_DEADLINE_ENDED')
         else:
@@ -117,14 +119,21 @@ class checkIn(graphene.Mutation):
 
     Output = rsvpResponseObj
 
+    @login_required
     def mutate(self, info, appID):
-        try:
-            app = Application.objects.get(id=appID)
-            app.checkIn = True
-            app.save()
-            return rsvpResponseObj(status='success')
-        except ObjectDoesNotExist:
-            rsvpResponseObj(status="Applicant Not found")
+        app = Application.objects.filter(id=appID).first()
+        if app is not None:
+            form = app.form
+            if form.enableCheckIn:
+                if app.checkIn:
+                    raise APIException('The person has already checked-in.', code='ALREADY_CHECKED_IN')
+                else:
+                    app.checkIn = True
+                    app.save()
+                    return rsvpResponseObj(status='success')
+            raise APIException('Check-In has not been enabled.', code='CHECK_IN_DISABLED')
+        else:
+            raise APIException('Person not found in the database', code='NOT_FOUND')
 
 
 class Mutation(object):
@@ -194,7 +203,6 @@ class Query(object):
     sendRSVPEmail = graphene.Field(rsvpResponseObj, applicationID=graphene.Int())
     getApplicant = graphene.Field(applicationObj, hash=graphene.String())
 
-
     def resolve_registrationForm(self, info, **kwargs):
         formID = kwargs.get('formID')
         return Form.objects.get(id=formID)
@@ -235,5 +243,8 @@ class Query(object):
     @login_required
     def resolve_getApplicant(self, info, **kwargs):
         hashCode = kwargs.get('hash')
-        return Application.objects.values().get(hash=hashCode)
-
+        try:
+            app = Application.objects.values().get(hash=hashCode)
+        except ObjectDoesNotExist:
+            raise APIException("Person not found in the database", code="NOT_FOUND")
+        return app

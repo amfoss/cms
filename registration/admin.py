@@ -11,12 +11,20 @@ class FormAdmin(admin.ModelAdmin):
             'fields': [
                         'name',
                         'submissionDeadline',
-                        ('isActive', 'allowMultiple'),
-                        ('applicationLimit', 'onSubmitAfterMax'),
+                        ('allowMultiple', 'applicationLimit', 'onSubmitAfterMax'),
                         'formHash',
-                        'rsvpSubject',
-                        'rsvpMessage'
                       ]
+        }),
+        ('Control Centre', {
+            'fields': [
+                        ('isActive', 'enableCheckIn')
+            ]
+        }),
+        ('RSVP Manager', {
+            'fields': [
+                'rsvpSubject',
+                'rsvpMessage'
+            ]
         }),
         ('Form Fields', {
             'fields': [
@@ -25,7 +33,7 @@ class FormAdmin(admin.ModelAdmin):
         }),
 
     ]
-    list_display = ('name', 'isActive', 'allowMultiple', 'applicationLimit')
+    list_display = ('name', 'isActive', 'allowMultiple', 'enableCheckIn', 'applicationLimit')
     select2 = select2_modelform(Form, attrs={'width': '250px'})
     form = select2
 
