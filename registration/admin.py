@@ -56,7 +56,8 @@ class ApplicationAdmin(admin.ModelAdmin):
         }),
         ('Status', {
             'fields': [
-                ('status', 'rsvp', 'checkIn')
+                ('status', 'rsvp', 'checkIn'),
+                'checkInTime'
             ]
         }),
 

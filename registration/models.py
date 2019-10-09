@@ -37,6 +37,7 @@ class Application(models.Model):
     status = models.CharField(choices=APPLICATION_STATUS, default='U', max_length=1)
     rsvp = models.BooleanField(blank=True, null=True)
     checkIn = models.BooleanField(blank=True, null=True)
+    checkInTime = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Applications"

@@ -126,14 +126,15 @@ class checkIn(graphene.Mutation):
             form = app.form
             if form.enableCheckIn:
                 if app.checkIn:
-                    raise APIException('The person has already checked-in.', code='ALREADY_CHECKED_IN')
+                    raise APIException('The person has already checked-in at ' + str(app.checkInTime), code='ALREADY_CHECKED_IN')
                 else:
                     app.checkIn = True
+                    app.checkInTime = datetime.now()
                     app.save()
                     return rsvpResponseObj(status='success')
-            raise APIException('Check-In has not been enabled.', code='CHECK_IN_DISABLED')
+            raise APIException('Check-in has not been enabled for this event.', code='CHECK_IN_DISABLED')
         else:
-            raise APIException('Person not found in the database', code='NOT_FOUND')
+            raise APIException('Person is not found in the database', code='NOT_FOUND')
 
 
 class Mutation(object):
