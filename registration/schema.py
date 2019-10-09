@@ -122,6 +122,7 @@ class checkIn(graphene.Mutation):
     @login_required
     def mutate(self, info, appID):
         app = Application.objects.filter(id=appID).first()
+        verifier = info.context.user
         if app is not None:
             form = app.form
             if form.enableCheckIn:
@@ -130,6 +131,7 @@ class checkIn(graphene.Mutation):
                 else:
                     app.checkIn = True
                     app.checkInTime = datetime.now()
+                    app.checkedInBy = verifier
                     app.save()
                     return rsvpResponseObj(status='success')
             raise APIException('Check-in has not been enabled for this event.', code='CHECK_IN_DISABLED')

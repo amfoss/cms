@@ -1,5 +1,6 @@
 from django.db import models
 from ckeditor.fields import RichTextField
+from django.contrib.auth.models import User
 
 APPLICATION_STATUS = (('A', 'Accepted'), ('R', 'Rejected'), ('W', 'Waitlisted'), ('U', 'Under Review'))
 ONFILL_OPTIONS = (('W', 'Waitlist'), ('D', 'Don\'t Accept'))
@@ -38,6 +39,7 @@ class Application(models.Model):
     rsvp = models.BooleanField(blank=True, null=True)
     checkIn = models.BooleanField(blank=True, null=True)
     checkInTime = models.DateTimeField(blank=True, null=True)
+    checkedInBy = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Applications"
