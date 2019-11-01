@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import *
 from easy_select2 import select2_modelform
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin, ExportActionMixin
 
 
 @admin.register(Thread)
@@ -24,8 +26,14 @@ class ThreadAdmin(admin.ModelAdmin):
     select2 = select2_modelform(Thread, attrs={'width': '250px'})
     form = select2
 
+
+class StatusUpdateResource(resources.ModelResource):
+    class Meta:
+        model = Log
+
+
 @admin.register(Log)
-class LogAdmin(admin.ModelAdmin):
+class LogAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
     fields = [
         ('member', 'thread'),
         ('date', 'timestamp'),
@@ -33,3 +41,4 @@ class LogAdmin(admin.ModelAdmin):
     list_display = ('member', 'date', 'timestamp', 'thread')
     search_fields = ('member', 'thread')
     filter = ('thread',)
+    resource_class = StatusUpdateResource

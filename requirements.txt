@@ -4,6 +4,7 @@ cachetools==3.1.1
 certifi==2019.9.11
 cffi==1.13.1
 chardet==3.0.4
+crypto==1.4.1
 cryptography==2.8
 defusedxml==0.6.0
 diff-match-patch==20181111
@@ -33,6 +34,7 @@ httplib2==0.14.0
 idna==2.8
 jdcal==1.4.1
 MarkupPy==1.14
+Naked==0.1.31
 oauth2client==4.1.3
 odfpy==1.4.0
 openpyxl==3.0.0
@@ -42,6 +44,7 @@ promise==2.2.1
 pyasn1==0.4.7
 pyasn1-modules==0.2.7
 pycparser==2.19
+pycrypto==2.6.1
 PyJWT==1.7.1
 python-dateutil==2.8.0
 python-telegram-bot==12.2.0
@@ -51,6 +54,7 @@ regex==2019.11.1
 requests==2.22.0
 rsa==4.0
 Rx==1.6.1
+shellescape==3.4.1
 singledispatch==3.4.0.3
 six==1.12.0
 sqlparse==0.3.0

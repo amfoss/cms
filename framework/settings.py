@@ -41,9 +41,12 @@ INSTALLED_APPS = [
     'attendance',
     'activity',
     'college.apps.CollegeConfig',
+    'events',
+    'forms',
     'status.apps.StatusConfig',
     'registration',
-    'tasks'
+    'tasks',
+    'payment'
 ]
 
 MIDDLEWARE = [
