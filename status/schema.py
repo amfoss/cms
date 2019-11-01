@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 
 from .api.log import Query as logQuery
 
+
 class StatusObj(DjangoObjectType):
     class Meta:
         model = Log

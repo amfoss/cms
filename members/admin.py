@@ -7,6 +7,24 @@ from django.contrib.auth.models import User
 from django.db.models import F, ExpressionWrapper, DurationField
 import datetime
 
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin, ExportActionMixin
+from django.contrib.auth.admin import UserAdmin as DefaultUserAdmin
+
+
+class UserResource(resources.ModelResource):
+    class Meta:
+        model = User
+
+
+class UserAdmin(ImportExportModelAdmin, ExportActionMixin, DefaultUserAdmin):
+    resource_class = UserResource
+    pass
+
+
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
+
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):

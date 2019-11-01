@@ -83,7 +83,7 @@ class Query(object):
         if stream_type is not None:
             streams = streams.filter(type=stream_type)
         if hasParent is not None:
-            streams = streams.filter(parent__isnull=not(hasParent))
+            streams = streams.filter(parent__isnull=not hasParent)
         elif parent is not None:
             parent_obj = Stream.objects.get(slug=parent)
             streams = streams.filter(parent=parent_obj)
