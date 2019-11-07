@@ -11,7 +11,13 @@ class Slot(models.Model):
 
 class Form(models.Model):
     name = models.CharField(max_length=100, verbose_name='Name of the Form')
-    admins = models.ManyToManyField(User, related_name='FormAdmins')
+
+    creator = models.ForeignKey(User, on_delete=models.PROTECT, related_name='FormCreator', blank=True, null=True)
+    creationTime = models.DateTimeField(null=True, blank=True)
+    lastEditor = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='FormLastModified', blank=True, null=True)
+    lastEditTime = models.DateTimeField(null=True, blank=True)
+    admins = models.ManyToManyField(User, related_name='FormAdmins', null=True, blank=True)
+
     isActive = models.BooleanField(default=True, verbose_name='Is Active?')
     allowMultiple = models.BooleanField(default=False, verbose_name='Allow Multiple?')
     submissionDeadline = models.DateTimeField(null=True, blank=True, verbose_name='Submission Deadline')

@@ -3,6 +3,7 @@ from easy_select2 import select2_modelform
 from import_export import resources
 from import_export.fields import Field
 from import_export.admin import ImportExportModelAdmin, ExportActionMixin
+from datetime import datetime
 
 from .models import *
 from .inlines import *
@@ -32,11 +33,19 @@ class FormAdmin(ImportExportModelAdmin, ExportActionMixin,admin.ModelAdmin):
         }),
 
     ]
-    list_display = ('name', 'isActive', 'allowMultiple', 'submissionDeadline', 'admissionLimit')
+    list_display = ('name', 'creator', 'lastEditTime', 'lastEditor', 'isActive', 'allowMultiple', 'submissionDeadline', 'admissionLimit')
     select2 = select2_modelform(Form, attrs={'width': '250px'})
     inlines = (FormSlotInline, )
     form = select2
     resource_class = FormResource
+
+    def save_model(self, request, obj, form, change):
+        if not obj.creator:
+            obj.creator = request.user
+            obj.creationTime = datetime.now()
+        obj.lastEditor = request.user
+        obj.lastEditTime = datetime.now()
+        obj.save()
 
 
 class EntryResource(resources.ModelResource):
