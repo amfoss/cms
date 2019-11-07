@@ -97,6 +97,7 @@ class Query(
 ):
     user = graphene.Field(UserObj, username=graphene.String(required=True))
     users = graphene.List(UserObj, sort=graphene.String())
+    isClubMember = graphene.Boolean()
 
     def resolve_user(self, info, **kwargs):
         username = kwargs.get('username')
@@ -110,6 +111,13 @@ class Query(
         if sort is None:
             sort = 'username'
         return User.objects.values().all().order_by(sort)
+
+    def resolve_isClubMember(self, info, **kwargs):
+        user = info.context.user
+        if Profile.objects.filter(user=user).count() == 0:
+            return False
+        else:
+            return True
 
 
 class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation, formMutation, graphene.ObjectType):

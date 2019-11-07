@@ -4,7 +4,7 @@ from forms.models import Form
 
 
 class FormFieldsObj(graphene.ObjectType):
-    name = graphene.String()
+    question = graphene.String()
     key = graphene.String()
     required = graphene.String()
     isSlot = graphene.Boolean()
