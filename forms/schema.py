@@ -5,8 +5,7 @@ from django.db.models import Q
 from django.utils import timezone
 from framework.api.APIException import APIException
 
-from forms.api.viewForms import Query as viewForm
-from forms.api.getFormFields import Query as getFormFields
+from forms.api.Form import Query as FormQueries
 from forms.api.viewEntries import Query as viewEntries
 
 to_tz = timezone.get_default_timezone()
@@ -99,7 +98,7 @@ class FormDetailsObj(graphene.ObjectType):
         return Form.objects.get(id=self).formslot_set.values()
 
 
-class Query(viewForm, viewEntries, getFormFields, object):
+class Query(FormQueries, viewEntries, object):
     viewSlotsStats = graphene.Field(FormDetailsObj, formID=graphene.Int())
 
     @staticmethod
