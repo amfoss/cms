@@ -14,9 +14,9 @@ class Form(models.Model):
 
     creator = models.ForeignKey(User, on_delete=models.PROTECT, related_name='FormCreator', blank=True, null=True)
     creationTime = models.DateTimeField(null=True, blank=True)
-    lastEditor = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='FormLastModified', blank=True, null=True)
+    lastEditor = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='FormLastEditor', blank=True, null=True)
     lastEditTime = models.DateTimeField(null=True, blank=True)
-    admins = models.ManyToManyField(User, related_name='FormAdmins', null=True, blank=True)
+    admins = models.ManyToManyField(User, related_name='FormAdmins', blank=True)
 
     isActive = models.BooleanField(default=True, verbose_name='Is Active?')
     allowMultiple = models.BooleanField(default=False, verbose_name='Allow Multiple?')

@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from django.db.models import Avg
 
 import attendance.schema
+from college.schema import Query as collegeQuery
+from dairy.schema import Query as dairyQuery
 from registration.schema import Mutation as registrationMutation, Query as registrationQuery
 from forms.schema import Mutation as formMutation, Query as formQuery
 from payment.schema import Query as paymentQuery
@@ -14,7 +16,6 @@ import activity.schema
 import tasks.schema
 import status.schema
 
-from college.schema import Query as collegeQuery
 from college.api.profile import StudentProfileObj
 from college.models import Profile as CollegeProfile
 
@@ -84,6 +85,7 @@ class UserObj(UserBasicObj, graphene.ObjectType):
 
 
 class Query(
+    dairyQuery,
     MembersQuery,
     collegeQuery,
     registrationQuery,
