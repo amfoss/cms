@@ -47,6 +47,7 @@ def generateThread(thread, email):
 #
 #
 
+
 def logStatus(thread):
     d = date.today()
     if thread.generationTime > thread.logTime:
@@ -81,16 +82,19 @@ def logStatus(thread):
 #
 #
 
+
 def getThreadDateTime(thread):
     d = now
     if thread.generationTime > thread.logTime:
         d = d - timedelta(days=1)
     return d
 
+
 def calcMinTime(thread):
     genTime = thread.generationTime
     d = getThreadDateTime(thread)
     return d.replace(hour=int(genTime[:2]), minute=int(genTime[2:]))
+
 
 def calcMaxTime(thread):
     dueTime = thread.dueTime

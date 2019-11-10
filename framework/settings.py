@@ -37,17 +37,17 @@ INSTALLED_APPS = [
     'easy_select2',
     'corsheaders',
     'import_export',
+    'forms',
+    'crons',
     'members',
     'attendance',
     'activity',
     'college.apps.CollegeConfig',
-    'events',
-    'dairy',
-    'forms',
+    # 'events',
+    'scheduler',
     'status.apps.StatusConfig',
     'registration',
     'tasks',
-    'payment'
 ]
 
 MIDDLEWARE = [
