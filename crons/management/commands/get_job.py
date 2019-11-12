@@ -1,16 +1,18 @@
+import telegram
 from django.core.management.base import BaseCommand
 from datetime import date, datetime, timedelta
-from members.models import Profile, Group
-from status.models import Log, Thread
-from django.core.mail import EmailMultiAlternatives, send_mail
+from members.models import Group
+from django.core.mail import send_mail
 from framework import settings
 from django.utils.html import strip_tags
 from django.utils import timezone
 
 from attendance.generateSSID import refreshSSID
 
-from status.gmailFetcher import fetchStatusLog
-from status.reportMaker import generateReport
+from status.fetcher import GMailFetcher
+from status.logger import log
+from crons.StatusUpdateReporter import ReportMaker
+from status.models import Thread
 
 to_tz = timezone.get_default_timezone()
 
@@ -30,82 +32,59 @@ def getSubject(thread, d):
 # Generating Status Update Thread
 #
 #
-
-def generateThread(thread, email):
+def sendThreadEmail(thread):
     send_mail(
         getSubject(thread, now),
         strip_tags(thread.threadMessage),
         from_email,
-        [email],
+        [thread.email],
         html_message=thread.threadMessage,
         fail_silently=False,
     )
+
 
 #
 #
 # Logging Status Updates
 #
 #
-
-
 def logStatus(thread):
     d = date.today()
     if thread.generationTime > thread.logTime:
         d = d - timedelta(days=1)
 
-    subject = getSubject(thread,d)
+    subject = getSubject(thread, d)
 
-    log = fetchStatusLog(d, subject)
-
-    profiles = Profile.objects.filter(email__in=log.emails)
-
-    MembersSentCount = 0
-    for profile in profiles:
-        if profile.user.is_active:
-            mint = calcMinTime(thread)
-            query = Log.objects.filter(member=profile.user, timestamp__gte=mint, thread=thread)
-            if query.count() == 0:
-                Log.objects.create(
-                    member=profile.user,
-                    timestamp=log.members[profile.email],
-                    date=mint.date(),
-                    thread=thread
-                )
-            MembersSentCount += 1
-
-    if thread.enableGroupNotification:
-       sendReport(thread, log, MembersSentCount, d)
-
-#
-#
-# Reporting Status Updates
-#
-#
+    logs = GMailFetcher(subject, d.strftime("%Y-%m-%d")).logs
+    members = []
+    groups = Group.objects.filter(thread=thread, statusUpdateEnabled=True)
+    for group in groups:
+        for member in group.members.all():
+            members.append(member)
+    log(logs, members, thread.id)
 
 
-def getThreadDateTime(thread):
-    d = now
+def sendTelegramReport(thread):
+    d = date.today()
     if thread.generationTime > thread.logTime:
         d = d - timedelta(days=1)
-    return d
 
+    logs = ReportMaker(d, thread.id).message
 
-def calcMinTime(thread):
-    genTime = thread.generationTime
-    d = getThreadDateTime(thread)
-    return d.replace(hour=int(genTime[:2]), minute=int(genTime[2:]))
+    telegramAgents = []
+    groups = Group.objects.filter(thread_id=thread.id, statusUpdateEnabled=True)
+    for group in groups:
+        obj = [group.telegramBot, group.telegramGroup]
+        if obj not in telegramAgents:
+            telegramAgents.append(obj)
 
-
-def calcMaxTime(thread):
-    dueTime = thread.dueTime
-    d = getThreadDateTime(thread)
-    return d.replace(hour=int(dueTime[:2]), minute=int(dueTime[2:]))
-
-def sendReport(thread, log, MembersSentCount, d):
-    mint = calcMinTime(thread)
-    maxt = calcMaxTime(thread)
-
-    generateReport(d, log, MembersSentCount, mint, maxt, thread)
+    for agent in telegramAgents:
+        bot = telegram.Bot(token=agent[0])
+        bot.send_message(
+            chat_id=agent[1],
+            text=logs,
+            parse_mode=telegram.ParseMode.HTML
+        )
 
 
 class Command(BaseCommand):
@@ -121,22 +100,14 @@ class Command(BaseCommand):
 
             # If the group has attendance enabled
             if group.attendanceEnabled:
-
                 # generate new SSID name if refreshing is required
                 refreshSSID(group.attendanceModule)
 
-            # If the group has Status Update Enabled
-            if group.statusUpdateEnabled:
-
-                # If today is an active day
-                if day in group.thread.days:
-
-                    # If its the generation time
-                    if group.thread.generationTime == time:
-                        # generate new thread for the group
-                        generateThread(group.thread, group.email)
-
-                    # If its the logging time
-                    if group.thread.logTime == time:
-                        # log status updates from the group's thread
-                        logStatus(group.thread)
+        threads = Thread.objects.filter(isActive=True)
+        for thread in threads:
+            if thread.generationTime == time:
+                sendThreadEmail(thread)
+            if thread.logTime == time:
+                logStatus(thread)
+                if thread.enableGroupNotification:
+                    sendTelegramReport(thread)

@@ -4,8 +4,6 @@ from activity.models import *
 from .inlines import *
 from easy_select2 import select2_modelform
 from django.contrib.auth.models import User
-from django.db.models import F, ExpressionWrapper, DurationField
-import datetime
 
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin, ExportActionMixin
@@ -167,7 +165,7 @@ class GroupAdmin(admin.ModelAdmin):
         ('Status Update Management', {
             'fields': (
                 'statusUpdateEnabled',
-                ('thread', 'email'),
+                ('thread',),
             )
         }),
         ('Telegram Integration', {

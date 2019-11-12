@@ -221,11 +221,10 @@ class Group(models.Model):
     attendanceModule = models.ForeignKey(Module, on_delete=models.CASCADE, verbose_name="Attendance Module")
 
     statusUpdateEnabled = models.BooleanField(default=False, verbose_name="Status Updates Enabled")
-    thread = models.OneToOneField(StatusThread, on_delete=models.CASCADE)
-    email = models.EmailField(max_length=250, verbose_name="Email to Send Thread")
+    thread = models.ForeignKey(StatusThread, on_delete=models.CASCADE)
 
     telegramBot = models.CharField(max_length=500, verbose_name="Telegram Bot Token")
-    telegramGroup= models.CharField(max_length=250, verbose_name="Telegram Group ID")
+    telegramGroup = models.CharField(max_length=250, verbose_name="Telegram Group ID")
 
     class Meta:
         verbose_name_plural = "Groups"

@@ -13,10 +13,10 @@ from registration.schema import Mutation as registrationMutation, Query as regis
 from forms.schema import Mutation as formMutation, Query as formQuery
 import activity.schema
 import tasks.schema
-import status.schema
 
 from college.api.profile import StudentProfileObj
 from college.models import Profile as CollegeProfile
+
 
 from members.schema import Query as MembersQuery, Mutation as membersMutation
 from members.api.profile import ProfileObj
@@ -92,7 +92,6 @@ class Query(
     attendance.schema.Query,
     activity.schema.Query,
     tasks.schema.Query,
-    status.schema.Query,
     graphene.ObjectType
 ):
     user = graphene.Field(UserObj, username=graphene.String(required=True))
