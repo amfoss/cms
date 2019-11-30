@@ -1,16 +1,17 @@
 import graphene
 import graphql_jwt
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from django.utils import timezone
-from graphql_jwt.decorators import login_required
+from graphql_jwt.decorators import permission_required, login_required
 from django.contrib.auth.models import User
 from django.db.models import Avg
 
 import attendance.schema
 from college.schema import Query as collegeQuery
-from scheduler.schema import Query as schedulerQuery
+from dairy.schema import Query as dairyQuery
 from registration.schema import Mutation as registrationMutation, Query as registrationQuery
 from forms.schema import Mutation as formMutation, Query as formQuery
+from payment.schema import Query as paymentQuery
 import activity.schema
 import tasks.schema
 
@@ -24,7 +25,7 @@ from members.api.group import GroupObj
 from members.models import Profile, Group
 
 from attendance.models import Log
-from attendance.api.Log import UserAttendanceObj
+from attendance.api.log import userAttendanceObj
 
 from .api.user import UserBasicObj
 
@@ -36,7 +37,7 @@ class UserObj(UserBasicObj, graphene.ObjectType):
     profile = graphene.Field(ProfileObj)
     groups = graphene.List(GroupObj)
     attendance = graphene.Field(
-        UserAttendanceObj,
+        userAttendanceObj,
         startDate=graphene.types.datetime.Date(),
         endDate=graphene.types.datetime.Date()
     )
@@ -84,11 +85,12 @@ class UserObj(UserBasicObj, graphene.ObjectType):
 
 
 class Query(
-    schedulerQuery,
+    dairyQuery,
     MembersQuery,
     collegeQuery,
     registrationQuery,
     formQuery,
+    paymentQuery,
     attendance.schema.Query,
     activity.schema.Query,
     tasks.schema.Query,
