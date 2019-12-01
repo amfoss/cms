@@ -11,7 +11,6 @@ from college.schema import Query as collegeQuery
 from dairy.schema import Query as dairyQuery
 from registration.schema import Mutation as registrationMutation, Query as registrationQuery
 from forms.schema import Mutation as formMutation, Query as formQuery
-from payment.schema import Query as paymentQuery
 import activity.schema
 import tasks.schema
 
@@ -90,7 +89,6 @@ class Query(
     collegeQuery,
     registrationQuery,
     formQuery,
-    paymentQuery,
     attendance.schema.Query,
     activity.schema.Query,
     tasks.schema.Query,

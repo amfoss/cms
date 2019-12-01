@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'status.apps.StatusConfig',
     'registration',
     'tasks',
-    'payment'
 ]
 
 MIDDLEWARE = [
