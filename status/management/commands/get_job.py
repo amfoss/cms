@@ -11,7 +11,7 @@ from attendance.generateSSID import refreshSSID
 
 from status.fetcher import GMailFetcher
 from status.logger import log
-from crons.StatusUpdateReporter import ReportMaker
+from status.StatusUpdateReporter import ReportMaker
 from status.models import Thread
 
 to_tz = timezone.get_default_timezone()
