@@ -99,6 +99,13 @@ class Profile(models.Model):
     phone = models.CharField(max_length=12, blank=True, null=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=50, blank=True, null=True)
+    profile_pic = models.FileField(
+        upload_to=get_dp_path,
+        verbose_name='Upload Profile Pic',
+        null=True,
+        blank=True,
+        validators=[validate_file_size]
+    )
 
     # Additional Details
     githubUsername = models.CharField(max_length=50, null=True, blank=True)
