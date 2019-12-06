@@ -99,12 +99,14 @@ class Profile(models.Model):
     phone = models.CharField(max_length=12, blank=True, null=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=50, blank=True, null=True)
-    profile_pic = models.FileField(
-        upload_to=get_dp_path,
-        verbose_name='Upload Profile Pic',
-        null=True,
+    profile_pic = ProcessedImageField(
+        default='',
         blank=True,
-        validators=[validate_file_size]
+        verbose_name='Profile Picture',
+        upload_to=get_dp_path,
+        validators=[validate_file_size],
+        **processed_image_field_specs,
+        null=True,
     )
 
     # Additional Details
