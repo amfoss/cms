@@ -30,7 +30,7 @@ class ProfileAdmin(admin.ModelAdmin):
         ('Basic Details', {
             'fields': [
                 'user',
-                ('first_name', 'last_name'),
+                ('first_name', 'last_name', 'profile_pic'),
                 ('email', 'phone'),
                 ('telegram_id', 'githubUsername')
             ]
