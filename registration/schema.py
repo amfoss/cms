@@ -63,6 +63,17 @@ class submitApplication(graphene.Mutation):
                                 status=status
                             )
                             app.save()
+                            temp = Template(form.rsvpMessage)
+                            context = Context({'name': name})
+                            htmlMessage = temp.render(context)
+                            send_mail(
+                                form.rsvpSubject,
+                                strip_tags(htmlMessage),
+                                from_email,
+                                [email],
+                                html_message=htmlMessage,
+                                fail_silently=True,
+                            )
                             return responseObj(id=app.id, status=status)
                         else:
                             raise APIException('Registered already with the same email or phone number.',
