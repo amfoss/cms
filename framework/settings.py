@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'attendance',
     'activity',
     'college.apps.CollegeConfig',
-    'events',
     'dairy',
     'forms',
     'status.apps.StatusConfig',
