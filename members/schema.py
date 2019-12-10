@@ -10,6 +10,7 @@ from django.conf import settings
 
 from .api.profile import Query as profileQuery
 from .api.group import Query as groupQuery
+from .api.webspace import Query as webspaceQuery
 
 #
 #       Mutations
@@ -46,6 +47,6 @@ class Mutation(object):
 #       Queries
 #
 
-class Query(profileQuery, groupQuery):
+class Query(profileQuery, groupQuery, webspaceQuery):
     pass
 
