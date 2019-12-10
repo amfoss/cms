@@ -204,6 +204,14 @@ class MentorGroupAdmin(admin.ModelAdmin):
     mentees_display.verbose_name = 'Mentees'
 
 
+@admin.register(WebSpace)
+class WebSpaceAdmin(admin.ModelAdmin):
+    fields = ['name', ('user', 'file_name'), 'date']
+
+    list_filter = ('user',)
+    list_display = ('name', 'user', 'date')
+
+
 @admin.register(Portal)
 class PortalAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):

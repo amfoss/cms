@@ -9,6 +9,7 @@ import uuid
 from datetime import date
 from framework.validators import validate_file_size, processed_image_field_specs
 from imagekit.models import ProcessedImageField
+from django.utils import timezone
 
 SKILL_TYPES = (('T', 'Technical'), ('A', 'Arts'), ('S', 'Social'), ('P', 'Sports'), ('O', 'Others'))
 LEAVE_TYPE = (('M', 'Health'), ('F', 'Family/Home'), ('T', 'Tiredness'), ('A', 'Academics/Duty'))
@@ -273,6 +274,27 @@ class LeaveRecord(models.Model):
     def __str__(self):
         return self.member.username
 
+
+class WebSpace(models.Model):
+    def get_file_path(self, filename):
+        ext = filename.split('.')[-1]
+        filename = "%s.%s" % (uuid.uuid4(), ext)
+        return 'static/uploads/webspace/' + filename
+    name = models.CharField(max_length=20, blank=True, null=True)
+    file_name = models.FileField(upload_to=get_file_path)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE,
+        related_name='WebSpace',
+        verbose_name='User',
+    )
+    date = models.DateTimeField(verbose_name="Uploaded Time", default=timezone.now, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "Web Space"
+
+    def __str__(self):
+        return self.name
+
 __all__ = [
             'LeaveRecord',
             'MentorGroup',
@@ -285,5 +307,6 @@ __all__ = [
             'Language',
             'Skill',
             'Portal',
-            'Organization'
+            'Organization',
+            'WebSpace'
 ]
