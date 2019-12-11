@@ -15,7 +15,7 @@ import tasks.schema
 
 from college.api.profile import StudentProfileObj
 from college.models import Profile as CollegeProfile
-
+from dairy.schema import Mutation as eventMutation
 
 from members.schema import Query as MembersQuery, Mutation as membersMutation
 from members.api.profile import ProfileObj
@@ -117,7 +117,7 @@ class Query(
             return True
 
 
-class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation, graphene.ObjectType):
+class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation,eventMutation, graphene.ObjectType):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()
