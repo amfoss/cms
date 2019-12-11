@@ -13,7 +13,7 @@ class Event(models.Model):
     lastEditTime = models.DateTimeField(null=True, blank=True)
     admins = models.ManyToManyField(User, related_name='EventAdmins', blank=True)
     sharedGroups = models.ManyToManyField(Group, blank=True)
-    isPublic = models.BooleanField(default=False)
+    isPublic = models.BooleanField(default=True)
 
     startTimestamp = models.DateTimeField(verbose_name="Start Time")
     endTimestamp = models.DateTimeField(verbose_name="End Time", null=True, blank=True)
