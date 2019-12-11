@@ -15,8 +15,8 @@ class Event(models.Model):
     sharedGroups = models.ManyToManyField(Group, blank=True)
     isPublic = models.BooleanField(default=True)
 
-    startTimestamp = models.DateTimeField(verbose_name="Start Time")
-    endTimestamp = models.DateTimeField(verbose_name="End Time", null=True, blank=True)
+    startTimestamp = models.DateField(verbose_name="Start Time")
+    endTimestamp = models.DateField(verbose_name="End Time", null=True, blank=True)
     isAllDay = models.BooleanField(default=False)
     details = RichTextField(max_length=5000, null=True, blank=True)
 
