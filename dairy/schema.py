@@ -26,8 +26,8 @@ class EventObj(graphene.ObjectType):
     lastEditor = graphene.Field(UserBasicObj)
     lastEditTime = graphene.types.datetime.DateTime()
 
-    startTimestamp = graphene.types.datetime.DateTime()
-    endTimestamp = graphene.types.datetime.DateTime()
+    startTimestamp = graphene.types.datetime.Date()
+    endTimestamp = graphene.types.datetime.Date()
     details = graphene.String()
     isAllDay = graphene.Boolean()
 
@@ -54,8 +54,8 @@ class createEvent(graphene.Mutation):
     class Arguments:
         name = graphene.String()
         details = graphene.String()
-        startTimestamp = graphene.DateTime()
-        endTimestamp = graphene.DateTime()
+        startTimestamp = graphene.Date()
+        endTimestamp = graphene.Date()
 
     Output = eventObj
 
