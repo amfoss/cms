@@ -83,20 +83,18 @@ class createEvent(graphene.Mutation):
 class Query(object):
     viewEvents = graphene.List(
         EventObj,
-        startDate=graphene.types.datetime.Date(required=True),
-        endDate=graphene.types.datetime.Date(required=True)
+        startDate=graphene.types.datetime.Date(required=True)
     )
 
     @login_required
     def resolve_viewEvents(self, info, **kwargs):
         startDate = kwargs.get('startDate')
-        endDate = kwargs.get('endDate')
         user = info.context.user
         if user.is_superuser:
-            return Event.objects.values().filter((Q(startTimestamp__gte=startDate) & (Q(endTimestamp__lt=endDate) | Q(isAllDay=True))))
+            return Event.objects.values().filter((Q(startTimestamp__gte=startDate) | Q(isAllDay=True)))
         else:
             return Event.objects.values().filter(
-                (Q(startTimestamp__gte=startDate) & (Q(endTimestamp__lt=endDate) | Q(isAllDay=True)))
+                (Q(startTimestamp__gte=startDate) | Q(isAllDay=True))
                 & (Q(isPublic=True) | Q(creator=user) | Q(sharedGroups__members=user) | Q(admins=user))
             )
 
