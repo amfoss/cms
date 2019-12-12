@@ -5,6 +5,8 @@ from django.utils import timezone
 from graphql_jwt.decorators import permission_required, login_required
 from django.contrib.auth.models import User
 from django.db.models import Avg
+from django.contrib.auth import get_user_model
+from graphene_django import DjangoObjectType
 
 import attendance.schema
 from college.schema import Query as collegeQuery
@@ -12,7 +14,7 @@ from dairy.schema import Query as dairyQuery
 from registration.schema import Mutation as registrationMutation, Query as registrationQuery
 import activity.schema
 import tasks.schema
-
+from .api.APIException import APIException
 from college.api.profile import StudentProfileObj
 from college.models import Profile as CollegeProfile
 from dairy.schema import Mutation as eventMutation
@@ -27,8 +29,13 @@ from attendance.api.log import userAttendanceObj
 
 from .api.user import UserBasicObj
 
-
 to_tz = timezone.get_default_timezone()
+
+
+class UserType(DjangoObjectType):
+    class Meta:
+        model = get_user_model()
+        exclude = ('password',)
 
 
 class UserObj(UserBasicObj, graphene.ObjectType):
@@ -82,6 +89,47 @@ class UserObj(UserBasicObj, graphene.ObjectType):
             return None
 
 
+class CreateUser(graphene.Mutation):
+    user = graphene.Field(UserType)
+
+    class Arguments:
+        username = graphene.String(required=True)
+        password = graphene.String(required=True)
+        email = graphene.String(required=True)
+
+    def mutate(self, info, username, password, email):
+        newUser = get_user_model()(
+            username=username,
+            email=email,
+            is_active=False,
+        )
+        newUser.set_password(password)
+        newUser.save()
+
+        return CreateUser(user=newUser)
+
+
+class userObj(graphene.ObjectType):
+    id = graphene.String()
+
+
+class ApproveUser(graphene.Mutation):
+    class Arguments:
+        username = graphene.String(required=True)
+
+    Output = userObj
+
+    def mutate(self, info, username):
+        if info.context.user.is_superuser:
+            user = User.objects.get(username=username)
+            user.is_active = True
+            user.save()
+            return userObj(id=user.id)
+        else:
+            raise APIException('Only Superusers have access',
+                               code='ONLY_SUPERUSER_HAS_ACCESS')
+        
+
 class Query(
     dairyQuery,
     MembersQuery,
@@ -95,6 +143,7 @@ class Query(
     user = graphene.Field(UserObj, username=graphene.String(required=True))
     users = graphene.List(UserObj, sort=graphene.String())
     isClubMember = graphene.Boolean()
+    getInActiveUsers = graphene.List(UserType)
 
     def resolve_user(self, info, **kwargs):
         username = kwargs.get('username')
@@ -116,12 +165,22 @@ class Query(
         else:
             return True
 
+    def resolve_getInActiveUsers(self, info):
+        user = info.context.user
+        if user.is_superuser:
+            return User.objects.filter(is_active=False)
+        else:
+            raise APIException('Only Superusers have access',
+                               code='ONLY_SUPERUSER_HAS_ACCESS')
 
-class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation,eventMutation, graphene.ObjectType):
+
+class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation, eventMutation, graphene.ObjectType):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()
     revoke_token = graphql_jwt.Revoke.Field()
+    create_user = CreateUser.Field()
+    approve_user = ApproveUser.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
