@@ -14,6 +14,7 @@ from dairy.schema import Query as dairyQuery
 from registration.schema import Mutation as registrationMutation, Query as registrationQuery
 import activity.schema
 import tasks.schema
+import status.schema
 from .api.APIException import APIException
 from college.api.profile import StudentProfileObj
 from college.models import Profile as CollegeProfile
@@ -109,7 +110,7 @@ class CreateUser(graphene.Mutation):
         return CreateUser(user=newUser)
 
 
-class userObj(graphene.ObjectType):
+class userResponseObj(graphene.ObjectType):
     id = graphene.String()
 
 
@@ -117,14 +118,14 @@ class ApproveUser(graphene.Mutation):
     class Arguments:
         username = graphene.String(required=True)
 
-    Output = userObj
+    Output = userResponseObj
 
     def mutate(self, info, username):
         if info.context.user.is_superuser:
             user = User.objects.get(username=username)
             user.is_active = True
             user.save()
-            return userObj(id=user.id)
+            return userResponseObj(id=user.id)
         else:
             raise APIException('Only Superusers have access',
                                code='ONLY_SUPERUSER_HAS_ACCESS')
@@ -138,6 +139,7 @@ class Query(
     attendance.schema.Query,
     activity.schema.Query,
     tasks.schema.Query,
+    status.schema.Query,
     graphene.ObjectType
 ):
     user = graphene.Field(UserObj, username=graphene.String(required=True))
