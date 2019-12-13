@@ -7,6 +7,7 @@ class UserBasicObj(graphene.ObjectType):
     username = graphene.String()
     firstName = graphene.String()
     lastName = graphene.String()
+    fullName = graphene.String()
     email = graphene.String()
     avatar = graphene.Field(AvatarObj)
     isMembershipActive = graphene.Boolean()
