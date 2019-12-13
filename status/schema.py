@@ -2,12 +2,12 @@ import graphene
 from .models import *
 from datetime import date, timedelta
 from django.contrib.auth.models import User
-from .api.user import UserStatusObj
+from framework.api.user import UserBasicObj
 
 
 class MessageObj(graphene.ObjectType):
     message = graphene.String()
-    member = graphene.Field(UserStatusObj)
+    member = graphene.Field(UserBasicObj)
     date = graphene.Date()
     timestamp = graphene.DateTime()
 
