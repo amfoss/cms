@@ -1,6 +1,5 @@
 import graphene
 from .models import *
-from datetime import date, timedelta
 from django.contrib.auth.models import User
 from framework.api.user import UserBasicObj
 
@@ -22,8 +21,8 @@ class MessageObj(graphene.ObjectType):
 
 
 class Query(graphene.ObjectType):
-    getTodaysUpdates = graphene.List(MessageObj)
+    getStatusUpdates = graphene.List(MessageObj, date=graphene.types.datetime.Date(required=True))
 
-    def resolve_getTodaysUpdates(self, info):
-        d = date.today() - timedelta(days=1)
-        return Message.objects.values().filter(date=d)
+    def resolve_getStatusUpdates(self, info, **kwargs):
+        date = kwargs.get('date')
+        return Message.objects.values().filter(date=date)
