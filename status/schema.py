@@ -22,7 +22,12 @@ class MessageObj(graphene.ObjectType):
 
 class Query(graphene.ObjectType):
     getStatusUpdates = graphene.List(MessageObj, date=graphene.types.datetime.Date(required=True))
+    getMemberStatusUpdates = graphene.List(MessageObj, username=graphene.String(required=True))
 
     def resolve_getStatusUpdates(self, info, **kwargs):
         date = kwargs.get('date')
         return Message.objects.values().filter(date=date)
+
+    def resolve_getMemberStatusUpdates(self, info, **kwargs):
+        username = kwargs.get('username')
+        return Message.objects.values().filter(member__username=username)
