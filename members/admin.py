@@ -206,10 +206,10 @@ class MentorGroupAdmin(admin.ModelAdmin):
 
 @admin.register(WebSpace)
 class WebSpaceAdmin(admin.ModelAdmin):
-    fields = ['name', ('user', 'file_name'), 'date']
+    fields = [('user', 'file_name'), 'date']
 
     list_filter = ('user',)
-    list_display = ('name', 'user', 'date')
+    list_display = ('user', 'date')
 
 
 @admin.register(Portal)
