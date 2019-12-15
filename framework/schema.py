@@ -15,6 +15,7 @@ from registration.schema import Mutation as registrationMutation, Query as regis
 import activity.schema
 import tasks.schema
 import status.schema
+import password.schema
 from .api.APIException import APIException
 from college.api.profile import StudentProfileObj
 from college.models import Profile as CollegeProfile
@@ -138,6 +139,7 @@ class Query(
     registrationQuery,
     attendance.schema.Query,
     activity.schema.Query,
+    password.schema.Query,
     tasks.schema.Query,
     status.schema.Query,
     graphene.ObjectType
