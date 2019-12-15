@@ -1,23 +1,20 @@
 import graphene
-from graphql_jwt.decorators import permission_required, login_required
-from graphene_django_extras import DjangoObjectType
 from .models import *
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import check_password
-from graphene_django.filter import DjangoFilterConnectionField
 from datetime import date, datetime
 from django.conf import settings
 
 from .api.profile import Query as profileQuery
 from .api.group import Query as groupQuery
 from .api.webspace import Query as webspaceQuery
-
 #
 #       Mutations
 #
 
+
 class AtObj(graphene.ObjectType):
     id = graphene.String()
+
 
 class RecordLeaveToday(graphene.Mutation):
     class Arguments:
@@ -39,8 +36,24 @@ class RecordLeaveToday(graphene.Mutation):
         raise Exception('Invalid bot token')
 
 
+class UploadFiles(graphene.Mutation):
+    class Arguments:
+        name = graphene.String()
+
+    Output = AtObj
+
+    @classmethod
+    def mutate(cls, root, info, name):
+        files = info.context.FILES['imageFile']
+        user = info.context.user
+        ws = WebSpace.objects.create(user=user, file_name=files, name=name)
+        ws.save()
+        return AtObj(id=ws.id)
+
+
 class Mutation(object):
     RecordLeaveToday = RecordLeaveToday.Field()
+    UploadFiles = UploadFiles.Field()
 
 
 #
