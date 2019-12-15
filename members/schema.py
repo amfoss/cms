@@ -43,10 +43,10 @@ class UploadFiles(graphene.Mutation):
     Output = AtObj
 
     @classmethod
-    def mutate(cls, root, info, name):
+    def mutate(cls, root, info):
         files = info.context.FILES['imageFile']
         user = info.context.user
-        ws = WebSpace.objects.create(user=user, file_name=files, name=name)
+        ws = WebSpace.objects.create(user=user, file_name=files)
         ws.save()
         return AtObj(id=ws.id)
 

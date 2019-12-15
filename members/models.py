@@ -280,7 +280,6 @@ class WebSpace(models.Model):
         ext = filename.split('.')[-1]
         filename = "%s.%s" % (uuid.uuid4(), ext)
         return 'static/uploads/webspace/' + filename
-    name = models.CharField(max_length=20, blank=True, null=True)
     file_name = models.FileField(upload_to=get_file_path)
     user = models.OneToOneField(
         User, on_delete=models.CASCADE,
@@ -293,7 +292,7 @@ class WebSpace(models.Model):
         verbose_name_plural = "Web Space"
 
     def __str__(self):
-        return self.name
+        return self.user.username
 
 __all__ = [
             'LeaveRecord',

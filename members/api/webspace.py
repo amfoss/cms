@@ -5,13 +5,9 @@ from ..models import WebSpace
 
 
 class WebSpaceObj(graphene.ObjectType):
-    name = graphene.String()
     fileName = graphene.String()
     date = graphene.DateTime()
     user = graphene.Field(UserBasicObj)
-
-    def resolve_name(self, info):
-        return self['name']
 
     def resolve_fileName(self, info):
         return self['file_name']
@@ -30,7 +26,7 @@ class Query(object):
     )
 
     def resolve_file(self, info, **kwargs):
-        name = kwargs.get('name')
-        if name is not None:
-            return WebSpace.objects.values().get(name=name)
-        raise Exception('Name is a required parameter')
+        username = kwargs.get('username')
+        if username is not None:
+            return WebSpace.objects.values().get(user__username=username)
+        raise Exception('Username is a required parameter')
