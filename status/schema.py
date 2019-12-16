@@ -30,4 +30,4 @@ class Query(graphene.ObjectType):
 
     def resolve_getMemberStatusUpdates(self, info, **kwargs):
         username = kwargs.get('username')
-        return Message.objects.values().filter(member__username=username)
+        return reversed(Message.objects.values().filter(member__username=username))
