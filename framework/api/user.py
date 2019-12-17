@@ -1,6 +1,7 @@
 import graphene
 from members.api.profile import AvatarObj
 from members.models import Profile
+from status.models import Message
 
 
 class UserBasicObj(graphene.ObjectType):
@@ -13,6 +14,7 @@ class UserBasicObj(graphene.ObjectType):
     isMembershipActive = graphene.Boolean()
     isAdmin = graphene.Boolean()
     joinDateTime = graphene.types.datetime.DateTime()
+    statusUpdateCount = graphene.Int()
 
     def resolve_firstName(self, info):
         return self['first_name']
@@ -34,3 +36,6 @@ class UserBasicObj(graphene.ObjectType):
 
     def resolve_avatar(self, info):
         return Profile.objects.values().get(user__username=self['username'])
+
+    def resolve_statusUpdateCount(self, info):
+        return Message.objects.values().filter(member__username=self['username']).count()
