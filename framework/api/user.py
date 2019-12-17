@@ -15,6 +15,7 @@ class UserBasicObj(graphene.ObjectType):
     isAdmin = graphene.Boolean()
     joinDateTime = graphene.types.datetime.DateTime()
     statusUpdateCount = graphene.Int()
+    lastStatusUpdate = graphene.Date()
 
     def resolve_firstName(self, info):
         return self['first_name']
@@ -39,3 +40,6 @@ class UserBasicObj(graphene.ObjectType):
 
     def resolve_statusUpdateCount(self, info):
         return Message.objects.values().filter(member__username=self['username']).count()
+
+    def resolve_lastStatusUpdate(self, info):
+        return Message.objects.values().filter(member__username=self['username']).order_by('-date').first()['date']
