@@ -1,3 +1,5 @@
+from datetime import timedelta, date
+from django.db.models import Count
 import graphene
 from graphql_jwt.decorators import login_required
 
@@ -62,6 +64,26 @@ class dailyStatusObj(graphene.ObjectType):
         return usernames
 
 
+class userStatusStatObj(graphene.ObjectType):
+    user = graphene.Field(UserBasicObj)
+    statusCount = graphene.String()
+
+    def resolve_user(self, info):
+        return User.objects.values().get(id=self['member'])
+
+
+class clubStatusObj(graphene.ObjectType):
+    memberStats = graphene.List(userStatusStatObj, order=graphene.String())
+
+    def resolve_memberStats(self, info, **kwargs):
+        order = kwargs.get('order')
+        if order is None:
+            order = '-statusCount'
+        return self['messages'].values('member').annotate(
+            statusCount=Count('member')
+        ).order_by(order)
+
+
 class Query(graphene.ObjectType):
     getStatusUpdates = graphene.List(MessageObj, date=graphene.types.datetime.Date(required=True))
     getMemberStatusUpdates = graphene.List(MessageObj, username=graphene.String(required=True))
@@ -69,6 +91,10 @@ class Query(graphene.ObjectType):
         dailyStatusObj,
         date=graphene.types.datetime.Date(required=True)
     )
+    clubStatusUpdate = graphene.Field(clubStatusObj,
+                                      startDate=graphene.types.datetime.Date(required=True),
+                                      endDate=graphene.types.datetime.Date()
+                                      )
 
     @login_required
     def resolve_getStatusUpdates(self, info, **kwargs):
@@ -83,3 +109,23 @@ class Query(graphene.ObjectType):
     @login_required
     def resolve_dailyStatusUpdates(self, info, **kwargs):
         return kwargs.get('date')
+
+    @login_required
+    def resolve_clubStatusUpdate(self, info, **kwargs):
+        start = kwargs.get('startDate')
+        end = kwargs.get('endDate')
+        messages = Message.objects.all()
+        if start is not None:
+            messages = messages.filter(date__gte=start)
+        else:
+            raise Exception('Start date required')
+        if end is not None:
+            messages = messages.filter(date__lte=end)
+        else:
+            end = date.today()
+        data = {
+            'messages': messages,
+            'start': start,
+            'end': end
+        }
+        return data
