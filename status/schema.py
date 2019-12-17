@@ -34,7 +34,7 @@ class memberDidNotSendObj(graphene.ObjectType):
     member = graphene.Field(UserBasicObj)
 
     def resolve_member(self, info):
-        return User.objects.values().get(id=self['member_id'])
+        return User.objects.values().get(username=self)
 
 
 class dailyStatusObj(graphene.ObjectType):
