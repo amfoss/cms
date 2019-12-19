@@ -69,7 +69,7 @@ class submitApplication(graphene.Mutation):
                             )
                             app.save()
                             temp = Template(form.rsvpMessage)
-                            context = Context({'name': name})
+                            context = Context({'name': name, 'hash': hash})
                             htmlMessage = temp.render(context)
                             send_mail(
                                 form.rsvpSubject,
