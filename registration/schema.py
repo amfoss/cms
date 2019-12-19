@@ -97,7 +97,6 @@ class submitApplication(graphene.Mutation):
 class rsvpResponseObj(graphene.ObjectType):
     status = graphene.String()
 
-
 class submitRSVP(graphene.Mutation):
     class Arguments:
         response = graphene.Boolean(required=True)
@@ -105,10 +104,11 @@ class submitRSVP(graphene.Mutation):
         formID = graphene.Int(required=True)
         phone = graphene.String(required=True)
         formData = graphene.types.JSONString()
+        details = graphene.String()
 
     Output = rsvpResponseObj
 
-    def mutate(self, info, response, hash, formID, phone=None, formData=None):
+    def mutate(self, info, response, hash, formID, details, phone=None, formData=None):
         form = Form.objects.get(id=formID)
         if form:
             formHash = form.formHash
@@ -119,6 +119,7 @@ class submitRSVP(graphene.Mutation):
                 hexHash = hashStrEncoded.hexdigest()
                 if hash == hexHash:
                     application.rsvp = response
+                    application.details = details
                     application.save()
                     return rsvpResponseObj(status='success')
                 else:
