@@ -42,6 +42,7 @@ class submitApplication(graphene.Mutation):
 
     def mutate(self, info, formID, name, email=None, phone=None, formData=None):
         form = Form.objects.get(id=formID)
+        formHash = form.formHash
         if form.isActive:
             if form.submissionDeadline is None or datetime.now() < form.submissionDeadline:
                 regCount = Application.objects.filter(form_id=formID).count()
@@ -53,6 +54,9 @@ class submitApplication(graphene.Mutation):
                         apps = Application.objects.filter((Q(email=email) & Q(phone=phone)) & Q(form_id=formID))
                         apps.count()
                         if form.allowMultiple or apps.count() == 0:
+                            str = formHash + phone
+                            hashEncoded = hashlib.md5(str.encode())
+                            hash = hashEncoded.hexdigest()
                             app = Application.objects.create(
                                 name=name,
                                 submissionTime=datetime.now(),
@@ -60,6 +64,7 @@ class submitApplication(graphene.Mutation):
                                 email=email,
                                 phone=phone,
                                 formData=formData,
+                                hash=hash,
                                 status=status
                             )
                             app.save()
