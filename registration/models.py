@@ -40,6 +40,7 @@ class Application(models.Model):
     checkIn = models.BooleanField(blank=True, null=True)
     checkInTime = models.DateTimeField(blank=True, null=True)
     checkedInBy = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
+    details = models.CharField(max_length=200, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Applications"

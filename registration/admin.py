@@ -61,7 +61,7 @@ class ApplicationAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdm
                 'name',
                 ('form', 'submissionTime'),
                 ('email', 'phone'),
-                'hash'
+                'hash', 'details'
             ]
         }),
         ('Form Fields', {
