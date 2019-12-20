@@ -191,6 +191,7 @@ class applicationObj(graphene.ObjectType):
     phone = graphene.String()
     email = graphene.String()
     formData = graphene.List(formDataObj)
+    details = graphene.String()
 
     def resolve_formData(self, info):
         list = []
