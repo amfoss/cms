@@ -28,6 +28,7 @@ class EntryObj(graphene.ObjectType):
     phone = graphene.String()
     email = graphene.String()
     formData = graphene.List(FormDataObj)
+    details = graphene.String()
 
     def resolve_submissionTime(self, info):
         return self['submissionTime'].astimezone(to_tz)
