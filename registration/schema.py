@@ -11,6 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.template import Template, Context
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives, send_mail
+from .api.viewEntries import Query as viewEntriesQuery
 
 from framework import settings
 
@@ -217,7 +218,7 @@ class applicationsListObj(graphene.ObjectType):
         return self
 
 
-class Query(object):
+class Query(viewEntriesQuery, object):
     registrationForm = graphene.Field(formDetailsObj, formID=graphene.Int())
     viewApplications = graphene.Field(applicationsListObj, formID=graphene.Int())
     sendRSVPEmail = graphene.Field(rsvpResponseObj, applicationID=graphene.Int())

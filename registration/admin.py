@@ -25,6 +25,7 @@ class FormAdmin(ImportExportModelAdmin, ExportActionMixin,admin.ModelAdmin):
         }),
         ('Control Centre', {
             'fields': [
+                        'admins',
                         ('isActive', 'enableCheckIn')
             ]
         }),
