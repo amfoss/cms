@@ -24,7 +24,7 @@ class FormObj(graphene.ObjectType):
     isActive = graphene.Boolean()
     allowMultiple = graphene.Boolean()
     submissionDeadline = graphene.types.datetime.DateTime()
-    admissionLimit = graphene.Int()
+    applicationLimit = graphene.Int()
     entriesCount = graphene.Int()
     fields = graphene.List(FormFieldObj)
 
