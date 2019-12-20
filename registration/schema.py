@@ -12,6 +12,7 @@ from django.template import Template, Context
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives, send_mail
 from .api.viewEntries import Query as viewEntriesQuery
+from .api.Form import Query as formQuery
 
 from framework import settings
 
@@ -218,7 +219,7 @@ class applicationsListObj(graphene.ObjectType):
         return self
 
 
-class Query(viewEntriesQuery, object):
+class Query(viewEntriesQuery, formQuery,  object):
     registrationForm = graphene.Field(formDetailsObj, formID=graphene.Int())
     viewApplications = graphene.Field(applicationsListObj, formID=graphene.Int())
     sendRSVPEmail = graphene.Field(rsvpResponseObj, applicationID=graphene.Int())
