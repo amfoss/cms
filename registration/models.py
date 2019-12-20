@@ -6,6 +6,10 @@ APPLICATION_STATUS = (('A', 'Accepted'), ('R', 'Rejected'), ('W', 'Waitlisted'),
 ONFILL_OPTIONS = (('W', 'Waitlist'), ('D', 'Don\'t Accept'))
 
 
+def get_first_user():
+    return User.objects.first()
+
+
 class Form(models.Model):
     name = models.CharField(max_length=100, verbose_name='Name of the Form')
     isActive = models.BooleanField(default=True, verbose_name='Is Active?')
@@ -18,6 +22,7 @@ class Form(models.Model):
     rsvpSubject = models.TextField(blank=True, null=True)
     rsvpMessage = RichTextField(max_length=5000, verbose_name="RSVP Email Message")
     enableCheckIn = models.BooleanField(default=False, verbose_name="Enable Check-In")
+    admins = models.ManyToManyField(User, related_name='formAdmins', blank=True, default=get_first_user)
 
     class Meta:
         verbose_name_plural = "Forms"
