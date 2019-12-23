@@ -1,21 +1,9 @@
 import graphene
 from graphql_jwt.decorators import login_required
 
-from framework.api.APIException import APIException
 from .models import *
 from framework.api.user import UserBasicObj
 from django.db.models import F
-
-
-class PasswordLoginObj(graphene.ObjectType):
-    name = graphene.String()
-    url = graphene.String()
-
-    def resolve_name(self, info):
-        return self['name']
-
-    def resolve_url(self, info):
-        return self['url']
 
 
 class PasswordObj(graphene.ObjectType):
@@ -53,8 +41,7 @@ class PasswordObj(graphene.ObjectType):
 
 
 class Query(object):
-    viewAccounts = graphene.List(PasswordLoginObj)
-    viewAccount = graphene.Field(PasswordObj, name=graphene.String(required=True), key=graphene.String(required=True))
+    viewAccounts = graphene.List(PasswordObj)
 
     @login_required
     def resolve_viewAccounts(self, info):
@@ -63,19 +50,3 @@ class Query(object):
             return Password.objects.values().all().order_by('-id')
         else:
             return Password.objects.values().filter(admins=user).order_by('-id')
-
-    @login_required
-    def resolve_viewAccount(self, info, **kwargs):
-        name = kwargs.get('name')
-        key = kwargs.get('key')
-        password = Password.objects.get(name=name)
-        user = info.context.user
-        if user in password.admins.all() or user.is_superuser:
-            if key == password.key:
-                return Password.objects.values().get(name=name)
-            else:
-                raise APIException('Please enter the valid key',
-                                   code='WRONG_KEY')
-        else:
-            raise APIException('Only Admins have access',
-                               code='ONLY_ADMINS_HAS_ACCESS')

@@ -9,7 +9,6 @@ class Password(models.Model):
     details = models.TextField(blank=True, null=True)
     url = models.CharField(max_length=200, blank=True, null=True)
     admins = models.ManyToManyField(User, related_name='admins')
-    key = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Passwords"
