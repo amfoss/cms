@@ -41,22 +41,18 @@ class memberDidNotSendObj(graphene.ObjectType):
 
 class dailyStatusObj(graphene.ObjectType):
     date = graphene.types.datetime.Date()
-    membersSentCount = graphene.Int()
     membersSent = graphene.List(memberSentObj)
     memberDidNotSend = graphene.List(memberDidNotSendObj)
 
     def resolve_date(self, info):
-        return self['date']
-
-    def resolve_membersSentCount(self, info):
-        return len(self['message'])
+        return self
 
     def resolve_membersSent(self, info):
-        return Message.objects.values().filter(date=self['date'])
+        return Message.objects.values().filter(date=self)
 
     def resolve_memberDidNotSend(self, info):
         groups = Group.objects.filter(statusUpdateEnabled=True).values('members__username')
-        messages = Message.objects.values('member__username').filter(date=self['date'])
+        messages = Message.objects.values('member__username').filter(date=self)
         LogUsernames = []
         for i in messages:
             LogUsernames.append(i['member__username'])
@@ -66,6 +62,17 @@ class dailyStatusObj(graphene.ObjectType):
             if username not in LogUsernames:
                 usernames.append(username)
         return usernames
+
+
+class dailyStatusUpdateObj(graphene.ObjectType):
+    date = graphene.types.datetime.Date()
+    membersSentCount = graphene.Int()
+
+    def resolve_date(self, info):
+        return self['date']
+
+    def resolve_membersSentCount(self, info):
+        return len(self['message'])
 
 
 class userStatusStatObj(graphene.ObjectType):
@@ -78,7 +85,7 @@ class userStatusStatObj(graphene.ObjectType):
 
 class clubStatusObj(graphene.ObjectType):
     memberStats = graphene.List(userStatusStatObj, order=graphene.String())
-    dailyLog = graphene.List(dailyStatusObj)
+    dailyLog = graphene.List(dailyStatusUpdateObj)
 
     def resolve_memberStats(self, info, **kwargs):
         order = kwargs.get('order')
