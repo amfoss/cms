@@ -1,6 +1,8 @@
 import graphene
 import graphql_jwt
 from datetime import date, datetime, timedelta
+
+from django.contrib.auth.hashers import check_password
 from django.utils import timezone
 from graphql_jwt.decorators import permission_required, login_required
 from django.contrib.auth.models import User
@@ -130,7 +132,31 @@ class ApproveUser(graphene.Mutation):
         else:
             raise APIException('Only Superusers have access',
                                code='ONLY_SUPERUSER_HAS_ACCESS')
-        
+
+
+class userChangePasswordObj(graphene.ObjectType):
+    status = graphene.String()
+
+
+class ChangePassword(graphene.Mutation):
+    class Arguments:
+        password = graphene.String(required=True)
+        newPassword = graphene.String(required=True)
+
+    Output = userChangePasswordObj
+
+    def mutate(self, info, password, newPassword):
+        infoUser = info.context.user
+        user = User.objects.values().get(username=infoUser)
+        match = check_password(password, user['password'])
+        if match:
+            infoUser.set_password(newPassword)
+            infoUser.save()
+            return userChangePasswordObj(status=True)
+        else:
+            raise APIException('Wrong Password',
+                               code='WRONG_PASSWORD')
+
 
 class Query(
     dairyQuery,
@@ -185,6 +211,7 @@ class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation
     revoke_token = graphql_jwt.Revoke.Field()
     create_user = CreateUser.Field()
     approve_user = ApproveUser.Field()
+    change_password = ChangePassword.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
