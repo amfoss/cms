@@ -41,13 +41,31 @@ class memberDidNotSendObj(graphene.ObjectType):
 
 class dailyStatusObj(graphene.ObjectType):
     date = graphene.types.datetime.Date()
-    membersSent = graphene.Int()
+    membersSentCount = graphene.Int()
+    membersSent = graphene.List(memberSentObj)
+    memberDidNotSend = graphene.List(memberDidNotSendObj)
 
     def resolve_date(self, info):
         return self['date']
 
-    def resolve_membersSent(self, info):
+    def resolve_membersSentCount(self, info):
         return len(self['message'])
+
+    def resolve_membersSent(self, info):
+        return Message.objects.values().filter(date=self['date'])
+
+    def resolve_memberDidNotSend(self, info):
+        groups = Group.objects.filter(statusUpdateEnabled=True).values('members__username')
+        messages = Message.objects.values('member__username').filter(date=self['date'])
+        LogUsernames = []
+        for i in messages:
+            LogUsernames.append(i['member__username'])
+        usernames = []
+        for member in groups:
+            username = member['members__username']
+            if username not in LogUsernames:
+                usernames.append(username)
+        return usernames
 
 
 class userStatusStatObj(graphene.ObjectType):
