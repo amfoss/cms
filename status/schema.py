@@ -41,27 +41,13 @@ class memberDidNotSendObj(graphene.ObjectType):
 
 class dailyStatusObj(graphene.ObjectType):
     date = graphene.types.datetime.Date()
-    membersSent = graphene.List(memberSentObj)
-    memberDidNotSend = graphene.List(memberDidNotSendObj)
+    membersSent = graphene.Int()
 
     def resolve_date(self, info):
-        return self
+        return self['date']
 
     def resolve_membersSent(self, info):
-        return Message.objects.values().filter(date=self)
-
-    def resolve_memberDidNotSend(self, info):
-        groups = Group.objects.filter(statusUpdateEnabled=True).values('members__username')
-        messages = Message.objects.values('member__username').filter(date=self)
-        LogUsernames = []
-        for i in messages:
-            LogUsernames.append(i['member__username'])
-        usernames = []
-        for member in groups:
-            username = member['members__username']
-            if username not in LogUsernames:
-                usernames.append(username)
-        return usernames
+        return len(self['message'])
 
 
 class userStatusStatObj(graphene.ObjectType):
@@ -74,6 +60,7 @@ class userStatusStatObj(graphene.ObjectType):
 
 class clubStatusObj(graphene.ObjectType):
     memberStats = graphene.List(userStatusStatObj, order=graphene.String())
+    dailyLog = graphene.List(dailyStatusObj)
 
     def resolve_memberStats(self, info, **kwargs):
         order = kwargs.get('order')
@@ -82,6 +69,17 @@ class clubStatusObj(graphene.ObjectType):
         return self['messages'].values('member').annotate(
             statusCount=Count('member')
         ).order_by(order)
+
+    def resolve_dailyLog(self, info):
+        sdate = self['start']
+        delta = self['end'] - sdate
+        days = []
+        for i in range(delta.days + 1):
+            days.append(sdate + timedelta(days=i))
+        messages = []
+        for day in days:
+            messages.append({"date": day, "message": self['messages'].filter(date=day)})
+        return messages
 
 
 class Query(graphene.ObjectType):
