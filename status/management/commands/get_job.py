@@ -13,6 +13,8 @@ from status.fetcher import GMailFetcher
 from status.logger import log
 from status.StatusUpdateReporter import ReportMaker
 from status.models import Thread
+from utilities.models import Mailer
+from registration.models import Application
 
 to_tz = timezone.get_default_timezone()
 
@@ -111,3 +113,18 @@ class Command(BaseCommand):
                 logStatus(thread)
                 if thread.enableGroupNotification:
                     sendTelegramReport(thread)
+
+        mails = Mailer.objects.all()
+        for mail in mails:
+            if date.today() == mail.generationEmailDate and mail.generationEmailTime == time:
+                applications = Application.objects.values().filter(form=mail.form)
+                for application in applications:
+                    send_mail(
+                        mail.subject,
+                        strip_tags(mail.threadMessage),
+                        from_email,
+                        [application['email']],
+                        html_message=mail.threadMessage,
+                        fail_silently=False,
+                    )
+

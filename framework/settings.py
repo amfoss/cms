@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'status.apps.StatusConfig',
     'registration',
     'tasks',
-    'password.apps.PasswordConfig'
+    'password.apps.PasswordConfig',
+    'utilities'
 ]
 
 MIDDLEWARE = [
