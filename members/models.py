@@ -278,7 +278,6 @@ class LeaveRecord(models.Model):
 class WebSpace(models.Model):
     def get_file_path(self, filename):
         return 'static/uploads/webspace/' + filename
-    name = models.CharField(max_length=20)
     file_name = models.FileField(upload_to=get_file_path)
     user = models.OneToOneField(
         User, on_delete=models.CASCADE,
