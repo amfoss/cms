@@ -17,6 +17,10 @@ class AtObj(graphene.ObjectType):
     id = graphene.String()
 
 
+class UploadFileObj(graphene.ObjectType):
+    fileName = graphene.String()
+
+
 class RecordLeaveToday(graphene.Mutation):
     class Arguments:
         user_id = graphene.String(required=True)
@@ -38,7 +42,7 @@ class RecordLeaveToday(graphene.Mutation):
 
 
 class UploadFiles(graphene.Mutation):
-    Output = AtObj
+    Output = UploadFileObj
 
     @login_required
     def mutate(self, info):
@@ -47,7 +51,7 @@ class UploadFiles(graphene.Mutation):
         ws = WebSpace.objects.create(user=user, file_name=files)
         ws.save()
 
-        return AtObj(id=ws.id)
+        return UploadFileObj(fileName=ws.file_name)
 
 
 class Mutation(object):

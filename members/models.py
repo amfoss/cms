@@ -279,18 +279,14 @@ class WebSpace(models.Model):
     def get_file_path(self, filename):
         return 'static/uploads/webspace/' + filename
     file_name = models.FileField(upload_to=get_file_path)
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         User, on_delete=models.CASCADE,
-        related_name='WebspaceUser',
-        verbose_name='User',
     )
     date = models.DateTimeField(verbose_name="Uploaded Time", default=timezone.now, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Web Space"
 
-    def __str__(self):
-        return self.user.username
 
 __all__ = [
             'LeaveRecord',
