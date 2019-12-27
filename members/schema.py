@@ -7,6 +7,7 @@ from django.conf import settings
 from .api.profile import Query as profileQuery
 from .api.group import Query as groupQuery
 from .api.webspace import Query as webspaceQuery
+from graphql_jwt.decorators import login_required
 #
 #       Mutations
 #
@@ -37,13 +38,18 @@ class RecordLeaveToday(graphene.Mutation):
 
 
 class UploadFiles(graphene.Mutation):
+    class Arguments:
+        name = graphene.String(required=True)
+
     Output = AtObj
 
-    @classmethod
-    def mutate(cls, root, info):
+    @login_required
+    def mutate(self, info, name=None):
+        user = info.context.user
         files = info.context.FILES['imageFile']
-        ws = WebSpace.objects.create(file_name=files)
+        ws = WebSpace.objects.create(name=name, user=user, file_name=files)
         ws.save()
+
         return AtObj(id=ws.id)
 
 
