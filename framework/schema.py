@@ -158,6 +158,52 @@ class ChangePassword(graphene.Mutation):
                                code='WRONG_PASSWORD')
 
 
+class UpdateProfile(graphene.Mutation):
+    class Arguments:
+        username = graphene.String()
+        firstName = graphene.String()
+        lastName = graphene.String()
+        email = graphene.String()
+        phoneNo = graphene.String()
+        telegramID = graphene.String()
+        githubUsername = graphene.String()
+        roll = graphene.String()
+        batch = graphene.String()
+        about = graphene.String()
+
+    Output = userResponseObj
+
+    def mutate(self, info, username=None, firstName=None, lastName=None, email=None, phoneNo=None, telegramID=None, githubUsername=None, roll=None, batch=None, about=None):
+        user = info.context.user
+        profile = Profile.objects.get(user=user)
+        if username is not None:
+            user.username = username
+        if firstName is not None:
+            user.first_name = firstName
+            profile.first_name = firstName
+        if lastName is not None:
+            user.last_name = lastName
+            profile.last_name = lastName
+        if email is not None:
+            user.email = email
+            profile.email = email
+        if phoneNo is not None:
+            profile.phone = phoneNo
+        if telegramID is not None:
+            profile.telegram_id = telegramID
+        if githubUsername is not None:
+            profile.githubUsername = githubUsername
+        if roll is not None:
+            profile.roll_number = roll
+        if batch is not None:
+            profile.batch = batch
+        if about is not None:
+            profile.about = about
+        user.save()
+        profile.save()
+        return userResponseObj(id=user.id)
+
+
 class Query(
     dairyQuery,
     MembersQuery,
@@ -212,6 +258,7 @@ class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation
     create_user = CreateUser.Field()
     approve_user = ApproveUser.Field()
     change_password = ChangePassword.Field()
+    UpdateProfile = UpdateProfile.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
