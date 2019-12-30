@@ -168,7 +168,7 @@ class UpdateProfile(graphene.Mutation):
         telegramID = graphene.String()
         githubUsername = graphene.String()
         roll = graphene.String()
-        batch = graphene.String()
+        batch = graphene.Int()
         about = graphene.String()
 
     Output = userResponseObj
