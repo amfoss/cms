@@ -44,13 +44,13 @@ class ReportMaker(object):
     def getBatchName(y):
         now = datetime.now()
         year = int(now.strftime("%Y"))
-        if y == year:
+        if y + 1 == year:
             return 'First Year Batch'
-        elif y + 1 == year:
-            return 'Second Year Batch'
         elif y + 2 == year:
-            return 'Third Year Batch'
+            return 'Second Year Batch'
         elif y + 3 == year:
+            return 'Third Year Batch'
+        elif y + 4 == year:
             return 'Fourth Year Batch'
 
     @staticmethod
