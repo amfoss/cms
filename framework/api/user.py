@@ -1,6 +1,7 @@
 import graphene
 from members.api.profile import AvatarObj
 from members.models import Profile
+from members.api.profile import ProfileObj
 from status.models import Message
 from college.models import Profile as CollegeProfile
 
@@ -18,6 +19,7 @@ class UserBasicObj(graphene.ObjectType):
     statusUpdateCount = graphene.Int()
     lastStatusUpdate = graphene.Date()
     admissionYear = graphene.Int()
+    profile = graphene.Field(ProfileObj)
 
     def resolve_firstName(self, info):
         return self['first_name']
@@ -48,3 +50,6 @@ class UserBasicObj(graphene.ObjectType):
 
     def resolve_admissionYear(self, info):
         return CollegeProfile.objects.values().get(user__username=self['username'])['admissionYear']
+
+    def resolve_profile(self, info):
+        return Profile.objects.values().get(user__username=self['username'])
