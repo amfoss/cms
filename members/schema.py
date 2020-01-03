@@ -41,6 +41,20 @@ class RecordLeaveToday(graphene.Mutation):
         raise Exception('Invalid bot token')
 
 
+class UpdateProfilePic(graphene.Mutation):
+    Output = UploadFileObj
+
+    @login_required
+    def mutate(self, info):
+        user = info.context.user
+        profilePic = info.context.FILES['imageFile']
+        profile = Profile.objects.get(user=user)
+        profile.profile_pic = profilePic
+        profile.save()
+
+        return UploadFileObj(fileName=profile.profile_pic)
+
+
 class UploadFiles(graphene.Mutation):
     Output = UploadFileObj
 
@@ -57,6 +71,7 @@ class UploadFiles(graphene.Mutation):
 class Mutation(object):
     RecordLeaveToday = RecordLeaveToday.Field()
     UploadFiles = UploadFiles.Field()
+    UpdateProfilePic = UpdateProfilePic.Field()
 
 
 #
