@@ -30,7 +30,7 @@ class ProfileObj(graphene.ObjectType):
     links = graphene.List(SocialProfileObj)
     githubUsername = graphene.String()
     # fields that require login
-    profile_pic = graphene.String()
+    profilePic = graphene.String()
     phone = graphene.String()
     birthDay = graphene.types.datetime.Date()
     telegramID = graphene.String()
