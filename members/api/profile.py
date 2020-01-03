@@ -61,6 +61,9 @@ class ProfileObj(graphene.ObjectType):
     def resolve_githubUsername(self, info):
         return self['githubUsername']
 
+    def resolve_profilePic(self, info):
+        return self['profile_pic']
+
     @login_required
     def resolve_birthDay(self, info):
         return self['birthday']
