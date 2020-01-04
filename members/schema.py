@@ -56,13 +56,16 @@ class UpdateProfilePic(graphene.Mutation):
 
 
 class UploadFiles(graphene.Mutation):
+    class Arguments:
+        name = graphene.String()
+
     Output = UploadFileObj
 
     @login_required
-    def mutate(self, info):
+    def mutate(self, info, name):
         user = info.context.user
         files = info.context.FILES['imageFile']
-        ws = WebSpace.objects.create(user=user, file_name=files)
+        ws = WebSpace.objects.create(name=name, user=user, file_name=files)
         ws.save()
 
         return UploadFileObj(fileName=ws.file_name)

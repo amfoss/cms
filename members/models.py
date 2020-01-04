@@ -278,6 +278,8 @@ class LeaveRecord(models.Model):
 class WebSpace(models.Model):
     def get_file_path(self, filename):
         return 'static/uploads/webspace/' + filename
+
+    name = models.CharField(max_length=20, null=True, blank=True)
     file_name = models.FileField(upload_to=get_file_path)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE,
@@ -286,6 +288,9 @@ class WebSpace(models.Model):
 
     class Meta:
         verbose_name_plural = "Web Space"
+
+    def __str__(self):
+        return self.name
 
 
 __all__ = [
