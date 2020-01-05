@@ -80,7 +80,7 @@ class ReportMaker(object):
     def getMemberLastSend(self, member):
         obj = DailyLog.objects.filter(thread=self.thread, members=member, date__lt=self.date).exclude(didNotSend=member).order_by('-date').first()
         if obj:
-            return Message.objects.get(thread=self.thread, member=member, date=obj.date).timestamp
+            return Message.objects.filter(thread=self.thread, member=member, date=obj.date)[0].timestamp
         else:
             return None
 
