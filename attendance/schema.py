@@ -9,6 +9,7 @@ from datetime import date, datetime, timedelta
 from django.conf import settings
 from members.models import Group
 import json
+from .generatorScript import generatorScript
 
 from django.utils import timezone
 
@@ -21,6 +22,16 @@ class AttendanceLogObj(graphene.ObjectType):
     id = graphene.String()
 
 
+def update_futureSSID(futureSSID):
+    seed = 1000
+    if len(futureSSID) != 0:
+        seed = futureSSID[-1]
+    while len(futureSSID) < 10000:
+        futureSSID.append(generatorScript(seed))
+        seed = futureSSID[-1]
+    with open("futureSSID.json", "w") as file:
+        json.dump(futureSSID, file)
+
 class LogAttendance(graphene.Mutation):
     class Arguments:
         username = graphene.String(required=True)
@@ -30,6 +41,11 @@ class LogAttendance(graphene.Mutation):
     Output = AttendanceLogObj
 
     def mutate(self, info, username, password, list):
+        with open("futureSSID.json", "r") as file:
+            futureSSID = json.load(file)
+            if len(futureSSID) == 0:
+                update_futureSSID(futureSSID)
+
         time = datetime.now() - timedelta(minutes=5)
         recentLogsCount = Log.objects.filter(lastSeen__gte=time).count()
 
@@ -56,12 +72,15 @@ class LogAttendance(graphene.Mutation):
 
                         bypassSSID = 0
                         if recentLogsCount == 0:
-                            newSSID = [i for i in list if i.startswith('amFOSS_')]
+                            newSSID = [i for i in list if i.startswith('amFOSS_') and
+                                       i.strip('amFOSS_') in futureSSID]
                             if len(newSSID) > 0:
                                 bypassSSID = 1
                                 module.SSID = newSSID[0]
                                 module.seed = newSSID[0].strip('amFOSS_')
                                 module.lastRefreshTime = datetime.now()
+                                futureSSID = futureSSID[futureSSID.index(newSSID[0]):]
+                                update_futureSSID(futureSSID)
                                 module.save()
                             else:
                                 bypassSSID = 0
