@@ -41,10 +41,11 @@ class LogAttendance(graphene.Mutation):
     Output = AttendanceLogObj
 
     def mutate(self, info, username, password, list):
-        with open("futureSSID.json", "r") as file:
+        with open("attendance/futureSSID.json", "r") as file:
             futureSSID = json.load(file)
             if len(futureSSID) == 0:
                 update_futureSSID(futureSSID)
+
 
         time = datetime.now() - timedelta(minutes=5)
         recentLogsCount = Log.objects.filter(lastSeen__gte=time).count()

@@ -2,12 +2,10 @@ from datetime import timedelta, date
 from django.db.models import Count
 import graphene
 from graphql_jwt.decorators import login_required
-
 from .models import *
 from django.contrib.auth.models import User
 from framework.api.user import UserBasicObj
 from members.models import Group
-
 
 class MessageObj(graphene.ObjectType):
     message = graphene.String()
