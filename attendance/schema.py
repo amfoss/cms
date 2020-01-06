@@ -29,7 +29,7 @@ def update_futureSSID(futureSSID):
     while len(futureSSID) < 10000:
         futureSSID.append(generatorScript(seed))
         seed = futureSSID[-1]
-    with open("futureSSID.json", "w") as file:
+    with open("attendance/futureSSID.json", "w") as file:
         json.dump(futureSSID, file)
 
 class LogAttendance(graphene.Mutation):
