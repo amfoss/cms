@@ -5,6 +5,8 @@ import pytz
 from oauth2client import file, client, tools
 from apiclient import discovery
 from email.utils import parsedate_to_datetime
+from debug.models import Errors
+from datetime import datetime
 
 
 class GMailFetcher(object):
@@ -55,7 +57,6 @@ class GMailFetcher(object):
     def processMessages(self, msgs):
         log = []
         for msg in msgs:
-
             header_data = msg["payload"]["headers"]
             for data in header_data:
                 if "From" == data["name"]:
@@ -67,10 +68,17 @@ class GMailFetcher(object):
                 if "Received" == data["name"]:
                     timestamp = parsedate_to_datetime(data["value"].split(';', 1)[-1]).astimezone(
                         pytz.timezone("Asia/Calcutta"))
+            MsgB64 = ""
+            try:
+                if "parts" in msg["payload"]:
+                    MsgB64 = msg["payload"]['parts'][0]['body']['data'].replace("-", "+").replace("_", "/")
+                else:
+                    MsgB64 = msg["payload"]['body']['data'].replace("-", "+").replace("_", "/")
+            except Exception as e:
+                errorObj = Errors.objects.create(module='status', errorContent=e, timestamp=datetime.now())
+                errorObj.save()
 
-            MsgB64 = msg["payload"]['parts'][0]['body']['data'].replace("-", "+").replace("_", "/")
             Msg = base64.b64decode(bytes(MsgB64, 'UTF-8')).decode('UTF-8')
-
             Msg = "<br />".join(Msg.split("\r\n"))
             Msg = Msg.split("wrote:<br /><br />>")[0]
             Msg = Msg.rsplit("On ", 1)[0]

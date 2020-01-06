@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'registration',
     'tasks',
     'password.apps.PasswordConfig',
-    'utilities'
+    'utilities',
+    'debug'
 ]
 
 MIDDLEWARE = [
