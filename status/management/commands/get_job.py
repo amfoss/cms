@@ -74,7 +74,6 @@ def sendTelegramReport(thread):
 
     logs = ReportMaker(d, thread.id).message
     shouldKick = ReportMaker(d, thread.id).membersToBeKicked
-    print(shouldKick)
     telegramAgents = []
     groups = Group.objects.filter(thread_id=thread.id, statusUpdateEnabled=True)
     for group in groups:
@@ -89,31 +88,9 @@ def sendTelegramReport(thread):
             text=logs,
             parse_mode=telegram.ParseMode.HTML
         )
-
-        def sendTelegramReport(thread):
-            d = date.today()
-            if thread.generationTime > thread.logTime:
-                d = d - timedelta(days=1)
-
-            logs = ReportMaker(d, thread.id).message
-            shouldKick = ReportMaker(d, thread.id).membersToBeKicked
-            telegramAgents = []
-            groups = Group.objects.filter(thread_id=thread.id, statusUpdateEnabled=True)
-            for group in groups:
-                obj = [group.telegramBot, group.telegramGroup]
-                if obj not in telegramAgents:
-                    telegramAgents.append(obj)
-
-            for agent in telegramAgents:
-                bot = telegram.Bot(token=agent[0])
-                bot.send_message(
-                    chat_id=agent[1],
-                    text=logs,
-                    parse_mode=telegram.ParseMode.HTML
-                )
-                for user in shouldKick:
-                    profile = Profile.objects.get(user=user)
-                    bot.kick_chat_member(chat_id=agent[1], user_id=profile.telegram_id)
+        for user in shouldKick:
+            profile = Profile.objects.get(user=user)
+            bot.kick_chat_member(chat_id=agent[1], user_id=profile.telegram_id)
 
 
 class Command(BaseCommand):
