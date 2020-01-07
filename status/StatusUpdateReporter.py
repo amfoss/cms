@@ -12,6 +12,7 @@ class ReportMaker(object):
         self.date = d
         self.thread = Thread.objects.get(id=thread_id)
         self.message = self.generateDailyReport()
+        self.membersToBeKicked = self.kickMembers()
 
     @staticmethod
     def getPercentageSummary(send, total):
@@ -74,11 +75,19 @@ class ReportMaker(object):
             message += str(diff) + 'D'
         return message
 
+    @staticmethod
+    def getLastSend(last_send, expected_date):
+        diff = expected_date - last_send.date()
+        diff = diff.days + 1
+        return diff
+
     def getMemberLastRequiredDate(self, member):
-        return DailyLog.objects.filter(thread=self.thread, members=member, date__lt=self.date).order_by('-date').first().date
+        return DailyLog.objects.filter(thread=self.thread, members=member, date__lt=self.date).order_by(
+            '-date').first().date
 
     def getMemberLastSend(self, member):
-        obj = DailyLog.objects.filter(thread=self.thread, members=member, date__lt=self.date).exclude(didNotSend=member).order_by('-date').first()
+        obj = DailyLog.objects.filter(thread=self.thread, members=member, date__lt=self.date).exclude(
+            didNotSend=member).order_by('-date').first()
         if obj:
             return Message.objects.filter(thread=self.thread, member=member, date=obj.date)[0].timestamp
         else:
@@ -99,7 +108,7 @@ class ReportMaker(object):
             message = '\n<b>' + self.getBatchName(year) + ' (' + str(m.count()) + ')' + '</b>\n\n'
             i = 0
             for member in m:
-                i = i+1
+                i = i + 1
                 lastSend = self.getMemberLastSend(member.user)
                 message += str(i) + '. ' + self.getName(member.user)
                 if lastSend:
@@ -159,6 +168,26 @@ class ReportMaker(object):
                 message += '\n<i>' + thread.footerMessage + '</i>'
 
             return message
+
+        except ObjectDoesNotExist:
+            raise
+
+    def kickMembers(self):
+        shouldKick = []
+        date = self.date
+        thread = self.thread
+        try:
+            log = DailyLog.objects.get(date=date, thread=thread)
+            members = log.didNotSend.all()
+            for member in members:
+                lastSend = self.getMemberLastSend(member)
+                if lastSend:
+                    lastSend = self.getLastSend(lastSend,
+                                                self.getMemberLastRequiredDate(member))
+                    if lastSend > 3:
+                        shouldKick.append(member)
+
+            return shouldKick
 
         except ObjectDoesNotExist:
             raise
