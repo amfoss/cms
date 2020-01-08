@@ -16,6 +16,7 @@ from status.models import Thread
 from utilities.models import Mailer
 from registration.models import Application
 from members.models import Profile
+from status.models import StatusException
 
 to_tz = timezone.get_default_timezone()
 
@@ -88,9 +89,17 @@ def sendTelegramReport(thread):
             text=logs,
             parse_mode=telegram.ParseMode.HTML
         )
-        for user in shouldKick:
-            profile = Profile.objects.get(user=user)
-            bot.kick_chat_member(chat_id=agent[1], user_id=profile.telegram_id)
+        if thread.allowBotToKick:
+            for user in shouldKick:
+                exceptions = StatusException.objects.filter(isPaused=True)
+                for exception in exceptions:
+                    if exception.user != user:
+                        profile = Profile.objects.get(user=user)
+                        bot.kick_chat_member(chat_id=agent[1], user_id=profile.telegram_id)
+                        bot.unban_chat_member(
+                            chat_id=agent[1],
+                            user_id=profile.telegram_id
+                        )
 
 
 class Command(BaseCommand):
@@ -131,4 +140,3 @@ class Command(BaseCommand):
                         html_message=mail.threadMessage,
                         fail_silently=False,
                     )
-

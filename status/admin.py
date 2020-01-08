@@ -9,7 +9,7 @@ from import_export import resources
 class ThreadAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('name', 'isActive', 'enableGroupNotification')
+            'fields': ('name', 'isActive', 'enableGroupNotification', ('allowBotToKick', 'noOfDays'))
         }),
         ('Timings', {
             'fields': (('days', 'generationTime', 'dueTime', 'logTime'),)
@@ -21,7 +21,7 @@ class ThreadAdmin(admin.ModelAdmin):
             'fields': ('footerMessage',)
         }),
     )
-    list_display = ('name', 'isActive', 'enableGroupNotification', 'generationTime', 'dueTime', 'logTime')
+    list_display = ('name', 'isActive', 'enableGroupNotification', 'allowBotToKick', 'generationTime', 'dueTime', 'logTime')
     search_fields = ['name']
     select2 = select2_modelform(Thread, attrs={'width': '250px'})
     form = select2
@@ -37,6 +37,13 @@ class MessageAdmin(admin.ModelAdmin):
     list_display = ('member', 'date', 'timestamp', 'thread')
     search_fields = ('member__username', 'thread__name')
     filter = ('thread',)
+
+
+@admin.register(StatusException)
+class StatusExceptionAdmin(admin.ModelAdmin):
+    fields = ['user', 'isPaused']
+
+    list_display = ('user', 'isPaused')
 
 
 class DailyLogResource(resources.ModelResource):
