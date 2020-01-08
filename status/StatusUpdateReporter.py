@@ -184,7 +184,7 @@ class ReportMaker(object):
                 if lastSend:
                     lastSend = self.getLastSend(lastSend,
                                                 self.getMemberLastRequiredDate(member))
-                    if lastSend > 3:
+                    if lastSend > thread.noOfDays:
                         shouldKick.append(member)
 
             return shouldKick
