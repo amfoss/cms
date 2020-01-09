@@ -9,7 +9,7 @@ from import_export import resources
 class ThreadAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('name', 'isActive', 'enableGroupNotification', ('allowBotToKick', 'noOfDays'))
+            'fields': ('name', 'isActive', 'enableGroupNotification', 'allowBotToKick', 'noOfDays')
         }),
         ('Timings', {
             'fields': (('days', 'generationTime', 'dueTime', 'logTime'),)

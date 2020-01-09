@@ -23,10 +23,11 @@ class Thread(models.Model):
     name = models.CharField(max_length=200,  verbose_name="Name of Thread")
     isActive = models.BooleanField(verbose_name="Is Thread Active", default=True)
     enableGroupNotification = models.BooleanField(verbose_name="Should Send Report to Group?", default=True)
-    allowBotToKick = models.BooleanField(verbose_name="Should bot kick members who didn't send updates?", default=True)
+    allowBotToKick = models.BooleanField(verbose_name="Should bot kick members ?", default=True)
     noOfDays = models.IntegerField(verbose_name="Kick members after how many days ?", default=3, blank=True)
     email = models.EmailField(max_length=250, verbose_name="Thread Email")
-    days = models.CharField(max_length=50, null=True, blank=True, verbose_name="Days # to be active, leave blank for all days")
+    days = models.CharField(max_length=50, null=True, blank=True, verbose_name="Days # to be active, leave blank for "
+                                                                               "all days")
     generationTime = models.CharField(max_length=50, verbose_name="Generation Time")
     dueTime = models.CharField(max_length=50, verbose_name="Due Time")
     logTime = models.CharField(max_length=50, verbose_name="Log Time")

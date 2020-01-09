@@ -74,7 +74,6 @@ def sendTelegramReport(thread):
         d = d - timedelta(days=1)
 
     logs = ReportMaker(d, thread.id).message
-    shouldKick = ReportMaker(d, thread.id).membersToBeKicked
     telegramAgents = []
     groups = Group.objects.filter(thread_id=thread.id, statusUpdateEnabled=True)
     for group in groups:
@@ -89,17 +88,33 @@ def sendTelegramReport(thread):
             text=logs,
             parse_mode=telegram.ParseMode.HTML
         )
-        if thread.allowBotToKick:
-            for user in shouldKick:
-                exceptions = StatusException.objects.filter(isPaused=True)
-                for exception in exceptions:
-                    if exception.user != user:
-                        profile = Profile.objects.get(user=user)
-                        bot.kick_chat_member(chat_id=agent[1], user_id=profile.telegram_id)
-                        bot.unban_chat_member(
-                            chat_id=agent[1],
-                            user_id=profile.telegram_id
-                        )
+
+
+def kickMembersFromGroup(thread):
+    d = date.today()
+    if thread.generationTime > thread.logTime:
+        d = d - timedelta(days=1)
+
+    shouldKick = ReportMaker(d, thread.id).membersToBeKicked
+    telegramAgents = []
+    groups = Group.objects.filter(thread_id=thread.id, statusUpdateEnabled=True)
+    for group in groups:
+        obj = [group.telegramBot, group.telegramGroup]
+        if obj not in telegramAgents:
+            telegramAgents.append(obj)
+
+    for agent in telegramAgents:
+        bot = telegram.Bot(token=agent[0])
+        for user in shouldKick:
+            exceptions = StatusException.objects.filter(isPaused=True)
+            for exception in exceptions:
+                if exception.user != user:
+                    profile = Profile.objects.get(user=user)
+                    bot.kick_chat_member(chat_id=agent[1], user_id=profile.telegram_id)
+                    bot.unban_chat_member(
+                        chat_id=agent[1],
+                        user_id=profile.telegram_id
+                    )
 
 
 class Command(BaseCommand):
@@ -126,6 +141,8 @@ class Command(BaseCommand):
                 logStatus(thread)
                 if thread.enableGroupNotification:
                     sendTelegramReport(thread)
+                if thread.allowBotToKick:
+                    kickMembersFromGroup(thread)
 
         mails = Mailer.objects.all()
         for mail in mails:
