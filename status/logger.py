@@ -14,7 +14,7 @@ def log(data, members, thread_id):
             timestamp = dateutil.parser.parse(entry['timestamp'])
             logDate = dateutil.parser.parse(entry['date']).date()
 
-            if entry['to'] == thread.email and entry['CCemail'] == thread.email:
+            if entry['to'] == thread.email:
                 msgObj, msgCreated = Message.objects.get_or_create(
                     member=user,
                     date=logDate,
