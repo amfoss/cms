@@ -56,9 +56,16 @@ class GMailFetcher(object):
 
     def processMessages(self, msgs):
         log = []
+        CCemail = None
         for msg in msgs:
             header_data = msg["payload"]["headers"]
             for data in header_data:
+                if "To" == data["name"]:
+                    to_email = data["value"]
+                    if '<' in to_email:
+                        start = to_email.find('<')
+                        end = to_email.find('>')
+                        to_email = to_email[start + 1: end]
                 if "From" == data["name"]:
                     email_id = data["value"]
                     if '<' in email_id:
@@ -68,6 +75,12 @@ class GMailFetcher(object):
                 if "Received" == data["name"]:
                     timestamp = parsedate_to_datetime(data["value"].split(';', 1)[-1]).astimezone(
                         pytz.timezone("Asia/Calcutta"))
+                if "Cc" == data["name"]:
+                    CCemail = data["value"]
+                    if '<' in CCemail:
+                        start = CCemail.find('<')
+                        end = CCemail.find('>')
+                        CCemail = CCemail[start + 1: end]
             MsgB64 = ""
             try:
                 if "parts" in msg["payload"]:
@@ -85,6 +98,8 @@ class GMailFetcher(object):
             Msg = Msg.split("-- <br />You received this message")[0]
 
             log.append({
+                "CCemail": CCemail,
+                "to": to_email,
                 'email': email_id,
                 'date': self.date,
                 'timestamp': timestamp.isoformat(),

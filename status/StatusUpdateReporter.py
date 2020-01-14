@@ -138,7 +138,7 @@ class ReportMaker(object):
         lateCount = late_members.count()
         message = ''
         if lateCount > 0:
-            message += '\n\n<b>&#8987; LATE (' + str(lateCount) + ') : </b> \n'
+            message += '\n\n<b>&#8987; LATE (' + str(lateCount) + ') : </b> \n\n'
             i = 0
             for member in late_members.all():
                 i = i + 1
@@ -146,6 +146,17 @@ class ReportMaker(object):
                     '-timestamp').first().timestamp
                 message += str(i) + '. ' + self.getName(member) + ' [' + timestamp.astimezone(
                     timezone('Asia/Kolkata')).strftime('%I:%M %p') + '] \n'
+        return message
+
+    def getInvalidUpdatesReport(self, invalidUpdates):
+        invalidUpdatesCount = invalidUpdates.count()
+        message = ''
+        if invalidUpdatesCount > 0:
+            message += '\n\n<b>⚠️ INVALID STATUS UPDATES (' + str(invalidUpdatesCount) + ') : </b> \n\n'
+            i = 0
+            for member in invalidUpdates.all():
+                i = i + 1
+                message += str(i) + '. ' + self.getName(member) + '\n'
         return message
 
     def generateDailyReport(self):
@@ -156,12 +167,14 @@ class ReportMaker(object):
 
             totalMembers = log.members.count()
             didNotSendCount = log.didNotSend.count()
-            sendCount = totalMembers - didNotSendCount
+            invalidUpdatesCount = log.invalidUpdates.count()
+            sendCount = totalMembers - (didNotSendCount + invalidUpdatesCount)
 
             message = '<b>Daily Status Update Report</b> \n\n &#128197; ' + date.strftime(
                 '%d %B %Y') + ' | &#128228; ' + str(sendCount) + '/' + str(totalMembers) + ' Members'
 
             message += '\n\n<b>' + self.getPercentageSummary(sendCount, totalMembers) + '</b>'
+            message += self.getInvalidUpdatesReport(log.invalidUpdates)
             message += self.getLateReport(log.late)
             message += self.generateDidNotSendReport(log.didNotSend)
             if thread.footerMessage:

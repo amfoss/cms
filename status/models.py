@@ -58,6 +58,7 @@ class DailyLog(models.Model):
     members = models.ManyToManyField(User, related_name='threadMembers', blank=True)
     late = models.ManyToManyField(User, related_name='lateStatusLog', blank=True)
     didNotSend = models.ManyToManyField(User, related_name='didNotSendStatusLog', blank=True)
+    invalidUpdates = models.ManyToManyField(User, related_name='invalidStatusLog', blank=True)
 
     class Meta:
         verbose_name_plural = "Daily Logs"
