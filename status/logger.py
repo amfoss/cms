@@ -14,32 +14,46 @@ def log(data, members, thread_id):
             timestamp = dateutil.parser.parse(entry['timestamp'])
             logDate = dateutil.parser.parse(entry['date']).date()
 
-            msgObj, msgCreated = Message.objects.get_or_create(
-                member=user,
-                date=logDate,
-                timestamp=timestamp,
-                thread=thread,
-                message=entry['message']
-            )
-            msgObj.save()
-            if msgCreated:
+            if entry['to'] == thread.email and entry['CCemail'] == thread.email:
+                msgObj, msgCreated = Message.objects.get_or_create(
+                    member=user,
+                    date=logDate,
+                    timestamp=timestamp,
+                    thread=thread,
+                    message=entry['message']
+                )
+                msgObj.save()
+                if msgCreated:
+                    obj, created = DailyLog.objects.get_or_create(
+                        date=logDate,
+                        thread=thread,
+                    )
+                    if created:
+                        obj.members.add(*members)
+                        obj.didNotSend.add(*members)
+
+                    if user in obj.members.all():
+                        dueTime = timezone("Asia/Calcutta").localize(
+                            dateutil.parser.parse(entry['date']).replace(hour=int(thread.dueTime[:2]),
+                                                                         minute=int(thread.dueTime[2:])))
+
+                        if user in obj.didNotSend.all():
+                            if timestamp > dueTime:
+                                obj.late.add(user)
+                            obj.didNotSend.remove(user)
+                    obj.save()
+            else:
                 obj, created = DailyLog.objects.get_or_create(
                     date=logDate,
                     thread=thread,
                 )
+
                 if created:
                     obj.members.add(*members)
                     obj.didNotSend.add(*members)
 
-                if user in obj.members.all():
-                    dueTime = timezone("Asia/Calcutta").localize(
-                        dateutil.parser.parse(entry['date']).replace(hour=int(thread.dueTime[:2]),
-                                                                     minute=int(thread.dueTime[2:])))
-
-                    if user in obj.didNotSend.all():
-                        if timestamp > dueTime:
-                            obj.late.add(user)
-                        obj.didNotSend.remove(user)
+                obj.invalidUpdates.add(user)
+                obj.didNotSend.remove(user)
                 obj.save()
 
         except ObjectDoesNotExist:

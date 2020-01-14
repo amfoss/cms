@@ -57,9 +57,10 @@ class DailyLogAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin)
         ('date', 'thread'),
         'members',
         'late',
-        'didNotSend'
+        'didNotSend',
+        'invalidUpdates'
     ]
-    list_display = ('date', 'thread', 'totalCount', 'lateCount', 'didNotSendCount')
+    list_display = ('date', 'thread', 'totalCount', 'lateCount', 'didNotSendCount', 'invalidUpdatesCount')
     select2 = select2_modelform(DailyLog, attrs={'width': '300px'})
     form = select2
     resource_class = DailyLogResource
@@ -75,3 +76,7 @@ class DailyLogAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin)
     @staticmethod
     def didNotSendCount(obj):
         return obj.didNotSend.count()
+
+    @staticmethod
+    def invalidUpdatesCount(obj):
+        return obj.invalidUpdates.count()
