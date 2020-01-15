@@ -56,8 +56,9 @@ class GMailFetcher(object):
 
     def processMessages(self, msgs):
         log = []
-        CCemail = None
         for msg in msgs:
+            CCemail = None
+            to_email = None
             header_data = msg["payload"]["headers"]
             for data in header_data:
                 if "To" == data["name"]:
