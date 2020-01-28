@@ -18,8 +18,10 @@ def refreshSSID(module):
         time = datetime.now() - timedelta(minutes=5)
         recentLogsCount = Log.objects.filter(lastSeen__gte=time).count()
 
+        module.lastRefreshTime = now.replace(second=0, microsecond=0)
+
         if recentLogsCount == 0:
-            module.lastRefreshTime = now.replace(second=0, microsecond=0)
+            module.save()
             return
 
         # open file and move list by 1 place
@@ -28,7 +30,6 @@ def refreshSSID(module):
         newSeed = generatorScript(seed)
         module.SSID = 'amFOSS_' + str(newSeed)
         module.seed = newSeed
-        module.lastRefreshTime = now.replace(second=0, microsecond=0)
         with open("attendance/futureSSID.json", "r") as file:
             futureSSID = json.load(file)
         futureSSID = futureSSID[1:]

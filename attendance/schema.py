@@ -50,7 +50,6 @@ class LogAttendance(graphene.Mutation):
                 futureSSID.append('DummyValue2')
                 update_futureSSID(futureSSID)
 
-
         time = datetime.now() - timedelta(minutes=5)
         recentLogsCount = Log.objects.filter(lastSeen__gte=time).count()
 
@@ -77,10 +76,10 @@ class LogAttendance(graphene.Mutation):
                         giveAttendance = False
                         if recentLogsCount == 0:
                             currentSSID = -1
-                            for i in list:
+                            for sentSSID in list:
                                 try:
-                                    if int(i.strip('amFOSS_')) in futureSSID:
-                                        currentSSID = int(i.strip('amFOSS_'))
+                                    if int(sentSSID.strip('amFOSS_')) in futureSSID:
+                                        currentSSID = int(sentSSID.strip('amFOSS_'))
                                 except ValueError:
                                     pass
                             if currentSSID != -1:
@@ -95,6 +94,10 @@ class LogAttendance(graphene.Mutation):
 
                                 giveAttendance = True
                                 futureSSID = ['DummyValue1', 'DummyValue2'] + futureSSID[futureSSID.index(currentSSID):]
+                                module.SSID = 'amFOSS_' + str(futureSSID[2])
+                                module.seed = futureSSID[2]
+                                module.lastRefreshTime = now.replace(second=0, microsecond=0)
+                                module.save()
                                 with open("attendance/futureSSID.json", "w") as file:
                                     json.dump(futureSSID, file)
                             else:
