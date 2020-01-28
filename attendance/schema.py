@@ -24,7 +24,7 @@ class AttendanceLogObj(graphene.ObjectType):
 
 def update_futureSSID(futureSSID):
     seed = 1000
-    if len(futureSSID) != 0:
+    if len(futureSSID) > 2:
         seed = futureSSID[-1]
     while len(futureSSID) < 10000:
         futureSSID.append(generatorScript(seed))
@@ -44,6 +44,10 @@ class LogAttendance(graphene.Mutation):
         with open("attendance/futureSSID.json", "r") as file:
             futureSSID = json.load(file)
             if len(futureSSID) == 0:
+                # current SSID must always be at index 2, adding 2 dummy values to get it to
+                # index 2
+                futureSSID.append('DummyValue1')
+                futureSSID.append('DummyValue2')
                 update_futureSSID(futureSSID)
 
 
@@ -70,24 +74,36 @@ class LogAttendance(graphene.Mutation):
 
                         # convert refresh interval to minutes
                         refreshMins = refreshInterval.seconds / 60
-
-                        bypassSSID = 0
+                        giveAttendance = False
                         if recentLogsCount == 0:
-                            newSSID = [i for i in list if i.startswith('amFOSS_') and
-                                       i.strip('amFOSS_') in futureSSID]
-                            if len(newSSID) > 0:
-                                bypassSSID = 1
-                                module.SSID = newSSID[0]
-                                module.seed = newSSID[0].strip('amFOSS_')
-                                module.lastRefreshTime = datetime.now()
-                                futureSSID = futureSSID[futureSSID.index(newSSID[0]):]
-                                update_futureSSID(futureSSID)
-                                module.save()
-                            else:
-                                bypassSSID = 0
+                            currentSSID = -1
+                            for i in list:
+                                try:
+                                    if int(i.strip('amFOSS_')) in futureSSID:
+                                        currentSSID = int(i.strip('amFOSS_'))
+                                except ValueError:
+                                    pass
+                            if currentSSID != -1:
+                                
+                                # The NodeMCU might stop at two windows, at the 5 minute mark 
+                                # or in between the 5 minute interval.
+                                # For the first case time-5 is being used and stored at 
+                                # index 1 while latter time-10 is 
+                                # stored at index 0. The currentSSID is at Index 2.
+                                # DummyValues used ot keep currentSSID at 
+                                # position 2 after recognising it
 
+                                giveAttendance = True
+                                futureSSID = ['DummyValue1', 'DummyValue2'] + futureSSID[futureSSID.index(currentSSID):]
+                                with open("attendance/futureSSID.json", "w") as file:
+                                    json.dump(futureSSID, file)
+                            else:
+                                raise Exception('Node and Server are out of sync')
+                        else:
+                            if module.SSID in list:
+                                giveAttendance = True
                         # check for matching ssid from list
-                        if ssid in list or bypassSSID:
+                        if giveAttendance:
 
                             # Compute start time & end time for the current session
 
@@ -170,4 +186,3 @@ class Query(logQuery):
     def resolve_attendanceModule(self, info, **kwargs):
         id = kwargs.get('id')
         return Module.objects.values().get(id=id)
-
