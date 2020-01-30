@@ -2,7 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime
 from pytz import timezone
 
-from status.models import Thread, DailyLog, Message
+from status.models import Thread, DailyLog, Message, StatusException
 from college.models import Profile
 
 
@@ -198,7 +198,14 @@ class ReportMaker(object):
                     lastSend = self.getLastSend(lastSend,
                                                 self.getMemberLastRequiredDate(member))
                     if lastSend > thread.noOfDays:
-                        shouldKick.append(member)
+                        kick = True
+                        exceptions = StatusException.objects.filter(isPaused=True)
+                        for exception in exceptions:
+                            if member == exception.user:
+                                kick = False
+                                break
+                        if kick:
+                            shouldKick.append(member)
 
             return shouldKick
 
