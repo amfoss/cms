@@ -1,9 +1,11 @@
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime
 from pytz import timezone
-
+import telegram
 from status.models import Thread, DailyLog, Message, StatusException
 from college.models import Profile
+from members.models import Group
+from members.models import Profile as UserProfile
 
 
 class ReportMaker(object):
@@ -11,8 +13,8 @@ class ReportMaker(object):
     def __init__(self, d, thread_id):
         self.date = d
         self.thread = Thread.objects.get(id=thread_id)
-        self.message = self.generateDailyReport()
         self.membersToBeKicked = self.kickMembers()
+        self.message = self.generateDailyReport()
 
     @staticmethod
     def getPercentageSummary(send, total):
@@ -159,11 +161,23 @@ class ReportMaker(object):
                 message += str(i) + '. ' + self.getName(member) + '\n'
         return message
 
+    def getKickMembersReport(self, kickedOutMembers):
+        kickedOutMembersCount = len(kickedOutMembers)
+        message = ''
+        if kickedOutMembersCount > 0:
+            message += '\n\n<b>❌ PEOPLE WHO ARE KICKED (' + str(kickedOutMembersCount) + ') : </b> \n\n'
+            i = 0
+            for member in kickedOutMembers:
+                i = i + 1
+                message += str(i) + '. ' + self.getName(member) + '\n'
+        return message
+
     def generateDailyReport(self):
         date = self.date
         thread = self.thread
         try:
             log = DailyLog.objects.get(date=date, thread=thread)
+            allowKick = Thread.objects.get(name=thread).allowBotToKick
 
             totalMembers = log.members.count()
             didNotSendCount = log.didNotSend.count()
@@ -175,6 +189,8 @@ class ReportMaker(object):
 
             message += '\n\n<b>' + self.getPercentageSummary(sendCount, totalMembers) + '</b>'
             message += self.getInvalidUpdatesReport(log.invalidUpdates)
+            if allowKick:
+                message += self.getKickMembersReport(self.membersToBeKicked)
             message += self.getLateReport(log.late)
             message += self.generateDidNotSendReport(log.didNotSend)
             if thread.footerMessage:
@@ -190,22 +206,36 @@ class ReportMaker(object):
         date = self.date
         thread = self.thread
         try:
+            telegramAgents = []
+            groups = Group.objects.filter(thread_id=thread.id, statusUpdateEnabled=True)
+            for group in groups:
+                obj = [group.telegramBot, group.telegramGroup]
+                if obj not in telegramAgents:
+                    telegramAgents.append(obj)
+
             log = DailyLog.objects.get(date=date, thread=thread)
             members = log.didNotSend.all()
-            for member in members:
-                lastSend = self.getMemberLastSend(member)
-                if lastSend:
-                    lastSend = self.getLastSend(lastSend,
-                                                self.getMemberLastRequiredDate(member))
-                    if lastSend > thread.noOfDays:
-                        kick = True
-                        exceptions = StatusException.objects.filter(isPaused=True)
-                        for exception in exceptions:
-                            if member == exception.user:
-                                kick = False
-                                break
-                        if kick:
-                            shouldKick.append(member)
+            for agent in telegramAgents:
+                bot = telegram.Bot(token=agent[0])
+                for member in members:
+                    userProfile = UserProfile.objects.get(user=member)
+                    lastSend = self.getMemberLastSend(member)
+                    if lastSend:
+                        lastSend = self.getLastSend(lastSend,
+                                                    self.getMemberLastRequiredDate(member))
+                        try:
+                            status = bot.getChatMember(chat_id=agent[1], user_id=userProfile.telegram_id).status
+                            if lastSend > thread.noOfDays:
+                                kick = True
+                                exceptions = StatusException.objects.filter(isPaused=True)
+                                for exception in exceptions:
+                                    if member == exception.user:
+                                        kick = False
+                                        break
+                                if kick and status != "left":
+                                    shouldKick.append(member)
+                        except:
+                            pass
 
             return shouldKick
 

@@ -106,16 +106,14 @@ def kickMembersFromGroup(thread):
         bot = telegram.Bot(token=agent[0])
         for user in shouldKick:
             profile = Profile.objects.get(user=user)
-            status = bot.getChatMember(chat_id=agent[1], user_id=profile.telegram_id).status
-            if status != "left":
-                try:
-                    bot.kick_chat_member(chat_id=agent[1], user_id=profile.telegram_id)
-                    bot.unban_chat_member(
-                        chat_id=agent[1],
-                        user_id=profile.telegram_id
-                    )
-                except:
-                    pass
+            try:
+                bot.kick_chat_member(chat_id=agent[1], user_id=profile.telegram_id)
+                bot.unban_chat_member(
+                    chat_id=agent[1],
+                    user_id=profile.telegram_id
+                )
+            except:
+                pass
 
 
 class Command(BaseCommand):
