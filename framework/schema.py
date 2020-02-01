@@ -157,7 +157,6 @@ class UpdateProfile(graphene.Mutation):
         lastName = graphene.String()
         email = graphene.String()
         phoneNo = graphene.String()
-        telegramID = graphene.String()
         githubUsername = graphene.String()
         roll = graphene.String()
         batch = graphene.Int()
@@ -165,7 +164,7 @@ class UpdateProfile(graphene.Mutation):
 
     Output = userResponseObj
 
-    def mutate(self, info, username=None, firstName=None, lastName=None, email=None, phoneNo=None, telegramID=None, githubUsername=None, roll=None, batch=None, about=None):
+    def mutate(self, info, username=None, firstName=None, lastName=None, email=None, phoneNo=None, githubUsername=None, roll=None, batch=None, about=None):
         user = info.context.user
         profile = Profile.objects.get(user=user)
         if username is not None:
@@ -181,8 +180,6 @@ class UpdateProfile(graphene.Mutation):
             profile.email = email
         if phoneNo is not None:
             profile.phone = phoneNo
-        if telegramID is not None:
-            profile.telegram_id = telegramID
         if githubUsername is not None:
             profile.githubUsername = githubUsername
         if roll is not None:
