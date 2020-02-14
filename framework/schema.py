@@ -218,6 +218,7 @@ class Query(
 ):
     user = graphene.Field(UserObj, username=graphene.String(required=True))
     users = graphene.List(UserObj, sort=graphene.String())
+    activeUsers = graphene.List(UserObj, sort=graphene.String())
     isClubMember = graphene.Boolean()
     getInActiveUsers = graphene.List(UserType)
 
@@ -233,6 +234,12 @@ class Query(
         if sort is None:
             sort = 'username'
         return User.objects.values().all().order_by(sort)
+
+    def resolve_activeUsers(self, info, **kwargs):
+        sort = kwargs.get('sort')
+        if sort is None:
+            sort = 'username'
+        return User.objects.filter(is_active=True).order_by(sort)
 
     def resolve_isClubMember(self, info, **kwargs):
         user = info.context.user
