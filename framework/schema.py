@@ -239,7 +239,7 @@ class Query(
         sort = kwargs.get('sort')
         if sort is None:
             sort = 'username'
-        return User.objects.filter(is_active=True).order_by(sort)
+        return User.objects.values().filter(is_active=True).order_by(sort)
 
     def resolve_isClubMember(self, info, **kwargs):
         user = info.context.user
