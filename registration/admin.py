@@ -80,7 +80,8 @@ class ApplicationAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdm
 
     ]
     list_display = ('name', 'form', 'status', 'submissionTime', 'rsvp', 'checkIn')
-    list_filter = ('status', 'rsvp', 'checkIn')
+    list_filter = ('form', 'status', 'rsvp', 'checkIn')
+    search_fields = ['name', 'email', 'phone']
     select2 = select2_modelform(Form, attrs={'width': '250px'})
     form = select2
     resource_class = ApplicationResource
