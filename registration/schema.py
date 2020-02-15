@@ -99,6 +99,7 @@ class submitApplication(graphene.Mutation):
 class rsvpResponseObj(graphene.ObjectType):
     status = graphene.String()
 
+
 class submitRSVP(graphene.Mutation):
     class Arguments:
         response = graphene.Boolean(required=True)
@@ -146,7 +147,8 @@ class checkIn(graphene.Mutation):
             form = app.form
             if form.enableCheckIn:
                 if app.checkIn:
-                    raise APIException('The person has already checked-in at ' + str(app.checkInTime), code='ALREADY_CHECKED_IN')
+                    raise APIException('The person has already checked-in at ' + str(app.checkInTime),
+                                       code='ALREADY_CHECKED_IN')
                 else:
                     app.checkIn = True
                     app.checkInTime = datetime.now()
@@ -267,7 +269,7 @@ class Query(viewEntriesQuery, formQuery,  object):
     def resolve_getApplicant(self, info, **kwargs):
         hashCode = kwargs.get('hash')
         try:
-            app = Application.objects.values().get(hash=hashCode)
+            app = Application.objects.values().filter(hash=hashCode).first()
         except ObjectDoesNotExist:
             raise APIException("Person not found in the database", code="NOT_FOUND")
         return app
