@@ -32,7 +32,7 @@ class ProfileAdmin(admin.ModelAdmin):
                 'user',
                 ('first_name', 'last_name', 'profile_pic'),
                 ('email', 'phone'),
-                ('telegram_id', 'githubUsername')
+                ('telegram_id', 'githubUsername', 'didNotSendStreak')
             ]
         }),
         ('Additional Details', {
@@ -51,6 +51,7 @@ class ProfileAdmin(admin.ModelAdmin):
         }),
 
     ]
+    readonly_fields = ('didNotSendStreak', )
     inlines = (sp_inline, wexp_inline, eq_inline)
     list_display = ('first_name', 'last_name', 'batch')
     list_filter = ('batch',)
