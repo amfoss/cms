@@ -150,7 +150,7 @@ class Profile(models.Model):
     interests = models.ManyToManyField(Skill, related_name='interests', blank=True)
     expertise = models.ManyToManyField(Skill, related_name='expertise', blank=True)
     experiences = models.ManyToManyField(Organization, related_name='WorkExperiences', through='WorkExperience')
-    didNotSendStreak = models.IntegerField(default=0)
+    didNotSendStreak = models.CharField(null=True, blank=True, max_length=10)
     qualifications = models.ManyToManyField(
                 Organization,
                 related_name='EducationalQualifications',

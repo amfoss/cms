@@ -60,10 +60,9 @@ class ReportMaker(object):
         return UserProfile.objects.filter(user__in=members, batch=year)
 
     @staticmethod
-    def getLastSendStr(last_send, expected_date):
+    def getLastSendStr(last_send):
         message = ''
-        diff = expected_date - last_send.date()
-        diff = diff.days + 1
+        diff = last_send + 1
         if diff > 28:
             message += '1M+'
         elif diff > 21:
@@ -77,9 +76,8 @@ class ReportMaker(object):
         return message
 
     @staticmethod
-    def getLastSend(last_send, expected_date):
-        diff = expected_date - last_send.date()
-        diff = diff.days + 1
+    def getLastSend(last_send):
+        diff = last_send + 1
         return diff
 
     def getMemberLastRequiredDate(self, member):
@@ -110,13 +108,12 @@ class ReportMaker(object):
             i = 0
             for member in m:
                 i = i + 1
-                lastSend = self.getMemberLastSend(member.user)
                 message += str(i) + '. ' + self.getName(member.user)
+                profile = UserProfile.objects.get(user=member.user)
+                lastSend = profile.didNotSendStreak
                 if lastSend:
-                    lastSend = self.getLastSendStr(lastSend,
-                                                   self.getMemberLastRequiredDate(member.user))
-                    profile = UserProfile.objects.get(user=member.user)
-                    profile.didNotSendStreak = lastSend
+                    profile.didNotSendStreak = self.getLastSend(int(lastSend))
+                    lastSend = self.getLastSendStr(int(lastSend))
                     profile.save()
                     memberHistory = self.getMemberHistory(member.user)
                     message += ' [ ' + lastSend + ', ' + memberHistory + ']'
@@ -160,6 +157,9 @@ class ReportMaker(object):
             i = 0
             for member in invalidUpdates.all():
                 i = i + 1
+                profile = UserProfile.objects.get(user=member.user)
+                lastSend = profile.didNotSendStreak
+                profile.didNotSendStreak = self.getLastSend(int(lastSend))
                 message += str(i) + '. ' + self.getName(member) + '\n'
         return message
 
@@ -221,13 +221,11 @@ class ReportMaker(object):
                 bot = telegram.Bot(token=agent[0])
                 for member in members:
                     userProfile = UserProfile.objects.get(user=member)
-                    lastSend = self.getMemberLastSend(member)
+                    lastSend = userProfile.didNotSendStreak
                     if lastSend:
-                        lastSend = self.getLastSend(lastSend,
-                                                    self.getMemberLastRequiredDate(member))
                         try:
                             status = bot.getChatMember(chat_id=agent[1], user_id=userProfile.telegram_id).status
-                            if lastSend > thread.noOfDays:
+                            if int(lastSend) > thread.noOfDays:
                                 kick = True
                                 exceptions = StatusException.objects.filter(isPaused=True)
                                 for exception in exceptions:
