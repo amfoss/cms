@@ -3,7 +3,6 @@ from members.api.profile import AvatarObj
 from members.models import Profile
 from members.api.profile import ProfileObj
 from status.models import Message
-from college.models import Profile as CollegeProfile
 
 
 class UserBasicObj(graphene.ObjectType):
@@ -49,7 +48,7 @@ class UserBasicObj(graphene.ObjectType):
         return Message.objects.values().filter(member__username=self['username']).order_by('-date').first()['date']
 
     def resolve_admissionYear(self, info):
-        return CollegeProfile.objects.values().get(user__username=self['username'])['admissionYear']
+        return Profile.objects.values().get(user__username=self['username'])['batch']
 
     def resolve_profile(self, info):
         return Profile.objects.values().get(user__username=self['username'])

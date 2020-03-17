@@ -3,7 +3,6 @@ from datetime import datetime
 from pytz import timezone
 import telegram
 from status.models import Thread, DailyLog, Message, StatusException
-from college.models import Profile
 from members.models import Group
 from members.models import Profile as UserProfile
 
@@ -58,7 +57,7 @@ class ReportMaker(object):
 
     @staticmethod
     def groupMembersByBatch(members, year):
-        return Profile.objects.filter(user__in=members, admissionYear=year)
+        return UserProfile.objects.filter(user__in=members, batch=year)
 
     @staticmethod
     def getLastSendStr(last_send, expected_date):

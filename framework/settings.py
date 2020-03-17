@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'members',
     'attendance',
     'activity',
-    'college.apps.CollegeConfig',
     'dairy',
     'status.apps.StatusConfig',
     'registration',

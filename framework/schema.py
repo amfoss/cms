@@ -11,7 +11,6 @@ from django.contrib.auth import get_user_model
 from graphene_django import DjangoObjectType
 
 import attendance.schema
-from college.schema import Query as collegeQuery
 from dairy.schema import Query as dairyQuery
 from registration.schema import Mutation as registrationMutation, Query as registrationQuery
 import activity.schema
@@ -19,8 +18,6 @@ import tasks.schema
 import status.schema
 import password.schema
 from .api.APIException import APIException
-from college.api.profile import StudentProfileObj
-from college.models import Profile as CollegeProfile
 from dairy.schema import Mutation as eventMutation
 
 from members.schema import Query as MembersQuery, Mutation as membersMutation
@@ -52,13 +49,9 @@ class UserObj(UserBasicObj, graphene.ObjectType):
     )
     isInLab = graphene.Boolean()
     lastSeenInLab = graphene.types.datetime.DateTime()
-    collegeProfile = graphene.Field(StudentProfileObj)
 
     def resolve_profile(self, info):
         return Profile.objects.values().get(user__username=self['username'])
-
-    def resolve_collegeProfile(self, info):
-        return CollegeProfile.objects.values().get(user__username=self['username'])
 
     @login_required
     def resolve_groups(self, info):
@@ -207,7 +200,6 @@ class UpdateProfile(graphene.Mutation):
 class Query(
     dairyQuery,
     MembersQuery,
-    collegeQuery,
     registrationQuery,
     attendance.schema.Query,
     activity.schema.Query,
