@@ -2,10 +2,16 @@ from datetime import timedelta, date
 from django.db.models import Count
 import graphene
 from graphql_jwt.decorators import login_required
+from framework.api.APIException import APIException
 from .models import *
 from django.contrib.auth.models import User
 from framework.api.user import UserBasicObj
-from members.models import Group
+from members.models import Group, Profile
+
+
+class statusResponseObj(graphene.ObjectType):
+    status = graphene.String()
+
 
 class MessageObj(graphene.ObjectType):
     message = graphene.String()
@@ -116,6 +122,8 @@ class Query(graphene.ObjectType):
                                       startDate=graphene.types.datetime.Date(required=True),
                                       endDate=graphene.types.datetime.Date()
                                       )
+    resetStatusStreak = graphene.Field(statusResponseObj)
+    decrementStatusStreak = graphene.Field(statusResponseObj)
 
     @login_required
     def resolve_getStatusUpdates(self, info, **kwargs):
@@ -150,3 +158,30 @@ class Query(graphene.ObjectType):
             'end': end
         }
         return data
+
+    @login_required
+    def resolve_resetStatusStreak(self, info):
+        if info.context.user.is_superuser:
+            profiles = Profile.objects.all()
+            for profile in profiles:
+                profile.didNotSendStreak = None
+                profile.save()
+
+            return statusResponseObj(status="Done")
+
+        else:
+            raise APIException('You don\'t have permission required to reset status streak', code='ACCESS_DENIED')
+
+    @login_required
+    def resolve_decrementStatusStreak(self, info):
+        if info.context.user.is_superuser:
+            profiles = Profile.objects.all()
+            for profile in profiles:
+                if profile.didNotSendStreak and int(profile.didNotSendStreak) > 0:
+                    profile.didNotSendStreak = int(profile.didNotSendStreak) - 1
+                    profile.save()
+
+            return statusResponseObj(status="Done")
+
+        else:
+            raise APIException('You don\'t have permission required to decrease status streak', code='ACCESS_DENIED')

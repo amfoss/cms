@@ -157,7 +157,7 @@ class ReportMaker(object):
             i = 0
             for member in invalidUpdates.all():
                 i = i + 1
-                profile = UserProfile.objects.get(user=member.user)
+                profile = UserProfile.objects.get(user=member)
                 lastSend = profile.didNotSendStreak
                 profile.didNotSendStreak = self.getLastSend(int(lastSend))
                 message += str(i) + '. ' + self.getName(member) + '\n'
