@@ -1,7 +1,6 @@
 import dateutil.parser
 from django.contrib.auth.models import User
 from status.models import Thread, Message, DailyLog
-from members.models import Profile
 from pytz import timezone
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -24,9 +23,6 @@ def log(data, members, thread_id):
                     message=entry['message']
                 )
                 msgObj.save()
-                profile = Profile.objects.get(user=user)
-                profile.didNotSendStreak = 0
-                profile.save()
                 if msgCreated:
                     obj, created = DailyLog.objects.get_or_create(
                         date=logDate,
