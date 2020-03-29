@@ -1,12 +1,18 @@
 from django.contrib import admin
 from easy_select2 import select2_modelform
-from datetime import datetime
-from django.utils import timezone
 from .models import *
 from .generatorScript import generatorScript
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin, ExportActionMixin
+
+
+class AttendanceModuleResource(resources.ModelResource):
+    class Meta:
+        model = Module
+
 
 @admin.register(Module)
-class AttendanceModuleAdmin(admin.ModelAdmin):
+class AttendanceModuleAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
     fields = (
         'name',
         ('seed', 'SSID', 'isPaused'),
@@ -25,8 +31,14 @@ class AttendanceModuleAdmin(admin.ModelAdmin):
             obj.lastRefreshTime = timezone.now().replace(second=0, microsecond=0)
         super(AttendanceModuleAdmin, self).save_model(request, obj, form, change)
 
+
+class AttendanceLogResource(resources.ModelResource):
+    class Meta:
+        model = Log
+
+
 @admin.register(Log)
-class AttendanceLogAdmin(admin.ModelAdmin):
+class AttendanceLogAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
     fields = (
         ('member', 'date', 'duration'),
         ('modules', 'lastSeen'),

@@ -24,8 +24,14 @@ admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 
+class ProfileResource(resources.ModelResource):
+
+    class Meta:
+        model = Profile
+
+
 @admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
+class ProfileAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
     fieldsets = [
         ('Basic Details', {
             'fields': [
@@ -98,9 +104,14 @@ class ProfileAdmin(admin.ModelAdmin):
 #             return queryset.exclude(xduration__gt=datetime.timedelta(hours=3))
 #         return queryset
 
+class LeaveRecordResource(resources.ModelResource):
+
+    class Meta:
+        model = LeaveRecord
+
 
 @admin.register(LeaveRecord)
-class LeaveRecordAdmin(admin.ModelAdmin):
+class LeaveRecordAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
     fields = [
         ('member', 'approver', 'type'),
         ('start_date', 'end_date'),
@@ -139,16 +150,28 @@ class LeaveRecordAdmin(admin.ModelAdmin):
         return True
 
 
+class ResponsibilityResource(resources.ModelResource):
+
+    class Meta:
+        model = Responsibility
+
+
 @admin.register(Responsibility)
-class ResponsibilityAdmin(admin.ModelAdmin):
+class ResponsibilityAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
     search_fields = ['title', 'members']
     list_display = ('title', 'thread')
     select2 = select2_modelform(Responsibility, attrs={'width': '250px'})
     form = select2
 
 
+class GroupResource(resources.ModelResource):
+
+    class Meta:
+        model = Group
+
+
 @admin.register(Group)
-class GroupAdmin(admin.ModelAdmin):
+class GroupAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
@@ -183,8 +206,14 @@ class GroupAdmin(admin.ModelAdmin):
     members_count.verbose_name = 'No. of Mentees'
 
 
+class MentorGroupResource(resources.ModelResource):
+
+    class Meta:
+        model = MentorGroup
+
+
 @admin.register(MentorGroup)
-class MentorGroupAdmin(admin.ModelAdmin):
+class MentorGroupAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
     search_fields = ['mentor', 'mentees']
     list_filter = ('sendReport', 'forwardStatusUpdates')
     list_display = ('mentor', 'sendReport', 'forwardStatusUpdates', 'mentees_count', 'mentees_display')
@@ -204,8 +233,14 @@ class MentorGroupAdmin(admin.ModelAdmin):
     mentees_display.verbose_name = 'Mentees'
 
 
+class WebspaceResource(resources.ModelResource):
+
+    class Meta:
+        model = WebSpace
+
+
 @admin.register(WebSpace)
-class WebSpaceAdmin(admin.ModelAdmin):
+class WebSpaceAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
     fields = ['name', 'user', ('file_name',  'date')]
 
     list_display = ('name', 'user', 'date',)

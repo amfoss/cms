@@ -7,26 +7,25 @@ from .models import *
 
 
 class FormResource(resources.ModelResource):
-
     class Meta:
         model = Form
 
 
 @admin.register(Form)
-class FormAdmin(ImportExportModelAdmin, ExportActionMixin,admin.ModelAdmin):
+class FormAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
     fieldsets = [
         ('Basic Details', {
             'fields': [
-                        'name',
-                        'submissionDeadline',
-                        ('allowMultiple', 'applicationLimit', 'onSubmitAfterMax'),
-                        'formHash',
-                      ]
+                'name',
+                'submissionDeadline',
+                ('allowMultiple', 'applicationLimit', 'onSubmitAfterMax'),
+                'formHash',
+            ]
         }),
         ('Control Centre', {
             'fields': [
-                        'admins',
-                        ('isActive', 'enableCheckIn')
+                'admins',
+                ('isActive', 'enableCheckIn')
             ]
         }),
         ('RSVP Manager', {
@@ -37,8 +36,8 @@ class FormAdmin(ImportExportModelAdmin, ExportActionMixin,admin.ModelAdmin):
         }),
         ('Form Fields', {
             'fields': [
-                        'formFields'
-                      ]
+                'formFields'
+            ]
         }),
 
     ]
@@ -49,7 +48,6 @@ class FormAdmin(ImportExportModelAdmin, ExportActionMixin,admin.ModelAdmin):
 
 
 class ApplicationResource(resources.ModelResource):
-
     class Meta:
         model = Application
 
@@ -85,5 +83,3 @@ class ApplicationAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdm
     select2 = select2_modelform(Form, attrs={'width': '250px'})
     form = select2
     resource_class = ApplicationResource
-
-

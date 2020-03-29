@@ -5,8 +5,13 @@ from import_export.admin import ImportExportModelAdmin, ExportActionMixin
 from import_export import resources
 
 
+class ThreadResource(resources.ModelResource):
+    class Meta:
+        model = Thread
+
+
 @admin.register(Thread)
-class ThreadAdmin(admin.ModelAdmin):
+class ThreadAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('name', 'isActive', 'enableGroupNotification', 'allowBotToKick', 'noOfDays')
@@ -27,8 +32,13 @@ class ThreadAdmin(admin.ModelAdmin):
     form = select2
 
 
+class MessageResource(resources.ModelResource):
+    class Meta:
+        model = Message
+
+
 @admin.register(Message)
-class MessageAdmin(admin.ModelAdmin):
+class MessageAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
     fields = [
         ('member', 'thread'),
         ('date', 'timestamp'),
@@ -39,8 +49,13 @@ class MessageAdmin(admin.ModelAdmin):
     filter = ('thread',)
 
 
+class StatusExceptionResource(resources.ModelResource):
+    class Meta:
+        model = StatusException
+
+
 @admin.register(StatusException)
-class StatusExceptionAdmin(admin.ModelAdmin):
+class StatusExceptionAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
     fields = ['user', 'isPaused']
 
     list_display = ('user', 'isPaused')
