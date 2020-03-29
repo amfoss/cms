@@ -14,10 +14,12 @@ class GroupObj(graphene.ObjectType):
     membersCount = graphene.Int()
 
     def resolve_membersCount(self, info):
-        return len(self['members'])
+        return Group.objects.annotate(
+            username=F('members__username')
+        ).filter(id=self['id']).count()
 
     def resolve_admins(self, info):
-        return Group.objects.annotate(
+        return Group.objects.values().annotate(
             username=F('admins__username'),
             first_name=F('admins__first_name'),
             last_name=F('admins__last_name'),
@@ -26,8 +28,9 @@ class GroupObj(graphene.ObjectType):
             is_admin=F('admins__is_superuser'),
         ).filter(id=self['id'])
 
-    def resolve_members(self, info):
-        return Group.objects.annotate(
+    @graphene.resolve_only_args
+    def resolve_members(self):
+        return Group.objects.values().annotate(
             username=F('members__username'),
             first_name=F('members__first_name'),
             last_name=F('members__last_name'),
