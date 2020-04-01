@@ -13,7 +13,6 @@ from graphene_django import DjangoObjectType
 import attendance.schema
 from dairy.schema import Query as dairyQuery
 from registration.schema import Mutation as registrationMutation, Query as registrationQuery
-import activity.schema
 import tasks.schema
 import status.schema
 import password.schema
@@ -202,7 +201,6 @@ class Query(
     MembersQuery,
     registrationQuery,
     attendance.schema.Query,
-    activity.schema.Query,
     password.schema.Query,
     tasks.schema.Query,
     status.schema.Query,

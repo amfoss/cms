@@ -181,7 +181,6 @@ class WorkExperience(models.Model):
     position = models.CharField(max_length=50, null=True)
     location = models.CharField(max_length=150, null=True, blank=True)
     description = RichTextField(max_length=1000, null=True, blank=True)
-    projects = models.ManyToManyField('activity.Project', blank=True)
     start = models.DateField(null=True, blank=True)
     end = models.DateField(null=True, blank=True)
 
@@ -197,8 +196,6 @@ class EducationalQualification(models.Model):
     location = models.CharField(max_length=150, null=True, blank=True)
     percentage = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     description = RichTextField(max_length=1000, null=True, blank=True)
-    certificate = models.ManyToManyField('activity.Certificate', blank=True)
-    projects = models.ManyToManyField('activity.Project', blank=True)
     start = models.DateField(null=True, blank=True)
     end = models.DateField(null=True, blank=True)
 

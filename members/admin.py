@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import *
-from activity.models import *
 from .inlines import *
 from easy_select2 import select2_modelform
 from django.contrib.auth.models import User
@@ -57,7 +56,7 @@ class ProfileAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
         }),
 
     ]
-    inlines = (sp_inline, wexp_inline, eq_inline)
+    inlines = (sp_inline, )
     list_display = ('first_name', 'last_name', 'batch')
     list_filter = ('batch',)
     search_fields = ['first_name', 'last_name', 'email', 'phone', 'batch']

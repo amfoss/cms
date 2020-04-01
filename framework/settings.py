@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'import_export',
     'members',
     'attendance',
-    'activity',
     'dairy',
     'status.apps.StatusConfig',
     'registration',
