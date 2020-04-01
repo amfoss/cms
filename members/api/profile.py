@@ -29,6 +29,7 @@ class ProfileObj(graphene.ObjectType):
     gravatar = graphene.String()
     links = graphene.List(SocialProfileObj)
     githubUsername = graphene.String()
+    customEmail = graphene.String()
     # fields that require login
     profilePic = graphene.String()
     phone = graphene.String()
@@ -60,6 +61,9 @@ class ProfileObj(graphene.ObjectType):
 
     def resolve_githubUsername(self, info):
         return self['githubUsername']
+
+    def resolve_customEmail(self,info):
+        return self['customEmail']
 
     def resolve_profilePic(self, info):
         return self['profile_pic']

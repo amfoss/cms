@@ -36,7 +36,7 @@ class ProfileAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
             'fields': [
                 'user',
                 ('first_name', 'last_name', 'profile_pic'),
-                ('email', 'phone'),
+                ('email', 'phone', 'customEmail'),
                 ('telegram_id', 'githubUsername')
             ]
         }),
