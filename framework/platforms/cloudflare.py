@@ -63,3 +63,4 @@ class Cloudflare(UserPlatform):
                         dns_record = cf.zones.dns_records.put(CLOUDFLARE_ZONE_ID, record['id'], data=dns_record)
                     except CloudFlare.exceptions.CloudFlareAPIError as e:
                         pass
+                    break
