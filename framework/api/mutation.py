@@ -5,6 +5,7 @@ from .APIException import APIException
 
 from framework.platforms.gitlab import GitLab
 from framework.platforms.github import GitHub
+from framework.platforms.cloudflare import Cloudflare
 
 
 class statusObj(graphene.ObjectType):
@@ -83,6 +84,42 @@ class RemoveUserGitHub(graphene.Mutation):
                                code='ONLY_SUPERUSER_HAS_ACCESS')
 
 
+class InviteUserCloudflare(graphene.Mutation):
+    class Arguments:
+        username = graphene.String(required=True)
+
+    Output = statusObj
+
+    def mutate(self, info, username):
+        if info.context.user.is_superuser:
+            user = User.objects.get(username=username)
+            profile = Profile.objects.get(user=user)
+            cloudflare = Cloudflare(profile.email, profile.customEmail)
+            cloudflare.addUser()
+            return statusObj(status='Done')
+        else:
+            raise APIException('Only Superusers have access',
+                               code='ONLY_SUPERUSER_HAS_ACCESS')
+
+
+class RemoveUserCloudflare(graphene.Mutation):
+    class Arguments:
+        username = graphene.String(required=True)
+
+    Output = statusObj
+
+    def mutate(self, info, username):
+        if info.context.user.is_superuser:
+            user = User.objects.get(username=username)
+            profile = Profile.objects.get(user=user)
+            cloudflare = Cloudflare(profile.email)
+            cloudflare.removeUser()
+            return statusObj(status='Done')
+        else:
+            raise APIException('Only Superusers have access',
+                               code='ONLY_SUPERUSER_HAS_ACCESS')
+
+
 class MakeUserInActive(graphene.Mutation):
     class Arguments:
         username = graphene.String(required=True)
@@ -97,6 +134,8 @@ class MakeUserInActive(graphene.Mutation):
             gitlab.removeUser()
             github = GitHub(profile.githubUsername)
             github.removeUser()
+            cloudflare = Cloudflare(profile.email)
+            cloudflare.removeUser()
             user.is_active = False
             user.save()
             return statusObj(status='Done')
@@ -119,6 +158,8 @@ class MakeUserActive(graphene.Mutation):
             gitlab.addUser()
             github = GitHub(profile.githubUsername)
             github.addUser()
+            cloudflare = Cloudflare(profile.email, profile.customEmail)
+            cloudflare.addUser()
             user.is_active = True
             user.save()
             return statusObj(status='Done')
@@ -132,5 +173,7 @@ class Mutation(object):
     invite_user_gitlab = InviteUserGitLab.Field()
     remove_user_github = RemoveUserGitHub.Field()
     invite_user_github = InviteUserGitHub.Field()
+    remove_user_cloudflare = RemoveUserCloudflare.Field()
+    invite_user_cloudflare = InviteUserCloudflare.Field()
     make_user_in_active = MakeUserInActive.Field()
     make_user_active = MakeUserActive.Field()
