@@ -112,6 +112,7 @@ class Profile(models.Model):
 
     # Additional Details
     githubUsername = models.CharField(max_length=50, null=True, blank=True)
+    gitlabUsername = models.CharField(max_length=50, null=True, blank=True)
     customEmail = models.CharField(max_length=50, null=True, blank=True)
     telegram_id = models.CharField(max_length=50, null=True, blank=True)
     roll_number = models.CharField(max_length=25, null=True, blank=True)

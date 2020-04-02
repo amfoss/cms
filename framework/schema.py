@@ -28,6 +28,7 @@ from attendance.models import Log
 from attendance.api.log import userAttendanceObj
 
 from .api.user import UserBasicObj
+from .api.mutation import Mutation as PlatformMutation
 
 to_tz = timezone.get_default_timezone()
 
@@ -126,7 +127,7 @@ class ApproveUser(graphene.Mutation):
                                code='ONLY_SUPERUSER_HAS_ACCESS')
 
 
-class userChangePasswordObj(graphene.ObjectType):
+class userStatusObj(graphene.ObjectType):
     status = graphene.String()
 
 
@@ -135,7 +136,7 @@ class ChangePassword(graphene.Mutation):
         password = graphene.String(required=True)
         newPassword = graphene.String(required=True)
 
-    Output = userChangePasswordObj
+    Output = userStatusObj
 
     def mutate(self, info, password, newPassword):
         infoUser = info.context.user
@@ -144,7 +145,7 @@ class ChangePassword(graphene.Mutation):
         if match:
             infoUser.set_password(newPassword)
             infoUser.save()
-            return userChangePasswordObj(status=True)
+            return userStatusObj(status=True)
         else:
             raise APIException('Wrong Password',
                                code='WRONG_PASSWORD')
@@ -164,7 +165,8 @@ class UpdateProfile(graphene.Mutation):
 
     Output = userResponseObj
 
-    def mutate(self, info, username=None, firstName=None, lastName=None, email=None, phoneNo=None, githubUsername=None, roll=None, batch=None, about=None):
+    def mutate(self, info, username=None, firstName=None, lastName=None, email=None, phoneNo=None, githubUsername=None,
+               roll=None, batch=None, about=None):
         user = info.context.user
         profile = Profile.objects.get(user=user)
         if username is not None:
@@ -244,7 +246,8 @@ class Query(
                                code='ONLY_SUPERUSER_HAS_ACCESS')
 
 
-class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation, eventMutation, graphene.ObjectType):
+class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation, eventMutation, PlatformMutation,
+               graphene.ObjectType):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()
