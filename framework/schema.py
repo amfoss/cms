@@ -165,8 +165,7 @@ class UpdateProfile(graphene.Mutation):
 
     Output = userResponseObj
 
-    def mutate(self, info, username=None, firstName=None, lastName=None, email=None, phoneNo=None, githubUsername=None,
-               roll=None, batch=None, about=None):
+    def mutate(self, info, username=None, firstName=None, lastName=None, email=None, phoneNo=None, githubUsername=None, roll=None, batch=None, about=None):
         user = info.context.user
         profile = Profile.objects.get(user=user)
         if username is not None:
@@ -246,8 +245,7 @@ class Query(
                                code='ONLY_SUPERUSER_HAS_ACCESS')
 
 
-class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation, eventMutation, PlatformMutation,
-               graphene.ObjectType):
+class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation, eventMutation, PlatformMutation, graphene.ObjectType):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()
