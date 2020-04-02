@@ -56,9 +56,9 @@ class StatusExceptionResource(resources.ModelResource):
 
 @admin.register(StatusException)
 class StatusExceptionAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
-    fields = ['user', 'isPaused']
+    fields = ['user', 'isPaused', 'start_date', 'end_date']
 
-    list_display = ('user', 'isPaused')
+    list_display = ('user', 'isPaused', 'start_date', 'end_date')
 
 
 class DailyLogResource(resources.ModelResource):

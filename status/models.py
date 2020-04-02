@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
+from datetime import date
 
 
 class StatusException(models.Model):
@@ -9,6 +10,8 @@ class StatusException(models.Model):
         related_name='StatusException',
         verbose_name='User',
     )
+    start_date = models.DateField(default=date.today, verbose_name="From")
+    end_date = models.DateField(default=date.today, verbose_name="To")
     isPaused = models.BooleanField(default=True)
 
     class Meta:

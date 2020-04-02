@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from datetime import datetime
+from datetime import datetime, date
 from pytz import timezone
 import telegram
 from status.models import Thread, DailyLog, Message, StatusException
@@ -229,8 +229,11 @@ class ReportMaker(object):
                                 exceptions = StatusException.objects.filter(isPaused=True)
                                 for exception in exceptions:
                                     if member == exception.user:
-                                        kick = False
-                                        break
+                                        if exception.start_date <= date.today() <= exception.end_date:
+                                            kick = False
+                                            break
+                                        else:
+                                            exception.isPaused = False
                                 if kick and status != "left":
                                     shouldKick.append(member)
                         except:
