@@ -208,7 +208,8 @@ class Query(
     users = graphene.List(UserObj, sort=graphene.String())
     activeUsers = graphene.List(UserObj, sort=graphene.String())
     isClubMember = graphene.Boolean()
-    getInActiveUsers = graphene.List(UserType)
+    isAdmin = graphene.Boolean()
+    inActiveUsers = graphene.List(UserObj, sort=graphene.String())
 
     def resolve_user(self, info, **kwargs):
         username = kwargs.get('username')
@@ -236,10 +237,18 @@ class Query(
         else:
             return True
 
-    def resolve_getInActiveUsers(self, info):
-        user = info.context.user
-        if user.is_superuser:
-            return User.objects.filter(is_active=False)
+    def resolve_isAdmin(self, info):
+        if info.context.user.is_superuser:
+            return True
+        else:
+            return False
+
+    def resolve_inActiveUsers(self, info, **kwargs):
+        sort = kwargs.get('sort')
+        if sort is None:
+            sort = 'username'
+        if info.context.user.is_superuser:
+            return User.objects.values().filter(is_active=False).order_by(sort)
         else:
             raise APIException('Only Superusers have access',
                                code='ONLY_SUPERUSER_HAS_ACCESS')
