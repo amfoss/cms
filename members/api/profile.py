@@ -38,7 +38,6 @@ class ProfileObj(graphene.ObjectType):
     birthDay = graphene.types.datetime.Date()
     telegramID = graphene.String()
     roll = graphene.String()
-    batch = graphene.Int()
 
     def resolve_firstName(self, info):
         return self['first_name']
@@ -102,7 +101,6 @@ class ProfileObj(graphene.ObjectType):
     def resolve_roll(self, info):
         return self['roll_number']
 
-    @login_required
     def resolve_batch(self, info):
         return self['batch']
 
