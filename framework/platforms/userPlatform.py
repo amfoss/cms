@@ -11,3 +11,7 @@ class UserPlatform(ABC):
     @abstractmethod
     def removeUser(self):
         pass
+
+    @abstractmethod
+    def checkIfUserExists(self):
+        pass

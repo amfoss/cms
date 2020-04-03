@@ -13,196 +13,51 @@ class statusObj(graphene.ObjectType):
     status = graphene.String()
 
 
-class InviteUserGitLab(graphene.Mutation):
+class ChangeUserPlatform(graphene.Mutation):
     class Arguments:
         username = graphene.String(required=True)
+        github = graphene.Boolean()
+        gitlab = graphene.Boolean()
+        telegram = graphene.Boolean()
+        cloudflare = graphene.Boolean()
+        cms = graphene.Boolean()
 
     Output = statusObj
 
-    def mutate(self, info, username):
+    def mutate(self, info, username, github=None, gitlab=None, telegram=None, cloudflare=None, cms=None):
         if info.context.user.is_superuser:
             user = User.objects.get(username=username)
             profile = Profile.objects.get(user=user)
-            gitlab = GitLab(profile.gitlabUsername)
-            gitlab.addUser()
-            return statusObj(status='Done')
-        else:
-            raise APIException('Only Superusers have access',
-                               code='ONLY_SUPERUSER_HAS_ACCESS')
+            if gitlab is not None:
+                if gitlab:
+                    GitLab(profile.gitlabUsername).addUser()
+                else:
+                    GitLab(profile.gitlabUsername).removeUser()
 
+            if github is not None:
+                if github:
+                    GitHub(profile.githubUsername).addUser()
+                else:
+                    GitHub(profile.githubUsername).removeUser()
 
-class RemoveUserGitLab(graphene.Mutation):
-    class Arguments:
-        username = graphene.String(required=True)
+            if telegram is not None:
+                if telegram:
+                    Telegram(profile.telegram_id).addUser()
+                else:
+                    Telegram(profile.telegram_id).removeUser()
 
-    Output = statusObj
+            if cloudflare is not None:
+                if cloudflare:
+                    Cloudflare(profile.email, profile.customEmail).addUser()
+                else:
+                    Cloudflare(profile.email, profile.customEmail).removeUser()
 
-    def mutate(self, info, username):
-        if info.context.user.is_superuser:
-            user = User.objects.get(username=username)
-            profile = Profile.objects.get(user=user)
-            gitlab = GitLab(profile.gitlabUsername)
-            gitlab.removeUser()
-            return statusObj(status='Done')
-        else:
-            raise APIException('Only Superusers have access',
-                               code='ONLY_SUPERUSER_HAS_ACCESS')
+            if cms is not None:
+                if cms:
+                    user.is_active = True
+                else:
+                    user.is_active = False
 
-
-class InviteUserGitHub(graphene.Mutation):
-    class Arguments:
-        username = graphene.String(required=True)
-
-    Output = statusObj
-
-    def mutate(self, info, username):
-        if info.context.user.is_superuser:
-            user = User.objects.get(username=username)
-            profile = Profile.objects.get(user=user)
-            github = GitHub(profile.githubUsername)
-            github.addUser()
-            return statusObj(status='Done')
-        else:
-            raise APIException('Only Superusers have access',
-                               code='ONLY_SUPERUSER_HAS_ACCESS')
-
-
-class RemoveUserGitHub(graphene.Mutation):
-    class Arguments:
-        username = graphene.String(required=True)
-
-    Output = statusObj
-
-    def mutate(self, info, username):
-        if info.context.user.is_superuser:
-            user = User.objects.get(username=username)
-            profile = Profile.objects.get(user=user)
-            github = GitHub(profile.githubUsername)
-            github.removeUser()
-            return statusObj(status='Done')
-        else:
-            raise APIException('Only Superusers have access',
-                               code='ONLY_SUPERUSER_HAS_ACCESS')
-
-
-class InviteUserCloudflare(graphene.Mutation):
-    class Arguments:
-        username = graphene.String(required=True)
-
-    Output = statusObj
-
-    def mutate(self, info, username):
-        if info.context.user.is_superuser:
-            user = User.objects.get(username=username)
-            profile = Profile.objects.get(user=user)
-            cloudflare = Cloudflare(profile.email, profile.customEmail)
-            cloudflare.addUser()
-            return statusObj(status='Done')
-        else:
-            raise APIException('Only Superusers have access',
-                               code='ONLY_SUPERUSER_HAS_ACCESS')
-
-
-class RemoveUserCloudflare(graphene.Mutation):
-    class Arguments:
-        username = graphene.String(required=True)
-
-    Output = statusObj
-
-    def mutate(self, info, username):
-        if info.context.user.is_superuser:
-            user = User.objects.get(username=username)
-            profile = Profile.objects.get(user=user)
-            cloudflare = Cloudflare(profile.email)
-            cloudflare.removeUser()
-            return statusObj(status='Done')
-        else:
-            raise APIException('Only Superusers have access',
-                               code='ONLY_SUPERUSER_HAS_ACCESS')
-
-
-class InviteUserTelegram(graphene.Mutation):
-    class Arguments:
-        username = graphene.String(required=True)
-
-    Output = statusObj
-
-    def mutate(self, info, username):
-        if info.context.user.is_superuser:
-            user = User.objects.get(username=username)
-            profile = Profile.objects.get(user=user)
-            telegram = Telegram(profile.telegram_id)
-            telegram.addUser()
-            return statusObj(status='Done')
-        else:
-            raise APIException('Only Superusers have access',
-                               code='ONLY_SUPERUSER_HAS_ACCESS')
-
-
-class RemoveUserTelegram(graphene.Mutation):
-    class Arguments:
-        username = graphene.String(required=True)
-
-    Output = statusObj
-
-    def mutate(self, info, username):
-        if info.context.user.is_superuser:
-            user = User.objects.get(username=username)
-            profile = Profile.objects.get(user=user)
-            telegram = Telegram(profile.telegram_id)
-            telegram.removeUser()
-            return statusObj(status='Done')
-        else:
-            raise APIException('Only Superusers have access',
-                               code='ONLY_SUPERUSER_HAS_ACCESS')
-
-
-class MakeUserInActive(graphene.Mutation):
-    class Arguments:
-        username = graphene.String(required=True)
-
-    Output = statusObj
-
-    def mutate(self, info, username):
-        if info.context.user.is_superuser:
-            user = User.objects.get(username=username)
-            profile = Profile.objects.get(user=user)
-            gitlab = GitLab(profile.gitlabUsername)
-            gitlab.removeUser()
-            github = GitHub(profile.githubUsername)
-            github.removeUser()
-            cloudflare = Cloudflare(profile.email)
-            cloudflare.removeUser()
-            telegram = Telegram(profile.telegram_id)
-            telegram.removeUser()
-            user.is_active = False
-            user.save()
-            return statusObj(status='Done')
-        else:
-            raise APIException('Only Superusers have access',
-                               code='ONLY_SUPERUSER_HAS_ACCESS')
-
-
-class MakeUserActive(graphene.Mutation):
-    class Arguments:
-        username = graphene.String(required=True)
-
-    Output = statusObj
-
-    def mutate(self, info, username):
-        if info.context.user.is_superuser:
-            user = User.objects.get(username=username)
-            profile = Profile.objects.get(user=user)
-            gitlab = GitLab(profile.gitlabUsername)
-            gitlab.addUser()
-            github = GitHub(profile.githubUsername)
-            github.addUser()
-            cloudflare = Cloudflare(profile.email, profile.customEmail)
-            cloudflare.addUser()
-            telegram = Telegram(profile.telegram_id)
-            telegram.addUser()
-            user.is_active = True
-            user.save()
             return statusObj(status='Done')
         else:
             raise APIException('Only Superusers have access',
@@ -210,13 +65,4 @@ class MakeUserActive(graphene.Mutation):
 
 
 class Mutation(object):
-    remove_user_gitlab = RemoveUserGitLab.Field()
-    invite_user_gitlab = InviteUserGitLab.Field()
-    remove_user_github = RemoveUserGitHub.Field()
-    invite_user_github = InviteUserGitHub.Field()
-    remove_user_cloudflare = RemoveUserCloudflare.Field()
-    invite_user_cloudflare = InviteUserCloudflare.Field()
-    remove_user_telegram = RemoveUserTelegram.Field()
-    invite_user_telegram = InviteUserTelegram.Field()
-    make_user_in_active = MakeUserInActive.Field()
-    make_user_active = MakeUserActive.Field()
+    change_user_platform = ChangeUserPlatform.Field()

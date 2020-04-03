@@ -2,21 +2,12 @@ import graphene
 from hashlib import md5
 from ..models import Profile, SocialProfile, Portal
 from graphql_jwt.decorators import login_required
-from framework import settings
 from framework.api.APIException import APIException
 
-from github import Github
-import gitlab
-import CloudFlare
-import telegram
-
-GITLAB_TOKEN = settings.GITLAB_TOKEN
-GITHUB_TOKEN = settings.GITHUB_TOKEN
-EMAIL_USER = settings.EMAIL_HOST_USER
-CLOUDFLARE_TOKEN = settings.CLOUDFLARE_TOKEN
-CLOUDFLARE_ZONE_ID = settings.CLOUDFLARE_ZONE_ID
-TELEGRAM_BOT_TOKEN = settings.TELEGRAM_BOT_TOKEN
-TELEGRAM_CHAT_ID = settings.TELEGRAM_CHAT_ID
+from framework.platforms.gitlab import GitLab
+from framework.platforms.github import GitHub
+from framework.platforms.cloudflare import Cloudflare
+from framework.platforms.telegram import Telegram
 
 
 class PortalObj(graphene.ObjectType):
@@ -91,16 +82,7 @@ class ProfileObj(graphene.ObjectType):
     def resolve_inGitLabGroup(self, info):
         if info.context.user.is_superuser:
             if self['gitlabUsername']:
-                gl = gitlab.Gitlab('https://gitlab.com/', GITLAB_TOKEN)
-                gl.auth()
-                group = gl.groups.get('amfoss')
-                userID = gl.users.list(username=self['gitlabUsername'])[0].id
-                try:
-                    member = group.members.get(userID)
-                    if member:
-                        return True
-                except:
-                    return False
+                return GitLab(self['gitlabUsername']).checkIfUserExists()
             else:
                 return False
         else:
@@ -111,13 +93,7 @@ class ProfileObj(graphene.ObjectType):
     def resolve_inGitHubGroup(self, info):
         if info.context.user.is_superuser:
             if self['githubUsername']:
-                g = Github(GITHUB_TOKEN)
-                ghuser = g.get_user(self['githubUsername'])
-                org = g.get_organization('amfoss')
-                if org.has_in_members(ghuser):
-                    return True
-                else:
-                    return False
+                return GitHub(self['githubUsername']).checkIfUserExists()
             else:
                 return False
         else:
@@ -128,13 +104,7 @@ class ProfileObj(graphene.ObjectType):
     def resolve_inCloudFlareGroup(self, info):
         if info.context.user.is_superuser:
             if self['email']:
-                cf = CloudFlare.CloudFlare(email=EMAIL_USER, token=CLOUDFLARE_TOKEN)
-                records = cf.zones.dns_records.get(CLOUDFLARE_ZONE_ID, params={'per_page': 50})
-                for record in records:
-                    if record['type'] == 'TXT' and record['name'] == 'amfoss.in' and record['content'].startswith(
-                            'forward-email'):
-                        if self['email'] in record['content']:
-                            return True
+                return Cloudflare(self['email']).checkIfUserExists()
             else:
                 return False
         else:
@@ -144,15 +114,7 @@ class ProfileObj(graphene.ObjectType):
     @login_required
     def resolve_inTelegramGroup(self, info):
         if info.context.user.is_superuser:
-            bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
-            try:
-                status = bot.get_chat_member(chat_id=TELEGRAM_CHAT_ID, user_id=self['telegram_id']).status
-                if status == "left" or status == "kicked":
-                    return False
-                else:
-                    return True
-            except:
-                return False
+            return Telegram(self['telegram_id']).checkIfUserExists()
         else:
             raise APIException('Only Superusers have access',
                                code='ONLY_SUPERUSER_HAS_ACCESS')

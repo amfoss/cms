@@ -64,3 +64,12 @@ class Cloudflare(UserPlatform):
                     except CloudFlare.exceptions.CloudFlareAPIError as e:
                         pass
                     break
+
+    def checkIfUserExists(self):
+        cf = CloudFlare.CloudFlare(email=EMAIL_USER, token=CLOUDFLARE_TOKEN)
+        records = cf.zones.dns_records.get(CLOUDFLARE_ZONE_ID, params={'per_page': 50})
+        for record in records:
+            if record['type'] == 'TXT' and record['name'] == 'amfoss.in' and record['content'].startswith(
+                    'forward-email'):
+                if self.email in record['content']:
+                    return True

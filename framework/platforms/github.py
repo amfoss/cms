@@ -23,3 +23,12 @@ class GitHub(UserPlatform):
         org = g.get_organization('amfoss')
         if not org.has_in_members(ghuser):
             org.add_to_public_members(ghuser)
+
+    def checkIfUserExists(self):
+        g = Github(GITHUB_TOKEN)
+        ghuser = g.get_user(self.username)
+        org = g.get_organization('amfoss')
+        if org.has_in_members(ghuser):
+            return True
+        else:
+            return False

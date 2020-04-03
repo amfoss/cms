@@ -38,3 +38,14 @@ class Telegram(UserPlatform):
                     text=message,
                     parse_mode=telegram.ParseMode.HTML
                 )
+
+    def checkIfUserExists(self):
+        bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+        try:
+            status = bot.get_chat_member(chat_id=TELEGRAM_CHAT_ID, user_id=self.telegram_id).status
+            if status == "left" or status == "kicked":
+                return False
+            else:
+                return True
+        except:
+            return False
