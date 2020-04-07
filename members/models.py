@@ -13,6 +13,7 @@ from django.utils import timezone
 
 SKILL_TYPES = (('T', 'Technical'), ('A', 'Arts'), ('S', 'Social'), ('P', 'Sports'), ('O', 'Others'))
 LEAVE_TYPE = (('M', 'Health'), ('F', 'Family/Home'), ('T', 'Tiredness'), ('A', 'Academics/Duty'))
+ROLE_TYPE = (('Member', 'Member'), ('Mentor', 'Mentor'))
 
 
 class Skill(models.Model):
@@ -111,6 +112,7 @@ class Profile(models.Model):
     )
 
     # Additional Details
+    role = models.CharField(max_length=256, choices=ROLE_TYPE, default='Member')
     githubUsername = models.CharField(max_length=50, null=True, blank=True)
     gitlabUsername = models.CharField(max_length=50, null=True, blank=True)
     customEmail = models.CharField(max_length=50, null=True, blank=True)

@@ -42,6 +42,7 @@ class ProfileAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
         }),
         ('Additional Details', {
             'fields': [
+                ('role', ),
                 ('roll_number', 'batch', 'birthday'),
                 ('resume', 'system_no', 'typing_speed'),
                 ('location', 'languages', 'displayInWebsite'),

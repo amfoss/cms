@@ -37,6 +37,7 @@ class ProfileObj(graphene.ObjectType):
     gitlabUsername = graphene.String()
     customEmail = graphene.String()
     displayInWebsite = graphene.Boolean()
+    role = graphene.String()
     # fields that require login
     inGitLabGroup = graphene.Boolean()
     inGitHubGroup = graphene.Boolean()
@@ -82,6 +83,9 @@ class ProfileObj(graphene.ObjectType):
 
     def resolve_displayInWebsite(self, info):
         return self['displayInWebsite']
+
+    def resolve_role(self, info):
+        return self['role']
 
     @login_required
     def resolve_inGitLabGroup(self, info):
