@@ -21,11 +21,13 @@ class ChangeUserPlatform(graphene.Mutation):
         telegram = graphene.Boolean()
         cloudflare = graphene.Boolean()
         cms = graphene.Boolean()
+        cmsGroup = graphene.Boolean()
+        groupName = graphene.String()
         displayInWebsite = graphene.String()
 
     Output = statusObj
 
-    def mutate(self, info, username, github=None, gitlab=None, telegram=None, cloudflare=None, cms=None, displayInWebsite=None):
+    def mutate(self, info, username, github=None, gitlab=None, telegram=None, cloudflare=None, cms=None, cmsGroup=None, groupName=None, displayInWebsite=None):
         if info.context.user.is_superuser:
             user = User.objects.get(username=username)
             profile = Profile.objects.get(user=user)
@@ -56,6 +58,16 @@ class ChangeUserPlatform(graphene.Mutation):
             if cms is not None:
                 user.is_active = cms
                 user.save()
+
+            if cmsGroup is not None and groupName is not None:
+                if cmsGroup:
+                    group = Group.objects.get(name=groupName)
+                    group.members.add(user)
+                    group.save()
+                else:
+                    group = Group.objects.get(name=groupName)
+                    group.members.remove(user)
+                    group.save()
 
             if displayInWebsite is not None:
                 profile.displayInWebsite = displayInWebsite

@@ -1,6 +1,6 @@
 import graphene
 from hashlib import md5
-from ..models import Profile, SocialProfile, Portal
+from ..models import Profile, SocialProfile, Portal, Group
 from graphql_jwt.decorators import login_required
 from framework.api.APIException import APIException
 
@@ -36,11 +36,13 @@ class ProfileObj(graphene.ObjectType):
     githubUsername = graphene.String()
     gitlabUsername = graphene.String()
     customEmail = graphene.String()
+    displayInWebsite = graphene.Boolean()
     # fields that require login
     inGitLabGroup = graphene.Boolean()
     inGitHubGroup = graphene.Boolean()
     inCloudFlareGroup = graphene.Boolean()
     inTelegramGroup = graphene.Boolean()
+    inCMSGroup = graphene.Boolean()
     profilePic = graphene.String()
     phone = graphene.String()
     birthDay = graphene.types.datetime.Date()
@@ -77,6 +79,9 @@ class ProfileObj(graphene.ObjectType):
 
     def resolve_profilePic(self, info):
         return self['profile_pic']
+
+    def resolve_displayInWebsite(self, info):
+        return self['displayInWebsite']
 
     @login_required
     def resolve_inGitLabGroup(self, info):
@@ -115,6 +120,14 @@ class ProfileObj(graphene.ObjectType):
     def resolve_inTelegramGroup(self, info):
         if info.context.user.is_superuser:
             return Telegram(self['telegram_id']).checkIfUserExists()
+        else:
+            raise APIException('Only Superusers have access',
+                               code='ONLY_SUPERUSER_HAS_ACCESS')
+
+    @login_required
+    def resolve_inCMSGroup(self, info):
+        if info.context.user.is_superuser:
+            return Group.objects.values().filter(members__id=self['user_id'])
         else:
             raise APIException('Only Superusers have access',
                                code='ONLY_SUPERUSER_HAS_ACCESS')
