@@ -107,7 +107,8 @@ class clubStatusObj(graphene.ObjectType):
 
 class Query(graphene.ObjectType):
     getStatusUpdates = graphene.List(MessageObj, date=graphene.types.datetime.Date(required=True))
-    getMemberStatusUpdates = graphene.List(MessageObj, username=graphene.String(required=True))
+    getMemberStatusUpdates = graphene.List(MessageObj, username=graphene.String(required=True),
+                                           date=graphene.types.datetime.Date())
     dailyStatusUpdates = graphene.Field(
         dailyStatusObj,
         date=graphene.types.datetime.Date(required=True)
@@ -125,7 +126,11 @@ class Query(graphene.ObjectType):
     @login_required
     def resolve_getMemberStatusUpdates(self, info, **kwargs):
         username = kwargs.get('username')
-        return reversed(Message.objects.values().filter(member__username=username))
+        date = kwargs.get('date')
+        if date is None:
+            return reversed(Message.objects.values().filter(member__username=username))
+        else:
+            return Message.objects.values().filter(date=date, member__username=username)
 
     @login_required
     def resolve_dailyStatusUpdates(self, info, **kwargs):
