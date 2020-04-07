@@ -236,13 +236,14 @@ class ReportMaker(object):
                             if lastSend > thread.noOfDays:
                                 kick = True
                                 exceptions = StatusException.objects.filter(isPaused=True)
-                                for exception in exceptions:
-                                    if member == exception.user:
-                                        if exception.start_date <= date.today() <= exception.end_date:
-                                            kick = False
-                                            break
-                                        else:
-                                            exception.isPaused = False
+                                if exceptions:
+                                    for exception in exceptions:
+                                        if member == exception.user:
+                                            if exception.start_date <= date.today() <= exception.end_date:
+                                                kick = False
+                                                break
+                                            else:
+                                                exception.isPaused = False
                                 if kick and status != "left":
                                     shouldKick.append(member)
                         except:
