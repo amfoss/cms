@@ -1,6 +1,6 @@
 import graphene
 from django.contrib.auth.models import User
-from members.models import Profile
+from members.models import Profile, Group
 from .APIException import APIException
 
 from framework.platforms.gitlab import GitLab
@@ -21,10 +21,11 @@ class ChangeUserPlatform(graphene.Mutation):
         telegram = graphene.Boolean()
         cloudflare = graphene.Boolean()
         cms = graphene.Boolean()
+        displayInWebsite = graphene.String()
 
     Output = statusObj
 
-    def mutate(self, info, username, github=None, gitlab=None, telegram=None, cloudflare=None, cms=None):
+    def mutate(self, info, username, github=None, gitlab=None, telegram=None, cloudflare=None, cms=None, displayInWebsite=None):
         if info.context.user.is_superuser:
             user = User.objects.get(username=username)
             profile = Profile.objects.get(user=user)
@@ -53,10 +54,12 @@ class ChangeUserPlatform(graphene.Mutation):
                     Cloudflare(profile.email, profile.customEmail).removeUser()
 
             if cms is not None:
-                if cms:
-                    user.is_active = True
-                else:
-                    user.is_active = False
+                user.is_active = cms
+                user.save()
+
+            if displayInWebsite is not None:
+                profile.displayInWebsite = displayInWebsite
+                profile.save()
 
             return statusObj(status='Done')
         else:

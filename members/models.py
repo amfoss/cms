@@ -116,6 +116,7 @@ class Profile(models.Model):
     customEmail = models.CharField(max_length=50, null=True, blank=True)
     telegram_id = models.CharField(max_length=50, null=True, blank=True)
     roll_number = models.CharField(max_length=25, null=True, blank=True)
+    displayInWebsite = models.BooleanField(default=True, verbose_name="Display in website")
     batch = models.IntegerField(null=True, help_text='Year of Admission', blank=True)
     location = models.CharField(max_length=150, null=True, blank=True)
     birthday = models.DateField(null=True, help_text='YYYY-MM-DD', blank=True)
