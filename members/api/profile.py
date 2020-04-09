@@ -1,6 +1,6 @@
 import graphene
 from hashlib import md5
-from ..models import Profile, SocialProfile, Portal, Group
+from ..models import Profile, SocialProfile, Portal, Group, Project
 from graphql_jwt.decorators import login_required
 from framework.api.APIException import APIException
 

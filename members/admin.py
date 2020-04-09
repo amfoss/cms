@@ -233,6 +233,55 @@ class MentorGroupAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdm
     mentees_display.verbose_name = 'Mentees'
 
 
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    fields = [
+                ('name', 'slug'),
+                'members',
+                ('tagline', 'topics'),
+                ('published', 'cover'),
+                'detail',
+                'featured',
+            ]
+    list_display = ('name', 'featured', 'published')
+    inlines = (ProjectLinkInline,)
+    select2 = select2_modelform(Project, attrs={'width': '250px'})
+    form = select2
+
+    def get_readonly_fields(self, request, obj=None):
+        fields = list(super().get_readonly_fields(request))
+        if not request.user.is_superuser:
+            fields.append('featured')
+        return fields
+
+    def get_queryset(self, request):
+        qs = super(ProjectAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(members=request.user)
+
+    def has_view_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if obj is not None and request.user not in obj.members.all():
+            return False
+        return True
+
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if obj is not None and request.user not in obj.members.all():
+            return False
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if obj is not None and request.user not in obj.members.all():
+            return False
+        return True
+
+
 class WebspaceResource(resources.ModelResource):
 
     class Meta:
@@ -248,18 +297,20 @@ class WebSpaceAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin)
 
 @admin.register(Portal)
 class PortalAdmin(admin.ModelAdmin):
-    def has_module_permission(self, request):
-        return False
+    fields = ['name', ('icon', 'color')]
 
-
-@admin.register(Organization)
-class OrganizationAdmin(admin.ModelAdmin):
-    def has_module_permission(self, request):
-        return False
+    list_display = ('name', 'icon', 'color')
 
 
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
+    fields = ['name', ('type', 'icon')]
+
+    list_display = ('name', 'type')
+
+
+@admin.register(Organization)
+class OrganizationAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):
         return False
 

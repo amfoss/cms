@@ -31,4 +31,30 @@ class sp_inline(admin.TabularInline):
         return True
 
 
-__all__ = ['sp_inline', ]
+class ProjectLinkInline(admin.TabularInline):
+    model = SocialProject
+    extra = 0
+
+    def has_add_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if obj is not None and request.user not in obj.members.all():
+            return False
+        return True
+
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if obj is not None and request.user not in obj.members.all():
+            return False
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if obj is not None and request.user not in obj.members.all():
+            return False
+        return True
+
+
+__all__ = ['sp_inline', 'ProjectLinkInline']

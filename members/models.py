@@ -11,7 +11,7 @@ from framework.validators import validate_file_size, processed_image_field_specs
 from imagekit.models import ProcessedImageField
 from django.utils import timezone
 
-SKILL_TYPES = (('T', 'Technical'), ('A', 'Arts'), ('S', 'Social'), ('P', 'Sports'), ('O', 'Others'))
+SKILL_TYPES = (('Technical', 'Technical'), ('Arts', 'Arts'), ('Social', 'Social'), ('Sports', 'Sports'), ('Others', 'Others'))
 LEAVE_TYPE = (('M', 'Health'), ('F', 'Family/Home'), ('T', 'Tiredness'), ('A', 'Academics/Duty'))
 ROLE_TYPE = (('Member', 'Member'), ('Mentor', 'Mentor'))
 
@@ -23,9 +23,8 @@ class Skill(models.Model):
         return 'static/uploads/images/icons/' + filename
 
     name = models.CharField(max_length=25)
-    type = models.CharField(choices=SKILL_TYPES, default='O', max_length=1)
+    type = models.CharField(choices=SKILL_TYPES, default='Others', max_length=10)
     icon = ProcessedImageField(
-        default='./pages/static/pages/defaults/members-skill-icon-default.png',
         blank=True,
         verbose_name='Icon',
         upload_to=get_icon_path,
@@ -172,7 +171,7 @@ class Profile(models.Model):
 
 class SocialProfile(models.Model):
     portal = models.ForeignKey(Portal, on_delete=models.CASCADE, verbose_name='Portal Name')
-    link = models.URLField(max_length=150,verbose_name='Profile URL')
+    link = models.URLField(max_length=150, verbose_name='Profile URL')
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     class Meta:
@@ -295,6 +294,42 @@ class WebSpace(models.Model):
         return self.name
 
 
+class Project(models.Model):
+    def get_poster_path(self, filename):
+        ext = filename.split('.')[-1]
+        filename = "%s.%s" % (uuid.uuid4(), ext)
+        return 'static/uploads/images/projects/' + filename
+
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
+    featured = models.BooleanField(default=False)
+    tagline = models.CharField(max_length=100)
+    members = models.ManyToManyField(User, related_name='Project')
+    published = models.DateField(default=date.today)
+    cover = ProcessedImageField(default='', verbose_name='Project Poster', upload_to=get_poster_path, validators=[validate_file_size], **processed_image_field_specs)
+    topics = models.ManyToManyField(Skill, related_name='ProjectTopics', blank=True)
+    detail = RichTextField(verbose_name='Details', null=True)
+    links = models.ManyToManyField(Portal, related_name='ProjectLinks', through='SocialProject')
+
+    class Meta:
+        verbose_name_plural = "Projects"
+        verbose_name = "Project"
+
+    def __str__(self):
+        return self.name
+
+
+class SocialProject(models.Model):
+    portal = models.ForeignKey(Portal, on_delete=models.CASCADE, related_name='project_links_portal',
+                               verbose_name='Portal Name')
+    link = models.URLField(max_length=100, verbose_name='Project Page URL')
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Project Profile Links"
+        verbose_name = "Project Profile Link"
+
+
 __all__ = [
             'LeaveRecord',
             'MentorGroup',
@@ -308,5 +343,7 @@ __all__ = [
             'Skill',
             'Portal',
             'Organization',
-            'WebSpace'
+            'WebSpace',
+            'SocialProject',
+            'Project'
 ]

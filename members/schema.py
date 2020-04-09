@@ -8,6 +8,7 @@ from .api.profile import Query as profileQuery
 from .api.group import Query as groupQuery
 from .api.webspace import Query as webspaceQuery
 from .api.leaverecord import Query as leaveRecordQuery
+from .api.project import Query as projectsQuery
 from graphql_jwt.decorators import login_required
 #
 #       Mutations
@@ -82,6 +83,6 @@ class Mutation(object):
 #       Queries
 #
 
-class Query(profileQuery, groupQuery,leaveRecordQuery, webspaceQuery):
+class Query(profileQuery, groupQuery, leaveRecordQuery, webspaceQuery, projectsQuery):
     pass
 
