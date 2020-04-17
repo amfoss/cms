@@ -159,7 +159,7 @@ class UpdateProfile(graphene.Mutation):
         email = graphene.String()
         phoneNo = graphene.String()
         githubUsername = graphene.String()
-        gitlabUseraname = graphene.String()
+        gitlabUsername = graphene.String()
         customEmail = graphene.String()
         roll = graphene.String()
         batch = graphene.Int()
