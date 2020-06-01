@@ -153,7 +153,7 @@ class ReportMaker(object):
         invalidUpdatesCount = invalidUpdates.count()
         message = ''
         if invalidUpdatesCount > 0:
-            message += '\n\n<b>⚠️ INVALID STATUS UPDATES (' + str(invalidUpdatesCount) + ') : </b> \n\n'
+            message += '\n\n<b>⚠️ INVALID (' + str(invalidUpdatesCount) + ') : </b> \n\n'
             i = 0
             for member in invalidUpdates.all():
                 i = i + 1
@@ -164,7 +164,7 @@ class ReportMaker(object):
         kickedOutMembersCount = len(kickedOutMembers)
         message = ''
         if kickedOutMembersCount > 0:
-            message += '\n\n<b>❌ PEOPLE WHO ARE KICKED (' + str(kickedOutMembersCount) + ') : </b> \n\n'
+            message += '\n\n<b>❌ KICKED (' + str(kickedOutMembersCount) + ') : </b> \n\n'
             i = 0
             for member in kickedOutMembers:
                 i = i + 1
