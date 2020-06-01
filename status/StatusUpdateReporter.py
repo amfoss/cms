@@ -174,6 +174,9 @@ class ReportMaker(object):
     def generateDailyReport(self):
         date = self.date
         thread = self.thread
+        updates = Message.objects.filter(date=date, thread=thread).order_by('timestamp')
+        first = UserProfile.objects.get(user=updates[0].member)
+        last = UserProfile.objects.get(user=list(reversed(updates))[0].member)
         try:
             log = DailyLog.objects.get(date=date, thread=thread)
             allowKick = Thread.objects.get(name=thread).allowBotToKick
@@ -190,7 +193,9 @@ class ReportMaker(object):
             message += self.getInvalidUpdatesReport(log.invalidUpdates)
             if allowKick:
                 message += self.getKickMembersReport(self.membersToBeKicked)
-            message += self.getLateReport(log.late)
+            if updates.count() > 0:
+                message += '\n\n<b>&#11088; First : </b>' + first.first_name + " " + first.last_name + '\n'
+                message += '<b>&#128012; Last : </b>' + last.first_name + " " + last.last_name + '\n'
             message += self.generateDidNotSendReport(log.didNotSend)
             if thread.footerMessage:
                 message += '\n<i>' + thread.footerMessage + '</i>'
