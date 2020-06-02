@@ -194,9 +194,12 @@ class ReportMaker(object):
             if allowKick:
                 message += self.getKickMembersReport(self.membersToBeKicked)
             if updates.count() > 0:
-                message += '\n\n<b>&#11088; First : </b>' + first.first_name + " " + first.last_name + '\n'
-                message += '<b>&#128012; Last : </b>' + last.first_name + " " + last.last_name + '\n'
-            message += self.generateDidNotSendReport(log.didNotSend)
+                message += '\n\n<b>&#11088; First : </b>' + first.first_name + ' ' + first.last_name + \
+                           ' (' + updates[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
+                    '%I:%M %p') + ')' + '\n'
+                message += '<b>&#128012; Last : </b>' + last.first_name + ' ' + last.last_name + \
+                           ' (' + list(reversed(updates))[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
+                    '%I:%M %p') + ')' + '\n'
             if thread.footerMessage:
                 message += '\n<i>' + thread.footerMessage + '</i>'
 
