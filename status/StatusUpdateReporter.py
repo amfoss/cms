@@ -200,6 +200,7 @@ class ReportMaker(object):
                 message += '<b>&#128012; Last : </b>' + last.first_name + ' ' + last.last_name + \
                            ' (' + list(reversed(updates))[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
                     '%I:%M %p') + ')' + '\n'
+            message += self.generateDidNotSendReport(log.didNotSend)
             if thread.footerMessage:
                 message += '\n<i>' + thread.footerMessage + '</i>'
 
