@@ -30,6 +30,15 @@ from attendance.api.log import userAttendanceObj
 from .api.user import UserBasicObj
 from .api.mutation import Mutation as PlatformMutation
 
+import secrets,string
+
+from framework import settings
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
+from_email = settings.EMAIL_HOST_USER
+
 to_tz = timezone.get_default_timezone()
 
 
@@ -200,6 +209,28 @@ class UpdateProfile(graphene.Mutation):
         profile.save()
         return userResponseObj(id=user.id)
 
+class ResetPassword(graphene.Mutation):
+    class Arguments:
+        email = graphene.String(required=True)
+
+    Output = userStatusObj
+
+    def mutate(self, info, email):
+        user = User.objects.get(email=email)
+        if user is not None:
+            newPassword = ''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(10))
+            user.set_password(newPassword)
+            user.save()
+            context = {
+                "password" : newPassword,
+                "username" : user.username
+            }
+            message = render_to_string('email/password_reset_email.html', context)
+            send_mail('Reset Password | amFOSS CMS',  strip_tags(message) , from_email, [email], fail_silently=False, html_message=message)
+            return userStatusObj(status=True)
+        else:
+            raise APIException('Email is not registered',
+                               code='WRONG_EMAIL')
 
 class Query(
     dairyQuery,
@@ -270,6 +301,7 @@ class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation
     approve_user = ApproveUser.Field()
     change_password = ChangePassword.Field()
     UpdateProfile = UpdateProfile.Field()
+    reset_password = ResetPassword.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
