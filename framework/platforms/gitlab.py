@@ -1,8 +1,6 @@
 import gitlab
-from framework import settings
 from framework.platforms.userPlatform import UserPlatform
-
-GITLAB_TOKEN = settings.GITLAB_TOKEN
+from utilities.models import Token
 
 
 class GitLab(UserPlatform):
@@ -11,6 +9,7 @@ class GitLab(UserPlatform):
         self.username = username
 
     def removeUser(self):
+        GITLAB_TOKEN = Token.objects.values().get(key='GITLAB_TOKEN')['value']
         gl = gitlab.Gitlab('https://gitlab.com/', GITLAB_TOKEN)
         gl.auth()
         group = gl.groups.get('amfoss')
@@ -18,6 +17,7 @@ class GitLab(UserPlatform):
         group.members.delete(userID)
 
     def addUser(self):
+        GITLAB_TOKEN = Token.objects.values().get(key='GITLAB_TOKEN')['value']
         gl = gitlab.Gitlab('https://gitlab.com/', GITLAB_TOKEN)
         gl.auth()
         group = gl.groups.get('amfoss')
@@ -25,6 +25,7 @@ class GitLab(UserPlatform):
         group.members.create({'user_id': userID, 'access_level': gitlab.GUEST_ACCESS})
 
     def checkIfUserExists(self):
+        GITLAB_TOKEN = Token.objects.values().get(key='GITLAB_TOKEN')['value']
         gl = gitlab.Gitlab('https://gitlab.com/', GITLAB_TOKEN)
         gl.auth()
         group = gl.groups.get('amfoss')

@@ -1,8 +1,6 @@
 from github import Github
-from framework import settings
 from framework.platforms.userPlatform import UserPlatform
-
-GITHUB_TOKEN = settings.GITHUB_TOKEN
+from utilities.models import Token
 
 
 class GitHub(UserPlatform):
@@ -11,6 +9,7 @@ class GitHub(UserPlatform):
         self.username = username
 
     def removeUser(self):
+        GITHUB_TOKEN = Token.objects.values().get(key='GITHUB_TOKEN')['value']
         g = Github(GITHUB_TOKEN)
         ghuser = g.get_user(self.username)
         org = g.get_organization('amfoss')
@@ -18,6 +17,7 @@ class GitHub(UserPlatform):
             org.remove_from_members(ghuser)
 
     def addUser(self):
+        GITHUB_TOKEN = Token.objects.values().get(key='GITHUB_TOKEN')['value']
         g = Github(GITHUB_TOKEN)
         ghuser = g.get_user(self.username)
         org = g.get_organization('amfoss')
@@ -25,6 +25,7 @@ class GitHub(UserPlatform):
             org.add_to_members(ghuser, 'member')
 
     def checkIfUserExists(self):
+        GITHUB_TOKEN = Token.objects.values().get(key='GITHUB_TOKEN')['value']
         g = Github(GITHUB_TOKEN)
         ghuser = g.get_user(self.username)
         org = g.get_organization('amfoss')

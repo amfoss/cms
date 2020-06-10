@@ -1,10 +1,7 @@
 import telegram
-from framework import settings
 from framework.platforms.userPlatform import UserPlatform
 from datetime import date
-
-TELEGRAM_BOT_TOKEN = settings.TELEGRAM_BOT_TOKEN
-TELEGRAM_CHAT_ID = settings.TELEGRAM_CHAT_ID
+from utilities.models import Token
 
 
 class Telegram(UserPlatform):
@@ -13,6 +10,8 @@ class Telegram(UserPlatform):
         self.telegram_id = telegram_id
 
     def removeUser(self):
+        TELEGRAM_BOT_TOKEN = Token.objects.values().get(key='TELEGRAM_BOT_TOKEN')['value']
+        TELEGRAM_CHAT_ID = Token.objects.values().get(key='TELEGRAM_CHAT_ID')['value']
         bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
         try:
             bot.kick_chat_member(chat_id=TELEGRAM_CHAT_ID, user_id=self.telegram_id)
@@ -24,6 +23,8 @@ class Telegram(UserPlatform):
             pass
 
     def addUser(self):
+        TELEGRAM_BOT_TOKEN = Token.objects.values().get(key='TELEGRAM_BOT_TOKEN')['value']
+        TELEGRAM_CHAT_ID = Token.objects.values().get(key='TELEGRAM_CHAT_ID')['value']
         bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
         user = bot.get_chat(chat_id=self.telegram_id)
         message = 'Hi Admin, \n\n'
@@ -40,6 +41,8 @@ class Telegram(UserPlatform):
                 )
 
     def checkIfUserExists(self):
+        TELEGRAM_BOT_TOKEN = Token.objects.values().get(key='TELEGRAM_BOT_TOKEN')['value']
+        TELEGRAM_CHAT_ID = Token.objects.values().get(key='TELEGRAM_CHAT_ID')['value']
         bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
         try:
             status = bot.get_chat_member(chat_id=TELEGRAM_CHAT_ID, user_id=self.telegram_id).status

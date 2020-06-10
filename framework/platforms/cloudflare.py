@@ -1,10 +1,9 @@
 import CloudFlare
 from framework import settings
 from framework.platforms.userPlatform import UserPlatform
+from utilities.models import Token
 
 EMAIL_USER = settings.EMAIL_HOST_USER
-CLOUDFLARE_TOKEN = settings.CLOUDFLARE_TOKEN
-CLOUDFLARE_ZONE_ID = settings.CLOUDFLARE_ZONE_ID
 
 
 class Cloudflare(UserPlatform):
@@ -17,6 +16,8 @@ class Cloudflare(UserPlatform):
             self.customEmail = customEmail
 
     def removeUser(self):
+        CLOUDFLARE_TOKEN = Token.objects.values().get(key='CLOUDFLARE_TOKEN')['value']
+        CLOUDFLARE_ZONE_ID = Token.objects.values().get(key='CLOUDFLARE_ZONE_ID')['value']
         cf = CloudFlare.CloudFlare(email=EMAIL_USER, token=CLOUDFLARE_TOKEN)
         records = cf.zones.dns_records.get(CLOUDFLARE_ZONE_ID, params={'per_page': 50})
         for record in records:
@@ -46,6 +47,8 @@ class Cloudflare(UserPlatform):
                             pass
 
     def addUser(self):
+        CLOUDFLARE_TOKEN = Token.objects.values().get(key='CLOUDFLARE_TOKEN')['value']
+        CLOUDFLARE_ZONE_ID = Token.objects.values().get(key='CLOUDFLARE_ZONE_ID')['value']
         cf = CloudFlare.CloudFlare(email=EMAIL_USER, token=CLOUDFLARE_TOKEN)
         records = cf.zones.dns_records.get(CLOUDFLARE_ZONE_ID, params={'per_page': 50})
         for record in records:
@@ -66,6 +69,8 @@ class Cloudflare(UserPlatform):
                     break
 
     def checkIfUserExists(self):
+        CLOUDFLARE_TOKEN = Token.objects.values().get(key='CLOUDFLARE_TOKEN')['value']
+        CLOUDFLARE_ZONE_ID = Token.objects.values().get(key='CLOUDFLARE_ZONE_ID')['value']
         cf = CloudFlare.CloudFlare(email=EMAIL_USER, token=CLOUDFLARE_TOKEN)
         records = cf.zones.dns_records.get(CLOUDFLARE_ZONE_ID, params={'per_page': 50})
         for record in records:
