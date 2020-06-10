@@ -24,21 +24,18 @@ class Telegram(UserPlatform):
 
     def addUser(self):
         TELEGRAM_BOT_TOKEN = Token.objects.values().get(key='TELEGRAM_BOT_TOKEN')['value']
-        TELEGRAM_CHAT_ID = Token.objects.values().get(key='TELEGRAM_CHAT_ID')['value']
+        ACCESS_TELEGRAM_GROUP_CHAT_ID = Token.objects.values().get(key='ACCESS_TELEGRAM_GROUP_CHAT_ID')['value']
         bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
         user = bot.get_chat(chat_id=self.telegram_id)
-        message = 'Hi Admin, \n\n'
-        message += 'Please add @' + user['username'] + ' to amFOSS-2019 Telegram Group, \n\n'
+        message = 'Hi, \n\n'
+        message += 'Please add @' + user['username'] + ' to amFOSS Official Telegram Group, \n\n'
         message += '<i>This is an automatically generated request powered by the CMS on </i>' \
                    + '<i>' + date.today().strftime('%d %B %Y') + '.</i>'
-        admins = bot.get_chat_administrators(chat_id=TELEGRAM_CHAT_ID)
-        for admin in admins:
-            if admin['status'] == "creator":
-                bot.send_message(
-                    chat_id=admin['user']['id'],
-                    text=message,
-                    parse_mode=telegram.ParseMode.HTML
-                )
+        bot.send_message(
+            chat_id=ACCESS_TELEGRAM_GROUP_CHAT_ID,
+            text=message,
+            parse_mode=telegram.ParseMode.HTML
+        )
 
     def checkIfUserExists(self):
         TELEGRAM_BOT_TOKEN = Token.objects.values().get(key='TELEGRAM_BOT_TOKEN')['value']
