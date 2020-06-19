@@ -31,6 +31,7 @@ class NewsObj(graphene.ObjectType):
     tags = graphene.List(TagObj)
     pinned = graphene.Boolean()
     description = graphene.String(required=True)
+    cover = graphene.String(required=True)
 
     def resolve_title(self, info):
         return self['title']
@@ -55,6 +56,9 @@ class NewsObj(graphene.ObjectType):
         return News.objects.values().annotate(
             name=F('tags__name'),
         ).filter(id=self['id'])
+
+    def resolve_cover(self, info):
+        return self['cover']
 
 
 class Query(graphene.ObjectType):
