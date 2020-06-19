@@ -2,6 +2,7 @@ import graphene
 from .models import *
 from framework.api.user import UserBasicObj
 from django.db.models import F
+from framework.api.APIException import APIException
 
 
 class CategoryObj(graphene.ObjectType):
@@ -62,16 +63,21 @@ class NewsObj(graphene.ObjectType):
 
 
 class Query(graphene.ObjectType):
-    news = graphene.List(NewsObj, slug=graphene.String())
+    news = graphene.List(NewsObj)
+    getNews = graphene.Field(NewsObj, slug = graphene.String(required=True))
     tags = graphene.List(TagObj)
     categories = graphene.List(CategoryObj)
+    
+    def resolve_news(self, info):
+        return reversed(News.objects.values().all().order_by('date'))
 
-    def resolve_news(self, info, **kwargs):
+    def resolve_getNews(self, info, **kwargs):
         slug = kwargs.get('slug')
         if slug is not None:
             return News.objects.values().get(slug=slug)
         else:
-            return News.objects.values().all()
+            raise APIException('Slug is required',
+                               code='SLUG_IS_REQUIRED')
 
     def resolve_tags(self, info):
         return Tag.objects.values().all()
