@@ -37,7 +37,7 @@ class News(models.Model):
         filename = "%s.%s" % (uuid.uuid4(), ext)
         return 'static/uploads/news/cover/' + filename
 
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=150)
     slug = models.SlugField()
     author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='news_author', blank=True, null=True)
     pinned = models.BooleanField(default=False)
