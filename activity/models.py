@@ -45,7 +45,7 @@ class News(models.Model):
     date = models.DateField(default=date.today)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='category_author', blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name='tags')
-    description = RichTextField(max_length=1000, null=True, blank=True)
+    description = RichTextField(null=True, blank=True)
 
     class Meta:
         verbose_name = "News"
