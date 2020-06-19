@@ -11,6 +11,7 @@ from django.contrib.auth import get_user_model
 from graphene_django import DjangoObjectType
 
 import attendance.schema
+import activity.schema
 from dairy.schema import Query as dairyQuery
 from registration.schema import Mutation as registrationMutation, Query as registrationQuery
 import tasks.schema
@@ -239,6 +240,7 @@ class Query(
     attendance.schema.Query,
     password.schema.Query,
     tasks.schema.Query,
+    activity.schema.Query,
     status.schema.Query,
     graphene.ObjectType
 ):
