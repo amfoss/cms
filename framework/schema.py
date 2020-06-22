@@ -1,42 +1,39 @@
+import secrets
+import string
+from datetime import datetime, timedelta
+
 import graphene
 import graphql_jwt
-from datetime import date, datetime, timedelta
-
-from django.contrib.auth.hashers import check_password
-from django.utils import timezone
-from graphql_jwt.decorators import permission_required, login_required
-from django.contrib.auth.models import User
-from django.db.models import Avg
 from django.contrib.auth import get_user_model
-from graphene_django import DjangoObjectType
-
-import attendance.schema
-import activity.schema
-from dairy.schema import Query as dairyQuery
-from registration.schema import Mutation as registrationMutation, Query as registrationQuery
-import tasks.schema
-import status.schema
-import password.schema
-from .api.APIException import APIException
-from dairy.schema import Mutation as eventMutation
-
-from members.schema import Query as MembersQuery, Mutation as membersMutation
-from members.api.profile import ProfileObj
-from members.api.group import GroupObj
-from members.models import Profile, Group
-
-from attendance.models import Log
-from attendance.api.log import userAttendanceObj
-
-from .api.user import UserBasicObj
-from .api.mutation import Mutation as PlatformMutation
-
-import secrets,string
-
-from framework import settings
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.db.models import Avg
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.html import strip_tags
+from graphene_django import DjangoObjectType
+from graphql_jwt.decorators import login_required
+
+import activity.schema
+import attendance.schema
+import password.schema
+import status.schema
+import tasks.schema
+import gallery.schema
+from attendance.api.log import userAttendanceObj
+from attendance.models import Log
+from dairy.schema import Mutation as eventMutation
+from dairy.schema import Query as dairyQuery
+from framework import settings
+from members.api.group import GroupObj
+from members.api.profile import ProfileObj
+from members.models import Profile, Group
+from members.schema import Query as MembersQuery, Mutation as membersMutation
+from registration.schema import Mutation as registrationMutation, Query as registrationQuery
+from .api.APIException import APIException
+from .api.mutation import Mutation as PlatformMutation
+from .api.user import UserBasicObj
 
 from_email = settings.EMAIL_HOST_USER
 
@@ -210,6 +207,7 @@ class UpdateProfile(graphene.Mutation):
         profile.save()
         return userResponseObj(id=user.id)
 
+
 class ResetPassword(graphene.Mutation):
     class Arguments:
         email = graphene.String(required=True)
@@ -223,15 +221,17 @@ class ResetPassword(graphene.Mutation):
             user.set_password(newPassword)
             user.save()
             context = {
-                "password" : newPassword,
-                "username" : user.username
+                "password": newPassword,
+                "username": user.username
             }
             message = render_to_string('email/password_reset_email.html', context)
-            send_mail('Reset Password | amFOSS CMS',  strip_tags(message) , from_email, [email], fail_silently=False, html_message=message)
+            send_mail('Reset Password | amFOSS CMS', strip_tags(message), from_email, [email], fail_silently=False,
+                      html_message=message)
             return userStatusObj(status=True)
         else:
             raise APIException('Email is not registered',
                                code='WRONG_EMAIL')
+
 
 class Query(
     dairyQuery,
@@ -242,6 +242,7 @@ class Query(
     tasks.schema.Query,
     activity.schema.Query,
     status.schema.Query,
+    gallery.schema.Query,
     graphene.ObjectType
 ):
     user = graphene.Field(UserObj, username=graphene.String(required=True))
@@ -294,7 +295,8 @@ class Query(
                                code='ONLY_SUPERUSER_HAS_ACCESS')
 
 
-class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation, eventMutation, PlatformMutation, graphene.ObjectType):
+class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation, eventMutation, PlatformMutation,
+               graphene.ObjectType):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()

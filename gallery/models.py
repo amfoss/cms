@@ -14,11 +14,11 @@ class Photo(models.Model):
 
     uploader = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField(default=date.today)
-    image = ProcessedImageField(default='', verbose_name='Image', upload_to=get_gallery_path,validators=[validate_file_size], **processed_image_field_specs)
+    image = ProcessedImageField(default='', verbose_name='Image', upload_to=get_gallery_path, validators=[validate_file_size], **processed_image_field_specs)
     caption = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
-        return str(self.id) + str(self.uploader.username) + str(self.date)
+        return self.caption
 
     class Meta:
         verbose_name_plural = "Photos"
