@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'password.apps.PasswordConfig',
     'utilities',
     'debug',
-    'gallery'
+    'gallery',
+    'events',
 ]
 
 MIDDLEWARE = [

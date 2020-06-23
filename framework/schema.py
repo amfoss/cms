@@ -17,6 +17,7 @@ from graphql_jwt.decorators import login_required
 
 import activity.schema
 import attendance.schema
+import events.schema
 import password.schema
 import status.schema
 import tasks.schema
@@ -243,6 +244,7 @@ class Query(
     activity.schema.Query,
     status.schema.Query,
     gallery.schema.Query,
+    events.schema.Query,
     graphene.ObjectType
 ):
     user = graphene.Field(UserObj, username=graphene.String(required=True))
