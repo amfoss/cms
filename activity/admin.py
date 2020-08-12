@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import *
+from activity.models import *
 from import_export.admin import ImportExportModelAdmin, ExportActionMixin
+from easy_select2 import select2_modelform
 
 
 @admin.register(News)
@@ -40,3 +41,21 @@ class CategoryAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin)
             ]
         }),
     ]
+
+
+@admin.register(Blog)
+class BlogAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
+    fieldsets = [
+        ('Basic Details', {
+            'fields': [
+                ('title', 'slug'),
+                ('author', 'date', 'cover'),
+                ('draft', 'featured', 'tags', 'category'),
+                'description'
+            ]
+        }),
+    ]
+    list_display = ('title', 'slug', 'featured', 'date', 'category')
+    list_filter = ('featured', 'category')
+    select2 = select2_modelform(Blog, attrs={'width': '250px'})
+    form = select2

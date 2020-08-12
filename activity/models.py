@@ -53,3 +53,28 @@ class News(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Blog(models.Model):
+    def get_blog_poster_path(self, filename):
+        ext = filename.split('.')[-1]
+        filename = "%s.%s" % (uuid.uuid4(), ext)
+        return 'static/uploads/blogs/cover/' + filename
+
+    title = models.CharField(max_length=300)
+    slug = models.SlugField()
+    author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='blog_author', blank=True, null=True)
+    date = models.DateField(default=date.today)
+    cover = ProcessedImageField(default='', verbose_name='News Poster', upload_to=get_blog_poster_path, validators=[validate_file_size], **processed_image_field_specs)
+    description = RichTextField(null=True, blank=True)
+    featured = models.BooleanField(null=True, default=False)
+    tags = models.ManyToManyField(Tag, related_name='blog_tags')
+    draft = models.CharField(max_length=400, verbose_name='Blog Post Draft URL', null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='blog_category', blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Blog"
+        verbose_name_plural = "Blogs"
+
+    def __str__(self):
+        return self.title
