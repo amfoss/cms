@@ -46,6 +46,7 @@ class News(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='category_author', blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name='tags')
     description = RichTextField(null=True, blank=True)
+    rebuild = models.BooleanField(default=True, null=True)
 
     class Meta:
         verbose_name = "News"

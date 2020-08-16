@@ -2,6 +2,8 @@ from django.contrib import admin
 from activity.models import *
 from import_export.admin import ImportExportModelAdmin, ExportActionMixin
 from easy_select2 import select2_modelform
+import requests
+from utilities.models import Token
 
 
 @admin.register(News)
@@ -13,12 +15,21 @@ class NewsAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
                 ('title', 'slug', 'cover'),
                 ('date', 'category'),
                 'tags',
-                'description'
+                ('description', 'rebuild')
             ]
         }),
     ]
     list_display = ('title', 'category', 'pinned')
     list_filter = ('category', 'pinned', 'tags')
+
+    def save_model(self, request, obj, form, change):
+        if obj.rebuild is True:
+            TRIGGER_TOKEN = Token.objects.values().get(key='TRIGGER_TOKEN')['value']
+            url = 'https://gitlab.com/api/v4/projects/16307254/trigger/pipeline'
+            data = {'ref': 'master', 'token': TRIGGER_TOKEN}
+            x = requests.post(url, data=data)
+            obj.rebuild = False
+        super(NewsAdmin, self).save_model(request, obj, form, change)
 
 
 @admin.register(Tag)
