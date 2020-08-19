@@ -8,6 +8,7 @@ from framework.platforms.gitlab import GitLab
 from framework.platforms.github import GitHub
 from framework.platforms.cloudflare import Cloudflare
 from framework.platforms.telegram import Telegram
+from django.db.models import F
 
 
 class PortalObj(graphene.ObjectType):
@@ -23,6 +24,11 @@ class SocialProfileObj(graphene.ObjectType):
     def resolve_portal(self, info):
         return Portal.objects.values().get(id=self['portal'])
 
+class LanguageObj(graphene.ObjectType):
+    name = graphene.String()
+
+    def resolve_name(self, info):
+        return self['name']
 
 class ProfileObj(graphene.ObjectType):
     firstName = graphene.String()
@@ -50,6 +56,8 @@ class ProfileObj(graphene.ObjectType):
     telegramID = graphene.String()
     roll = graphene.String()
     batch = graphene.String()
+    location = graphene.String()
+    languages = graphene.List(LanguageObj)
 
     def resolve_firstName(self, info):
         return self['first_name']
@@ -86,6 +94,12 @@ class ProfileObj(graphene.ObjectType):
 
     def resolve_role(self, info):
         return self['role']
+
+    @graphene.resolve_only_args
+    def resolve_languages(self):
+        return Profile.objects.values().annotate(
+            name=F('languages__name'),
+        ).filter(id=self['id'])
 
     @login_required
     def resolve_inGitLabGroup(self, info):
@@ -136,9 +150,11 @@ class ProfileObj(graphene.ObjectType):
             raise APIException('Only Superusers have access',
                                code='ONLY_SUPERUSER_HAS_ACCESS')
 
-    @login_required
     def resolve_birthDay(self, info):
         return self['birthday']
+
+    def resolve_location(self, info):
+        return  self['location']
 
     @login_required
     def resolve_phone(self, info):
@@ -154,7 +170,6 @@ class ProfileObj(graphene.ObjectType):
 
     def resolve_batch(self, info):
         return self['batch']
-
 
 class AvatarObj(graphene.ObjectType):
     githubUsername = graphene.String()
@@ -179,6 +194,9 @@ class Query(object):
 
     def resolve_profiles(self, info, **kwargs):
         return Profile.objects.values().all()
+
+    def resolve_languages(self, info):
+        return Language.objects.values().all()
 
     def resolve_getAvatar(self, info, **kwargs):
         username = kwargs.get('username')
