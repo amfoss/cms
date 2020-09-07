@@ -169,7 +169,7 @@ class Query(graphene.ObjectType):
         return Category.objects.values().all()
 
     def resolve_blogs(self, info):
-        return reversed(Blog.objects.values().all().order_by('date'))
+        return reversed(Blog.objects.values().filter(featured=True).order_by('date'))
 
     def resolve_blog(self, info, **kwargs):
         slug = kwargs.get('slug')
