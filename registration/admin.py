@@ -25,7 +25,7 @@ class FormAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
         ('Control Centre', {
             'fields': [
                 'admins',
-                ('isActive', 'enableCheckIn')
+                ('isActive', 'enableCheckIn', 'sendRSVP')
             ]
         }),
         ('RSVP Manager', {
@@ -41,7 +41,7 @@ class FormAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
         }),
 
     ]
-    list_display = ('name', 'isActive', 'allowMultiple', 'enableCheckIn', 'applicationLimit')
+    list_display = ('name', 'isActive', 'allowMultiple', 'enableCheckIn', 'applicationLimit', 'sendRSVP')
     select2 = select2_modelform(Form, attrs={'width': '250px'})
     form = select2
     resource_class = FormResource

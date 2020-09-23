@@ -23,6 +23,7 @@ class Form(models.Model):
     rsvpMessage = RichTextField(max_length=5000, verbose_name="RSVP Email Message")
     enableCheckIn = models.BooleanField(default=False, verbose_name="Enable Check-In")
     admins = models.ManyToManyField(User, related_name='formAdmins', blank=True)
+    sendRSVP = models.BooleanField(default=True, verbose_name='Send RSVP Email?')
 
     class Meta:
         verbose_name_plural = "Forms"
