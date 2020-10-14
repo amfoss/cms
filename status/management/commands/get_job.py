@@ -2,18 +2,18 @@ import telegram
 from django.core.management.base import BaseCommand
 from datetime import date, datetime, timedelta
 from members.models import Group
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from framework import settings
 from django.utils.html import strip_tags
 from django.utils import timezone
-
+from django.core import mail
 from attendance.generateSSID import refreshSSID
 
 from status.fetcher import GMailFetcher
 from status.logger import log
 from status.StatusUpdateReporter import ReportMaker
 from status.models import Thread
-from utilities.models import Mailer
+from utilities.models import Mailer, Emails
 from registration.models import Application
 from members.models import Profile
 
@@ -144,15 +144,21 @@ class Command(BaseCommand):
                     kickMembersFromGroup(thread)
 
         mails = Mailer.objects.all()
-        for mail in mails:
-            if date.today() == mail.generationEmailDate and mail.generationEmailTime == time:
-                applications = Application.objects.values().filter(form=mail.form)
+        for m in mails:
+            if date.today() == m.generationEmailDate and m.generationEmailTime == time:
+                emails = []
+                if m.form is not None:
+                    applications = Application.objects.values().filter(form=m.form)
+                else:
+                    applications = Emails.objects.values().filter(category=m.category)
                 for application in applications:
-                    send_mail(
-                        mail.subject,
-                        strip_tags(mail.threadMessage),
+                    email = EmailMultiAlternatives(
+                        m.subject,
+                        strip_tags(m.threadMessage),
                         from_email,
                         [application['email']],
-                        html_message=mail.threadMessage,
-                        fail_silently=False,
                     )
+                    email.attach_alternative(m.threadMessage, "text/html")
+                    emails.append(email)
+                connection = mail.get_connection()
+                return connection.send_messages(emails)

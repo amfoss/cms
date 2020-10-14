@@ -1,6 +1,27 @@
 from django.contrib import admin
-from .models import Mailer, Token
+from .models import Mailer, Token, Emails
 from datetime import datetime
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin, ExportActionMixin
+
+
+class EmailResource(resources.ModelResource):
+    class Meta:
+        model = Emails
+
+
+@admin.register(Emails)
+class EmailAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'category')
+        }),
+        ('Emails', {
+            'fields': ('email',)
+        })
+    )
+
+    list_display = ('name', 'category', 'email')
 
 
 @admin.register(Mailer)
@@ -13,7 +34,7 @@ class MailerAdmin(admin.ModelAdmin):
             'fields': (('generationEmailTime', 'generationEmailDate'),)
         }),
         ('Mailing', {
-            'fields': (('subject', 'form',), 'threadMessage',)
+            'fields': (('subject', 'form', 'category'), 'threadMessage',)
         }),
     )
 

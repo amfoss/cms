@@ -4,9 +4,23 @@ from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
 
 
+class Emails(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=254, blank=True, null=True)
+    category = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name_plural = "Emails"
+        verbose_name = "Email"
+
+    def __str__(self):
+        return self.name
+
+
 class Mailer(models.Model):
     name = models.CharField(max_length=100)
-    form = models.ForeignKey(Form, on_delete=models.CASCADE)
+    form = models.ForeignKey(Form, on_delete=models.CASCADE, null=True, blank=True)
+    category = models.CharField(max_length=100, null=True)
     generationEmailDate = models.DateField(default=None, verbose_name="Date")
     generationEmailTime = models.CharField(max_length=20, verbose_name="Time")
     subject = models.CharField(max_length=50, verbose_name="Email Message subject")
