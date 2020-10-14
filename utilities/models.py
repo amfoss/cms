@@ -24,7 +24,7 @@ class Mailer(models.Model):
     generationEmailDate = models.DateField(default=None, verbose_name="Date")
     generationEmailTime = models.CharField(max_length=20, verbose_name="Time")
     subject = models.CharField(max_length=50, verbose_name="Email Message subject")
-    threadMessage = RichTextField(max_length=2000, verbose_name="Email Message")
+    threadMessage = RichTextField(max_length=5000, verbose_name="Email Message")
 
     class Meta:
         verbose_name_plural = "Mailer"
