@@ -29,7 +29,7 @@ from dairy.schema import Query as dairyQuery
 from framework import settings
 from members.api.group import GroupObj
 from members.api.profile import ProfileObj
-from members.models import Profile, Group
+from members.models import Profile, Group, Language, Portal, SocialProfile
 from members.schema import Query as MembersQuery, Mutation as membersMutation
 from registration.schema import Mutation as registrationMutation, Query as registrationQuery
 from .api.APIException import APIException
@@ -159,6 +159,11 @@ class ChangePassword(graphene.Mutation):
                                code='WRONG_PASSWORD')
 
 
+class SocialLinksObj(graphene.InputObjectType):
+    name = graphene.String(required=True)
+    link = graphene.String(required=True)
+
+
 class UpdateProfile(graphene.Mutation):
     class Arguments:
         username = graphene.String()
@@ -172,11 +177,15 @@ class UpdateProfile(graphene.Mutation):
         roll = graphene.String()
         batch = graphene.Int()
         about = graphene.String()
+        languages = graphene.List(graphene.String)
+        links = graphene.List(SocialLinksObj)
 
     Output = userResponseObj
 
     def mutate(self, info, username=None, firstName=None, lastName=None, email=None, phoneNo=None,
-               githubUsername=None, gitlabUsername=None, customEmail=None, roll=None, batch=None, about=None):
+               githubUsername=None, gitlabUsername=None, customEmail=None, roll=None, batch=None, about=None,
+               languages=None, links=None):
+        global socialObj
         user = info.context.user
         profile = Profile.objects.get(user=user)
         if username is not None:
@@ -204,6 +213,22 @@ class UpdateProfile(graphene.Mutation):
             profile.batch = batch
         if about is not None:
             profile.about = about
+        if languages is not None:
+            for language in languages:
+                langObj = Language.objects.get_or_create(
+                    name=language
+                )
+                profile.languages.add(langObj)
+        if links is not None:
+            for link in links:
+                portalObj = Portal.objects.get(
+                    name=link.name
+                )
+                SocialProfile.objects.create(
+                    portal=portalObj,
+                    profile=profile,
+                    link=link.link
+                )
         user.save()
         profile.save()
         return userResponseObj(id=user.id)

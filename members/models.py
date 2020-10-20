@@ -46,8 +46,8 @@ class Language(models.Model):
 
 class Portal(models.Model):
     name = models.CharField(max_length=25)
-    icon = models.CharField(max_length=25, verbose_name='Icon Class', null=True)
-    color = models.CharField(max_length=10, verbose_name='Color', help_text='hexcode with #', null=True)
+    icon = models.CharField(max_length=25, verbose_name='Icon Class', null=True, blank=True)
+    color = models.CharField(max_length=10, verbose_name='Color', help_text='hexcode with #', null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -177,6 +177,9 @@ class SocialProfile(models.Model):
     class Meta:
         verbose_name_plural = "Social Profile Links"
         verbose_name = "Social Profile Link"
+
+    def __str__(self):
+        return self.portal.name
 
 
 class WorkExperience(models.Model):
