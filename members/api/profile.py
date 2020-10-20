@@ -9,6 +9,7 @@ from framework.platforms.github import GitHub
 from framework.platforms.cloudflare import Cloudflare
 from framework.platforms.telegram import Telegram
 from django.db.models import F
+from members.models import Language
 
 
 class PortalObj(graphene.ObjectType):
@@ -24,11 +25,13 @@ class SocialProfileObj(graphene.ObjectType):
     def resolve_portal(self, info):
         return Portal.objects.values().get(id=self['portal'])
 
+
 class LanguageObj(graphene.ObjectType):
     name = graphene.String()
 
     def resolve_name(self, info):
         return self['name']
+
 
 class ProfileObj(graphene.ObjectType):
     firstName = graphene.String()
@@ -170,6 +173,7 @@ class ProfileObj(graphene.ObjectType):
 
     def resolve_batch(self, info):
         return self['batch']
+
 
 class AvatarObj(graphene.ObjectType):
     githubUsername = graphene.String()
