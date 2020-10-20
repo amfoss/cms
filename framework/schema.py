@@ -215,10 +215,13 @@ class UpdateProfile(graphene.Mutation):
             profile.about = about
         if languages is not None:
             for language in languages:
-                langObj = Language.objects.get_or_create(
+                langObj, langCreated = Language.objects.get_or_create(
                     name=language
                 )
-                profile.languages.add(langObj)
+                if langObj:
+                    profile.languages.add(langObj)
+                else:
+                    profile.languages.add(langCreated)
         if links is not None:
             for link in links:
                 portalObj = Portal.objects.get(
