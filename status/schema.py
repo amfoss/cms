@@ -128,7 +128,7 @@ class Query(graphene.ObjectType):
         username = kwargs.get('username')
         date = kwargs.get('date')
         if date is None:
-            return reversed(Message.objects.values().filter(member__username=username))
+            return reversed(Message.objects.values().filter(member__username=username).order_by('date'))
         else:
             return Message.objects.values().filter(date=date, member__username=username)
 
