@@ -132,6 +132,6 @@ GRAPHQL_JWT = {
     'JWT_ALLOW_ARGUMENT': True,
     'JWT_VERIFY_EXPIRATION': True,
     'JWT_LONG_RUNNING_REFRESH_TOKEN': True,
-    'JWT_EXPIRATION_DELTA': timedelta(days=7),
+    'JWT_EXPIRATION_DELTA': timedelta(minutes=5),
     'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
 }
