@@ -13,7 +13,7 @@ from django.utils import timezone
 
 SKILL_TYPES = (('Technical', 'Technical'), ('Arts', 'Arts'), ('Social', 'Social'), ('Sports', 'Sports'), ('Others', 'Others'))
 LEAVE_TYPE = (('M', 'Health'), ('F', 'Family/Home'), ('T', 'Tiredness'), ('A', 'Academics/Duty'))
-ROLE_TYPE = (('Member', 'Member'), ('Mentor', 'Mentor'))
+ROLE_TYPE = (('Member', 'Member'), ('Mentor', 'Mentor'), ('Alumni', 'Alumni'), ('Faculty', 'Faculty Mentor'))
 
 
 class Skill(models.Model):
