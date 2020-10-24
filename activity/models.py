@@ -79,3 +79,18 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Achievements(models.Model):
+    title = models.CharField(max_length=300)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='achievement_user', blank=True, null=True)
+    description = RichTextField(null=True, blank=True)
+    year = models.IntegerField(blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='achievement_category', blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Achievement"
+        verbose_name_plural = "Achievements"
+
+    def __str__(self):
+        return self.title

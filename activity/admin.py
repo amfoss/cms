@@ -70,3 +70,19 @@ class BlogAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
     list_filter = ('featured', 'category')
     select2 = select2_modelform(Blog, attrs={'width': '250px'})
     form = select2
+
+
+@admin.register(Achievements)
+class AchievementsAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
+    fieldsets = [
+        ('Basic Details', {
+            'fields': [
+                'title',
+                ('user', 'year', 'category'),
+                'description'
+            ]
+        }),
+    ]
+
+    list_display = ('title', 'user', 'year', 'category')
+    list_filter = ('year', 'category')

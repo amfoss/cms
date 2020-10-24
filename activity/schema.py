@@ -109,6 +109,29 @@ class BlogObj(graphene.ObjectType):
         return Category.objects.values().get(id=self['category_id'])
 
 
+class AchievementObj(graphene.ObjectType):
+    title = graphene.String(required=True)
+    user = graphene.Field(UserBasicObj)
+    year = graphene.Int(required=True)
+    description = graphene.String(required=True)
+    category = graphene.Field(CategoryObj)
+
+    def resolve_title(self, info):
+        return self['title']
+
+    def resolve_user(self, info):
+        return User.objects.values().get(id=self['user_id'])
+
+    def resolve_year(self, info):
+        return self['year']
+
+    def resolve_description(self, info):
+        return self['description']
+
+    def resolve_category(self, info):
+        return Category.objects.values().get(id=self['category_id'])
+
+
 class blogStatusObj(graphene.ObjectType):
     id = graphene.String()
 
@@ -150,6 +173,7 @@ class Query(graphene.ObjectType):
     categories = graphene.List(CategoryObj)
     blogs = graphene.List(BlogObj)
     blog = graphene.Field(BlogObj, slug=graphene.String(required=True))
+    achievements = graphene.List(AchievementObj, category=graphene.String(), username=graphene.String())
 
     def resolve_news(self, info):
         return reversed(News.objects.values().all().order_by('date'))
@@ -178,6 +202,19 @@ class Query(graphene.ObjectType):
         else:
             raise APIException('Slug is required',
                                code='SLUG_IS_REQUIRED')
+
+    def resolve_achievements(self, info, **kwargs):
+        username = kwargs.get('username')
+        category = kwargs.get('category')
+
+        if username is None and category is None:
+            raise APIException('Username or Category is required',
+                               code='USERNAME_OR_CATEGORY_IS_REQUIRED')
+        else:
+            if category is not None:
+                return Achievements.objects.values().filter(category__name=category)
+            else:
+                return Achievements.objects.values().filter(user__username=username)
 
 
 class Mutation(graphene.ObjectType):

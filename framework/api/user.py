@@ -69,6 +69,25 @@ class BlogBasicObj(graphene.ObjectType):
         return Category.objects.values().get(id=self['category_id'])
 
 
+class AchievementBasicObj(graphene.ObjectType):
+    title = graphene.String(required=True)
+    year = graphene.Int(required=True)
+    description = graphene.String(required=True)
+    category = graphene.Field(CategoryBasicObj)
+
+    def resolve_title(self, info):
+        return self['title']
+
+    def resolve_year(self, info):
+        return self['year']
+
+    def resolve_description(self, info):
+        return self['description']
+
+    def resolve_category(self, info):
+        return Category.objects.values().get(id=self['category_id'])
+
+
 class UserBasicObj(graphene.ObjectType):
     username = graphene.String()
     firstName = graphene.String()
@@ -84,6 +103,7 @@ class UserBasicObj(graphene.ObjectType):
     admissionYear = graphene.Int()
     profile = graphene.Field(ProfileObj)
     blogs = graphene.List(BlogBasicObj)
+    achievements = graphene.List(AchievementBasicObj)
 
     def resolve_firstName(self, info):
         return self['first_name']
@@ -120,3 +140,6 @@ class UserBasicObj(graphene.ObjectType):
 
     def resolve_blogs(self, info):
         return Blog.objects.values().filter(author__username=self['username'])
+
+    def resolve_achievements(self, info):
+        return Achievements.objects.values().filter(user__username=self['username'])
