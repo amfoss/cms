@@ -12,6 +12,7 @@ class EventsObj(graphene.ObjectType):
     content = graphene.String()
     creator = graphene.Field(UserBasicObj)
     date = graphene.DateTime()
+    eventType = graphene.String()
     album = graphene.Field(AlbumObj)
 
     def resolve_title(self, info):
@@ -31,6 +32,9 @@ class EventsObj(graphene.ObjectType):
 
     def resolve_album(self, info):
         return Album.objects.values().get(id=self['album_id'])
+    
+    def resolve_eventType(self, info):
+        return self['event_type']
 
 
 class Query(graphene.ObjectType):

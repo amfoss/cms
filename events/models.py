@@ -3,6 +3,7 @@ from gallery.models import Album
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+EVENT_TYPE = (('Meetup', 'Meetup'), ('BootCamp', 'BootCamp'), ('OpenTalks', 'OpenTalks'), ('Hackathon', 'Hackathon'))
 
 class Event(models.Model):
     name = models.CharField(max_length=50, blank=True, verbose_name='Title of the event')
@@ -11,6 +12,7 @@ class Event(models.Model):
     date = models.DateTimeField(verbose_name="Event Date", default=timezone.now)
     album = models.ForeignKey(Album, on_delete=models.CASCADE, null=True)
     creator = models.OneToOneField(User, on_delete=models.CASCADE, related_name='Events', verbose_name='User', null=True, blank=True)
+    event_type = models.CharField(max_length=256, choices=EVENT_TYPE, default='Meetup')
 
     class Meta:
         verbose_name_plural = "Events"
