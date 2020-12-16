@@ -96,6 +96,7 @@ class UserBasicObj(graphene.ObjectType):
     email = graphene.String()
     avatar = graphene.Field(AvatarObj)
     isMembershipActive = graphene.Boolean()
+    isVerified = graphene.Boolean()
     isAdmin = graphene.Boolean()
     joinDateTime = graphene.types.datetime.DateTime()
     statusUpdateCount = graphene.Int()
@@ -119,6 +120,9 @@ class UserBasicObj(graphene.ObjectType):
 
     def resolve_isMembershipActive(self, info):
         return self['is_active']
+
+    def resolve_isVerified(self, info):
+        return self['is_staff']
 
     def resolve_isAdmin(self, info):
         return self['is_superuser']

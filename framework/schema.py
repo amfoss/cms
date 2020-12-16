@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
-from django.db.models import Avg
+from django.db.models import Avg, Q
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import strip_tags
@@ -106,7 +106,7 @@ class CreateUser(graphene.Mutation):
         newUser = get_user_model()(
             username=username,
             email=email,
-            is_active=False,
+            is_active=True,
         )
         newUser.set_password(password)
         newUser.save()
@@ -127,7 +127,7 @@ class ApproveUser(graphene.Mutation):
     def mutate(self, info, username):
         if info.context.user.is_superuser:
             user = User.objects.get(username=username)
-            user.is_active = True
+            user.is_staff = True
             user.save()
             return userResponseObj(id=user.id)
         else:
@@ -299,27 +299,20 @@ class Query(
         sort = kwargs.get('sort')
         if sort is None:
             sort = 'username'
-        return User.objects.values().filter(is_active=True).order_by(sort)
+        return User.objects.values().filter(is_staff=True).order_by(sort)
 
     def resolve_isClubMember(self, info, **kwargs):
-        user = info.context.user
-        if Profile.objects.filter(user=user).count() == 0:
-            return False
-        else:
-            return True
+        return info.context.user.is_staff
 
     def resolve_isAdmin(self, info):
-        if info.context.user.is_superuser:
-            return True
-        else:
-            return False
+        return info.context.user.is_superuser
 
     def resolve_inActiveUsers(self, info, **kwargs):
         sort = kwargs.get('sort')
         if sort is None:
             sort = 'username'
         if info.context.user.is_superuser:
-            return User.objects.values().filter(is_active=False).order_by(sort)
+            return User.objects.values().filter(Q(is_active=False) | Q(is_staff=False)).order_by(sort)
         else:
             raise APIException('Only Superusers have access',
                                code='ONLY_SUPERUSER_HAS_ACCESS')
