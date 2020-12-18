@@ -176,12 +176,12 @@ class Query(graphene.ObjectType):
     achievements = graphene.List(AchievementObj, category=graphene.String(), username=graphene.String())
 
     def resolve_news(self, info):
-        return reversed(News.objects.values().all().order_by('date'))
+        return reversed(News.objects.values().filter(featured=True).order_by('date'))
 
     def resolve_getNews(self, info, **kwargs):
         slug = kwargs.get('slug')
         if slug is not None:
-            return News.objects.values().get(slug=slug)
+            return News.objects.values().get(slug=slug, featured=True)
         else:
             raise APIException('Slug is required',
                                code='SLUG_IS_REQUIRED')

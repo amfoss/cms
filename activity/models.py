@@ -44,9 +44,9 @@ class News(models.Model):
     cover = ProcessedImageField(default='', verbose_name='News Poster', upload_to=get_poster_path, validators=[validate_file_size], **processed_image_field_specs)
     date = models.DateField(default=date.today)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='category_author', blank=True, null=True)
-    tags = models.ManyToManyField(Tag, related_name='tags')
+    tags = models.ManyToManyField(Tag, related_name='news_tags')
     description = RichTextField(null=True, blank=True)
-    rebuild = models.BooleanField(default=True, null=True)
+    featured = models.BooleanField(default=True, null=True)
 
     class Meta:
         verbose_name = "News"
@@ -66,7 +66,7 @@ class Blog(models.Model):
     slug = models.SlugField()
     author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='blog_author', blank=True, null=True)
     date = models.DateField(default=date.today)
-    cover = ProcessedImageField(default='', verbose_name='News Poster', upload_to=get_blog_poster_path, validators=[validate_file_size], **processed_image_field_specs)
+    cover = ProcessedImageField(default='', verbose_name='Blog Poster', upload_to=get_blog_poster_path, validators=[validate_file_size], **processed_image_field_specs)
     description = RichTextField(null=True, blank=True)
     featured = models.BooleanField(null=True, default=False)
     tags = models.ManyToManyField(Tag, related_name='blog_tags')
