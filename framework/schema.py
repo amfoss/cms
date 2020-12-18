@@ -220,6 +220,7 @@ class UpdateProfile(graphene.Mutation):
         if about is not None:
             profile.about = about
         if languages is not None:
+            profile.languages.clear()
             for language in languages:
                 langObj, langCreated = Language.objects.get_or_create(
                     name=language
