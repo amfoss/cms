@@ -124,25 +124,25 @@ class userResponseObj(graphene.ObjectType):
     id = graphene.String()
 
 
-class ApproveUser(graphene.Mutation):
+class userStatusObj(graphene.ObjectType):
+    status = graphene.String()
+
+class ApproveUsers(graphene.Mutation):
     class Arguments:
-        username = graphene.String(required=True)
+        usernames = graphene.List(graphene.String)
 
-    Output = userResponseObj
+    Output = userStatusObj
 
-    def mutate(self, info, username):
+    def mutate(self, info, usernames):
         if info.context.user.is_superuser:
-            user = User.objects.get(username=username)
-            user.is_staff = True
-            user.save()
-            return userResponseObj(id=user.id)
+            for username in usernames:
+                user = User.objects.get(username=username)
+                user.is_staff = True
+                user.save()
+            return userStatusObj(status=True)
         else:
             raise APIException('Only Superusers have access',
                                code='ONLY_SUPERUSER_HAS_ACCESS')
-
-
-class userStatusObj(graphene.ObjectType):
-    status = graphene.String()
 
 
 class ChangePassword(graphene.Mutation):
@@ -332,7 +332,7 @@ class Mutation(membersMutation, attendance.schema.Mutation, registrationMutation
     refresh_token = graphql_jwt.Refresh.Field()
     revoke_token = graphql_jwt.Revoke.Field()
     create_user = CreateUser.Field()
-    approve_user = ApproveUser.Field()
+    approve_users = ApproveUsers.Field()
     change_password = ChangePassword.Field()
     UpdateProfile = UpdateProfile.Field()
     reset_password = ResetPassword.Field()
