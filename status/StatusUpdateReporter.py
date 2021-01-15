@@ -129,10 +129,10 @@ class ReportMaker(object):
         message = ''
         if didNotSendCount > 0:
             message = '\n\n<b>&#128561; DID NOT SEND (' + str(didNotSendCount) + ') : </b> \n'
-            message += self.generateBatchWiseDNSReport(members, year)
             message += self.generateBatchWiseDNSReport(members, year - 1)
             message += self.generateBatchWiseDNSReport(members, year - 2)
             message += self.generateBatchWiseDNSReport(members, year - 3)
+            message += self.generateBatchWiseDNSReport(members, year - 4)
         return message
 
     def getLateReport(self, late_members):
