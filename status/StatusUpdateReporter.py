@@ -62,7 +62,7 @@ class ReportMaker(object):
     @staticmethod
     def getLastSendStr(last_send, expected_date):
         message = ''
-        diff = expected_date - last_send.date()
+        diff = abs(expected_date - last_send)
         diff = diff.days + 1
         if diff > 28:
             message += '1M+'
@@ -78,13 +78,17 @@ class ReportMaker(object):
 
     @staticmethod
     def getLastSend(last_send, expected_date):
-        diff = expected_date - last_send.date()
+        diff = abs(expected_date - last_send)
         diff = diff.days + 1
         return diff
 
     def getMemberLastRequiredDate(self, member):
         return DailyLog.objects.filter(thread=self.thread, members=member, date__lt=self.date).order_by(
             '-date').first().date
+
+    def getNSBMemberLastRequiredDate(self, member):
+        return DailyLog.objects.filter(thread=self.thread, members=member, date__lt=self.date).order_by(
+            '-date').last().date
 
     def getMemberLastSend(self, member):
         obj = DailyLog.objects.filter(thread=self.thread, members=member, date__lt=self.date).exclude(
@@ -113,12 +117,13 @@ class ReportMaker(object):
                 lastSend = self.getMemberLastSend(member.user)
                 message += str(i) + '. ' + self.getName(member.user)
                 if lastSend:
-                    lastSend = self.getLastSendStr(lastSend,
+                    lastSend = self.getLastSendStr(lastSend.date(),
                                                    self.getMemberLastRequiredDate(member.user))
                     memberHistory = self.getMemberHistory(member.user)
                     message += ' [ ' + lastSend + ', ' + memberHistory + ']'
                 else:
-                    message += ' [ NSB ]'
+                    lastSend = self.getLastSendStr(self.date, self.getNSBMemberLastRequiredDate(member.user))
+                    message += ' [ ' + lastSend + ', NSB ]'
                 message += '\n'
         return message
 
@@ -229,25 +234,27 @@ class ReportMaker(object):
                     userProfile = UserProfile.objects.get(user=member)
                     lastSend = self.getMemberLastSend(member)
                     if lastSend:
-                        lastSend = self.getLastSend(lastSend,
+                        lastSend = self.getLastSend(lastSend.date(),
                                                     self.getMemberLastRequiredDate(member))
-                        try:
-                            status = bot.getChatMember(chat_id=agent[1], user_id=userProfile.telegram_id).status
-                            if lastSend > thread.noOfDays:
-                                kick = True
-                                exceptions = StatusException.objects.filter(isPaused=True)
-                                if exceptions:
-                                    for exception in exceptions:
-                                        if member == exception.user:
-                                            if exception.start_date <= date.today() <= exception.end_date:
-                                                kick = False
-                                                break
-                                            else:
-                                                exception.isPaused = False
-                                if kick and status != "left":
-                                    shouldKick.append(member)
-                        except:
-                            pass
+                    else:
+                        lastSend = self.getLastSend(self.date, self.getNSBMemberLastRequiredDate(member))
+                    try:
+                        status = bot.getChatMember(chat_id=agent[1], user_id=userProfile.telegram_id).status
+                        if lastSend > thread.noOfDays:
+                            kick = True
+                            exceptions = StatusException.objects.filter(isPaused=True)
+                            if exceptions:
+                                for exception in exceptions:
+                                    if member == exception.user:
+                                        if exception.start_date <= date.today() <= exception.end_date:
+                                            kick = False
+                                            break
+                                        else:
+                                            exception.isPaused = False
+                            if kick and status != "left":
+                                shouldKick.append(member)
+                    except:
+                        pass
 
             return shouldKick
 
