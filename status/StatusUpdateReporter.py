@@ -87,7 +87,7 @@ class ReportMaker(object):
             '-date').first().date
 
     def getNSBMemberLastRequiredDate(self, member):
-        return DailyLog.objects.filter(thread=self.thread, members=member, date__lt=self.date).order_by(
+        return DailyLog.objects.filter(thread=self.thread, members=member, date__lte=self.date).order_by(
             '-date').last().date
 
     def getMemberLastSend(self, member):
