@@ -25,7 +25,8 @@ class StatusException(models.Model):
 class Thread(models.Model):
     name = models.CharField(max_length=200,  verbose_name="Name of Thread")
     isActive = models.BooleanField(verbose_name="Is Thread Active", default=True)
-    enableGroupNotification = models.BooleanField(verbose_name="Should Send Report to Group?", default=True)
+    enableTelegramGroupNotification = models.BooleanField(verbose_name="Should Send Report to Telegram Group?", default=True)
+    enableDiscordGroupNotification = models.BooleanField(verbose_name="Should Send Report to Discord Group?", default=True)
     allowBotToKick = models.BooleanField(verbose_name="Should bot kick members ?", default=True)
     noOfDays = models.IntegerField(verbose_name="Kick members after how many days ?", default=3, blank=True)
     email = models.EmailField(max_length=250, verbose_name="Thread Email")

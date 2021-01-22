@@ -116,6 +116,7 @@ class Profile(models.Model):
     gitlabUsername = models.CharField(max_length=50, null=True, blank=True)
     customEmail = models.CharField(max_length=50, null=True, blank=True)
     telegram_id = models.CharField(max_length=50, null=True, blank=True)
+    discord_id = models.CharField(max_length=50, null=True, blank=True)
     roll_number = models.CharField(max_length=25, null=True, blank=True)
     displayInWebsite = models.BooleanField(default=True, verbose_name="Display in website")
     batch = models.IntegerField(null=True, help_text='Year of Admission', blank=True)
@@ -239,6 +240,10 @@ class Group(models.Model):
 
     telegramBot = models.CharField(max_length=500, verbose_name="Telegram Bot Token")
     telegramGroup = models.CharField(max_length=250, verbose_name="Telegram Group ID")
+
+    discordBot = models.CharField(max_length=500, verbose_name="Discord Bot Token")
+    discordGroup = models.CharField(max_length=250, verbose_name="Discord Group ID")
+    discordChannel = models.CharField(max_length=500, verbose_name="Discord Channel ID")
 
     class Meta:
         verbose_name_plural = "Groups"

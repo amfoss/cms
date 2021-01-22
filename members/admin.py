@@ -37,7 +37,7 @@ class ProfileAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
                 'user',
                 ('first_name', 'last_name', 'profile_pic'),
                 ('email', 'phone', 'customEmail'),
-                ('telegram_id', 'githubUsername', 'gitlabUsername')
+                ('telegram_id', 'discord_id', 'githubUsername', 'gitlabUsername')
             ]
         }),
         ('Additional Details', {
@@ -192,7 +192,10 @@ class GroupAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
             )
         }),
         ('Telegram Integration', {
-            'fields': (('telegramBot', 'telegramGroup'),),
+            'fields': (('telegramBot', 'telegramGroup'),)
+        }),
+        ('Discord Integration', {
+            'fields': (('discordBot', 'discordGroup', 'discordChannel'),)
         }),
     )
     search_fields = ['name', 'members']

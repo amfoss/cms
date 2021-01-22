@@ -5,6 +5,7 @@ import telegram
 from status.models import Thread, DailyLog, Message, StatusException
 from members.models import Group
 from members.models import Profile as UserProfile
+from status.discord import Discord
 
 
 class ReportMaker(object):
@@ -18,11 +19,13 @@ class ReportMaker(object):
     @staticmethod
     def getPercentageSummary(send, total):
         if send / total == 1:
-            return 'Everyone has sent their Status Updates today! &#128079;'
+            return 'Everyone has sent their Status Updates today!  :clap:  '
         elif send / total > 0.90:
             return 'More than 90% of members sent their status update today.'
         elif send / total > 0.75:
             return 'More than 75% of members sent their status update today.'
+        elif send / total > 0.50:
+            return 'More than 50% of members sent their status update today.'
         elif send / total < 0.50:
             return 'Less than 50% of members sent their status update today.'
         elif send / total < 0.25:
@@ -110,7 +113,7 @@ class ReportMaker(object):
         m = self.groupMembersByBatch(members.all(), year)
         message = ''
         if m.count() > 0:
-            message = '\n<b>' + self.getBatchName(year) + ' (' + str(m.count()) + ')' + '</b>\n\n'
+            message = '\n **' + self.getBatchName(year) + ' (' + str(m.count()) + ')' + '** \n\n'
             i = 0
             for member in m:
                 i = i + 1
@@ -133,7 +136,7 @@ class ReportMaker(object):
         didNotSendCount = members.count()
         message = ''
         if didNotSendCount > 0:
-            message = '\n\n<b>&#128561; DID NOT SEND (' + str(didNotSendCount) + ') : </b> \n'
+            message = '\n\n **  :scream:  DID NOT SEND (' + str(didNotSendCount) + ') : ** \n'
             message += self.generateBatchWiseDNSReport(members, year - 1)
             message += self.generateBatchWiseDNSReport(members, year - 2)
             message += self.generateBatchWiseDNSReport(members, year - 3)
@@ -144,7 +147,7 @@ class ReportMaker(object):
         lateCount = late_members.count()
         message = ''
         if lateCount > 0:
-            message += '\n\n<b>&#8987; LATE (' + str(lateCount) + ') : </b> \n\n'
+            message += '\n\n **  :hourglass:  LATE (' + str(lateCount) + ') : ** \n\n'
             i = 0
             for member in late_members.all():
                 i = i + 1
@@ -158,7 +161,7 @@ class ReportMaker(object):
         invalidUpdatesCount = invalidUpdates.count()
         message = ''
         if invalidUpdatesCount > 0:
-            message += '\n\n<b>⚠️ INVALID (' + str(invalidUpdatesCount) + ') : </b> \n\n'
+            message += '\n\n **  :warning:  INVALID (' + str(invalidUpdatesCount) + ') : ** \n\n'
             i = 0
             for member in invalidUpdates.all():
                 i = i + 1
@@ -169,7 +172,7 @@ class ReportMaker(object):
         kickedOutMembersCount = len(kickedOutMembers)
         message = ''
         if kickedOutMembersCount > 0:
-            message += '\n\n<b>❌ KICKED (' + str(kickedOutMembersCount) + ') : </b> \n\n'
+            message += '\n\n **  :x:  KICKED (' + str(kickedOutMembersCount) + ') : ** \n\n'
             i = 0
             for member in kickedOutMembers:
                 i = i + 1
@@ -191,23 +194,23 @@ class ReportMaker(object):
             invalidUpdatesCount = log.invalidUpdates.count()
             sendCount = totalMembers - (didNotSendCount + invalidUpdatesCount)
 
-            message = '<b>Daily Status Update Report</b> \n\n &#128197; ' + date.strftime(
-                '%d %B %Y') + ' | &#128228; ' + str(sendCount) + '/' + str(totalMembers) + ' Members'
+            message = '**Daily Status Update Report** \n\n  :calendar:  ' + date.strftime(
+                '%d %B %Y') + ' |  :outbox_tray:  ' + str(sendCount) + '/' + str(totalMembers) + ' Members'
 
-            message += '\n\n<b>' + self.getPercentageSummary(sendCount, totalMembers) + '</b>'
+            message += '\n\n **' + self.getPercentageSummary(sendCount, totalMembers) + '**'
             message += self.getInvalidUpdatesReport(log.invalidUpdates)
             if allowKick:
                 message += self.getKickMembersReport(self.membersToBeKicked)
             if updates.count() > 0:
-                message += '\n\n<b>&#11088; First : </b>' + first.first_name + ' ' + first.last_name + \
+                message += '\n\n**  :star:  First : **' + first.first_name + ' ' + first.last_name + \
                            ' (' + updates[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
                     '%I:%M %p') + ')' + '\n'
-                message += '<b>&#128012; Last : </b>' + last.first_name + ' ' + last.last_name + \
+                message += '**  :snail:  Last : **' + last.first_name + ' ' + last.last_name + \
                            ' (' + list(reversed(updates))[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
                     '%I:%M %p') + ')' + '\n'
             message += self.generateDidNotSendReport(log.didNotSend)
             if thread.footerMessage:
-                message += '\n<i>' + thread.footerMessage + '</i>'
+                message += '\n*' + thread.footerMessage + '*'
 
             return message
 
@@ -220,43 +223,66 @@ class ReportMaker(object):
         thread = self.thread
         try:
             telegramAgents = []
+            discordAgents = []
             groups = Group.objects.filter(thread_id=thread.id, statusUpdateEnabled=True)
             for group in groups:
                 obj = [group.telegramBot, group.telegramGroup]
+                discord_obj = [group.discordBot, group.discordGroup, group.discordChannel]
                 if obj not in telegramAgents:
                     telegramAgents.append(obj)
+                if discord_obj not in discordAgents:
+                    discordAgents.append(discord_obj)
 
             log = DailyLog.objects.get(date=date, thread=thread)
             members = log.didNotSend.all()
+
             for agent in telegramAgents:
                 bot = telegram.Bot(token=agent[0])
                 for member in members:
-                    userProfile = UserProfile.objects.get(user=member)
-                    lastSend = self.getMemberLastSend(member)
-                    if lastSend:
-                        lastSend = self.getLastSend(lastSend.date(),
-                                                    self.getMemberLastRequiredDate(member))
-                    else:
-                        lastSend = self.getLastSend(self.date, self.getNSBMemberLastRequiredDate(member))
-                    try:
-                        status = bot.getChatMember(chat_id=agent[1], user_id=userProfile.telegram_id).status
-                        if lastSend > thread.noOfDays:
-                            kick = True
-                            exceptions = StatusException.objects.filter(isPaused=True)
-                            if exceptions:
-                                for exception in exceptions:
-                                    if member == exception.user:
-                                        if exception.start_date <= date.today() <= exception.end_date:
-                                            kick = False
-                                            break
-                                        else:
-                                            exception.isPaused = False
-                            if kick and status != "left":
-                                shouldKick.append(member)
-                    except:
-                        pass
+                    shouldKick = self.checkKickException(member, bot=bot)
 
-            return shouldKick
+            for discordAgent in discordAgents:
+                for member in members:
+                    if member not in shouldKick:
+                        shouldKick = self.checkKickException(member)
 
         except ObjectDoesNotExist:
             raise
+
+        return shouldKick
+    
+    def checkKickException(self, member, bot = None):
+        shouldKick = []
+        date = self.date
+        thread = self.thread
+        userProfile = UserProfile.objects.get(user=member)
+        lastSend = self.getMemberLastSend(member)
+
+        if lastSend:
+            lastSend = self.getLastSend(lastSend.date(),
+                                        self.getMemberLastRequiredDate(member))
+        else:
+            lastSend = self.getLastSend(self.date, self.getNSBMemberLastRequiredDate(member))
+        try:
+            if bot!=None:
+                status = bot.getChatMember(chat_id=agent[1], user_id=userProfile.telegram_id).status
+            else:
+                status = "present"
+            if lastSend > thread.noOfDays:
+                kick = True
+                exceptions = StatusException.objects.filter(isPaused=True)
+                if exceptions:
+                    for exception in exceptions:
+                        if member == exception.user:
+                            if exception.start_date <= date.today() <= exception.end_date:
+                                kick = False
+                                break
+                            else:
+                                exception.isPaused = False
+                if kick and status != "left":
+                    if member not in shouldKick:
+                        shouldKick.append(member)
+        except:
+            pass
+
+        return shouldKick

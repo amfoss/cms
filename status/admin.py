@@ -14,7 +14,7 @@ class ThreadResource(resources.ModelResource):
 class ThreadAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('name', 'isActive', 'enableGroupNotification', 'allowBotToKick', 'noOfDays')
+            'fields': ('name', 'isActive', 'enableTelegramGroupNotification', 'enableDiscordGroupNotification', 'allowBotToKick', 'noOfDays')
         }),
         ('Timings', {
             'fields': (('days', 'generationTime', 'dueTime', 'logTime'),)
@@ -26,7 +26,7 @@ class ThreadAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
             'fields': ('footerMessage',)
         }),
     )
-    list_display = ('name', 'isActive', 'enableGroupNotification', 'allowBotToKick', 'generationTime', 'dueTime', 'logTime')
+    list_display = ('name', 'isActive', 'enableTelegramGroupNotification', 'enableDiscordGroupNotification', 'allowBotToKick', 'generationTime', 'dueTime', 'logTime')
     search_fields = ['name']
     select2 = select2_modelform(Thread, attrs={'width': '250px'})
     form = select2
