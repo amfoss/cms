@@ -241,9 +241,9 @@ class Group(models.Model):
     telegramBot = models.CharField(max_length=500, verbose_name="Telegram Bot Token")
     telegramGroup = models.CharField(max_length=250, verbose_name="Telegram Group ID")
 
-    discordBot = models.CharField(max_length=500, verbose_name="Discord Bot Token")
-    discordGroup = models.CharField(max_length=250, verbose_name="Discord Group ID")
-    discordChannel = models.CharField(max_length=500, verbose_name="Discord Channel ID")
+    discordBot = models.CharField(max_length=500, null=True, blank=True, verbose_name="Discord Bot Token")
+    discordGroup = models.CharField(max_length=250, null=True, blank=True, verbose_name="Discord Group ID")
+    discordChannel = models.CharField(max_length=500, null=True, blank=True, verbose_name="Discord Channel ID")
 
     class Meta:
         verbose_name_plural = "Groups"
