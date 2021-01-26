@@ -6,6 +6,7 @@ from .models import *
 from django.contrib.auth.models import User
 from framework.api.user import UserBasicObj
 from members.models import Group
+from status.models import DailyLog
 
 class MessageObj(graphene.ObjectType):
     message = graphene.String()
@@ -76,9 +77,13 @@ class dailyStatusUpdateObj(graphene.ObjectType):
 class userStatusStatObj(graphene.ObjectType):
     user = graphene.Field(UserBasicObj)
     statusCount = graphene.String()
+    lateCount= graphene.Int()
 
     def resolve_user(self, info):
         return User.objects.values().get(id=self['member'])
+    
+    def resolve_lateCount(self, info):
+        return DailyLog.objects.filter(late=self['member'] ).count()
 
 
 class clubStatusObj(graphene.ObjectType):
