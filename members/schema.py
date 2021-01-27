@@ -23,22 +23,23 @@ class UploadFileObj(graphene.ObjectType):
     fileName = graphene.String()
 
 
-class RecordLeaveToday(graphene.Mutation):
+class RecordLeave(graphene.Mutation):
     class Arguments:
         user_id = graphene.String(required=True)
         type = graphene.String(required=True)
         reason = graphene.String(required=True)
         bot_token = graphene.String(required=True)
         token = graphene.String(required=True)
+        startDate = graphene.Date(required=False, default=date.today())
+        endDate = graphene.Date(required=False, default=date.today())
 
     Output = AtObj
 
-    def mutate(self, info, user_id, type, reason, bot_token, token):
+    def mutate(self, info, user_id, type, reason, bot_token, token, startDate, endDate):
         profile = Profile.objects.get(telegram_id=user_id)
         user = User.objects.get(username=profile.user.username)
-        d =date.today()
         if bot_token == settings.TELEGRAM_BOT_TOKEN:
-            lr = LeaveRecord.objects.create(member=user, start_date=d, end_date=d, type=type, reason=reason)
+            lr = LeaveRecord.objects.create(member=user, start_date=startDate, end_date=endDate, type=type, reason=reason)
             return AtObj(id=lr.id)
         raise Exception('Invalid bot token')
 
@@ -74,7 +75,7 @@ class UploadFiles(graphene.Mutation):
 
 
 class Mutation(object):
-    RecordLeaveToday = RecordLeaveToday.Field()
+    RecordLeave = RecordLeave.Field()
     UploadFiles = UploadFiles.Field()
     UpdateProfilePic = UpdateProfilePic.Field()
 
