@@ -72,7 +72,7 @@ def sendTelegramReport(thread):
     if thread.generationTime > thread.logTime:
         d = d - timedelta(days=1)
 
-    logs = ReportMaker(d, thread.id).message
+    logs = ReportMaker(d, thread.id, isTelegram = True).message
     telegramAgents = []
     groups = Group.objects.filter(thread_id=thread.id, statusUpdateEnabled=True)
     for group in groups:
@@ -85,7 +85,7 @@ def sendTelegramReport(thread):
         bot.send_message(
             chat_id=agent[1],
             text=logs,
-            parse_mode=telegram.ParseMode.MARKDOWN_V2
+            parse_mode=telegram.ParseMode.HTML
         )
 
 def sendDiscordReport(thread):
@@ -93,7 +93,7 @@ def sendDiscordReport(thread):
     if thread.generationTime > thread.logTime:
         d = d - timedelta(days=1)
 
-    logs = ReportMaker(d, thread.id).message
+    logs = ReportMaker(d, thread.id, isTelegram = False).message
     discordAgents = []
     groups = Group.objects.filter(thread_id=thread.id, statusUpdateEnabled=True)
     for group in groups:
@@ -112,7 +112,7 @@ def kickMembersFromGroup(thread, telegram_kick=False, discord_kick=False):
     if thread.generationTime > thread.logTime:
         d = d - timedelta(days=1)
 
-    shouldKick = ReportMaker(d, thread.id).membersToBeKicked
+    shouldKick = ReportMaker(d, thread.id, isTelegram = True).membersToBeKicked
     telegramAgents = []
     discordAgents = []
     groups = Group.objects.filter(thread_id=thread.id, statusUpdateEnabled=True)

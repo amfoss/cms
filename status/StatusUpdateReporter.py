@@ -10,16 +10,20 @@ from status.discord import Discord
 
 class ReportMaker(object):
 
-    def __init__(self, d, thread_id):
+    def __init__(self, d, thread_id, isTelegram):
         self.date = d
         self.thread = Thread.objects.get(id=thread_id)
         self.membersToBeKicked = self.kickMembers()
+        self.isTelegram = isTelegram
         self.message = self.generateDailyReport()
 
     @staticmethod
-    def getPercentageSummary(send, total):
+    def getPercentageSummary(send, total, isTelegram):
         if send / total == 1:
-            return 'Everyone has sent their Status Updates today!  :clap:  '
+            if isTelegram:
+                return 'Everyone has sent their Status Updates today! &#128079;'
+            else:
+                return 'Everyone has sent their Status Updates today!  :clap:'
         elif send / total > 0.90:
             return 'More than 90% of members sent their status update today.'
         elif send / total > 0.75:
@@ -113,7 +117,10 @@ class ReportMaker(object):
         m = self.groupMembersByBatch(members.all(), year)
         message = ''
         if m.count() > 0:
-            message = '\n **' + self.getBatchName(year) + ' (' + str(m.count()) + ')' + '** \n\n'
+            if self.isTelegram:
+                message = '\n<b>' + self.getBatchName(year) + ' (' + str(m.count()) + ')' + '</b>\n\n'
+            else:
+                message = '\n **' + self.getBatchName(year) + ' (' + str(m.count()) + ')' + '** \n\n'
             i = 0
             for member in m:
                 i = i + 1
@@ -136,7 +143,10 @@ class ReportMaker(object):
         didNotSendCount = members.count()
         message = ''
         if didNotSendCount > 0:
-            message = '\n\n **  :scream:  DID NOT SEND (' + str(didNotSendCount) + ') : ** \n'
+            if self.isTelegram:
+                message = '\n\n<b>&#128561; DID NOT SEND (' + str(didNotSendCount) + ') : </b> \n'
+            else:
+                message = '\n\n **  :scream:  DID NOT SEND (' + str(didNotSendCount) + ') : ** \n'
             message += self.generateBatchWiseDNSReport(members, year - 1)
             message += self.generateBatchWiseDNSReport(members, year - 2)
             message += self.generateBatchWiseDNSReport(members, year - 3)
@@ -147,7 +157,10 @@ class ReportMaker(object):
         lateCount = late_members.count()
         message = ''
         if lateCount > 0:
-            message += '\n\n **  :hourglass:  LATE (' + str(lateCount) + ') : ** \n\n'
+            if self.isTelegram:
+                message += '\n\n<b>&#8987; LATE (' + str(lateCount) + ') : </b> \n\n'
+            else:
+                message += '\n\n **  :hourglass:  LATE (' + str(lateCount) + ') : ** \n\n'
             i = 0
             for member in late_members.all():
                 i = i + 1
@@ -161,7 +174,10 @@ class ReportMaker(object):
         invalidUpdatesCount = invalidUpdates.count()
         message = ''
         if invalidUpdatesCount > 0:
-            message += '\n\n **  :warning:  INVALID (' + str(invalidUpdatesCount) + ') : ** \n\n'
+            if self.isTelegram:
+                message += '\n\n<b>⚠️ INVALID (' + str(invalidUpdatesCount) + ') : </b> \n\n'
+            else:
+                message += '\n\n **  :warning:  INVALID (' + str(invalidUpdatesCount) + ') : ** \n\n'
             i = 0
             for member in invalidUpdates.all():
                 i = i + 1
@@ -172,7 +188,10 @@ class ReportMaker(object):
         kickedOutMembersCount = len(kickedOutMembers)
         message = ''
         if kickedOutMembersCount > 0:
-            message += '\n\n **  :x:  KICKED (' + str(kickedOutMembersCount) + ') : ** \n\n'
+            if self.isTelegram:
+                message += '\n\n<b>❌ KICKED (' + str(kickedOutMembersCount) + ') : </b> \n\n'
+            else:
+                message += '\n\n **  :x:  KICKED (' + str(kickedOutMembersCount) + ') : ** \n\n'
             i = 0
             for member in kickedOutMembers:
                 i = i + 1
@@ -193,24 +212,40 @@ class ReportMaker(object):
             didNotSendCount = log.didNotSend.count()
             invalidUpdatesCount = log.invalidUpdates.count()
             sendCount = totalMembers - (didNotSendCount + invalidUpdatesCount)
+            if self.isTelegram:
+                message = '<b>Daily Status Update Report</b> \n\n &#128197; ' + date.strftime(
+                '%d %B %Y') + ' | &#128228; ' + str(sendCount) + '/' + str(totalMembers) + ' Members'
 
-            message = '**Daily Status Update Report** \n\n  :calendar:  ' + date.strftime(
-                '%d %B %Y') + ' |  :outbox_tray:  ' + str(sendCount) + '/' + str(totalMembers) + ' Members'
+                message += '\n\n<b>' + self.getPercentageSummary(sendCount, totalMembers, self.isTelegram) + '</b>'
+            else:
+                message = '**Daily Status Update Report** \n\n  :calendar:  ' + date.strftime(
+                    '%d %B %Y') + ' |  :outbox_tray:  ' + str(sendCount) + '/' + str(totalMembers) + ' Members'
 
-            message += '\n\n **' + self.getPercentageSummary(sendCount, totalMembers) + '**'
+                message += '\n\n **' + self.getPercentageSummary(sendCount, totalMembers, self.isTelegram) + '**'
             message += self.getInvalidUpdatesReport(log.invalidUpdates)
             if allowKick:
                 message += self.getKickMembersReport(self.membersToBeKicked)
             if updates.count() > 0:
-                message += '\n\n**  :star:  First : **' + first.first_name + ' ' + first.last_name + \
+                if self.isTelegram:
+                    message += '\n\n<b>&#11088; First : </b>' + first.first_name + ' ' + first.last_name + \
                            ' (' + updates[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
                     '%I:%M %p') + ')' + '\n'
-                message += '**  :snail:  Last : **' + last.first_name + ' ' + last.last_name + \
+                    message += '<b>&#128012; Last : </b>' + last.first_name + ' ' + last.last_name + \
                            ' (' + list(reversed(updates))[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
                     '%I:%M %p') + ')' + '\n'
+                else:
+                    message += '\n\n**  :star:  First : **' + first.first_name + ' ' + first.last_name + \
+                            ' (' + updates[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
+                        '%I:%M %p') + ')' + '\n'
+                    message += '**  :snail:  Last : **' + last.first_name + ' ' + last.last_name + \
+                            ' (' + list(reversed(updates))[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
+                        '%I:%M %p') + ')' + '\n'
             message += self.generateDidNotSendReport(log.didNotSend)
             if thread.footerMessage:
-                message += '\n*' + thread.footerMessage + '*'
+                if self.isTelegram:
+                    message += '\n<i>' + thread.footerMessage + '</i>'
+                else:
+                    message += '\n_' + thread.footerMessage + '_'
 
             return message
 
@@ -239,12 +274,16 @@ class ReportMaker(object):
             for agent in telegramAgents:
                 bot = telegram.Bot(token=agent[0])
                 for member in members:
-                    shouldKick = self.checkKickException(member, bot=bot)
+                    member = self.checkKickException(member, bot=bot)
+                    if member:
+                        shouldKick.append(member)
 
             for discordAgent in discordAgents:
                 for member in members:
-                    if member not in shouldKick:
-                        shouldKick = self.checkKickException(member)
+                    member = self.checkKickException(member)
+                    if member and member not in shouldKick:
+                        shouldKick.append(member)
+                
 
         except ObjectDoesNotExist:
             raise
@@ -252,7 +291,6 @@ class ReportMaker(object):
         return shouldKick
     
     def checkKickException(self, member, bot = None):
-        shouldKick = []
         date = self.date
         thread = self.thread
         userProfile = UserProfile.objects.get(user=member)
@@ -264,7 +302,7 @@ class ReportMaker(object):
         else:
             lastSend = self.getLastSend(self.date, self.getNSBMemberLastRequiredDate(member))
         try:
-            if bot!=None:
+            if bot:
                 status = bot.getChatMember(chat_id=agent[1], user_id=userProfile.telegram_id).status
             else:
                 status = "present"
@@ -280,9 +318,8 @@ class ReportMaker(object):
                             else:
                                 exception.isPaused = False
                 if kick and status != "left":
-                    if member not in shouldKick:
-                        shouldKick.append(member)
+                    return member
         except:
             pass
-
-        return shouldKick
+        
+        return None
