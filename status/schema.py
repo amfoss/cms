@@ -78,12 +78,15 @@ class userStatusStatObj(graphene.ObjectType):
     user = graphene.Field(UserBasicObj)
     statusCount = graphene.String()
     lateCount= graphene.Int()
+    invalidCount = graphene.Int()
 
     def resolve_user(self, info):
         return User.objects.values().get(id=self['member'])
     
     def resolve_lateCount(self, info):
         return DailyLog.objects.filter(late=self['member'] ).count()
+    def resolve_invalidCount(self, info):
+        return DailyLog.objects.filter(invalidUpdates=self['member']).count()
 
 
 class clubStatusObj(graphene.ObjectType):
