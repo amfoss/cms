@@ -30,8 +30,8 @@ class RecordLeave(graphene.Mutation):
         reason = graphene.String(required=True)
         bot_token = graphene.String(required=True)
         token = graphene.String(required=True)
-        startDate = graphene.Date(required=False, default=date.today())
-        endDate = graphene.Date(required=False, default=date.today())
+        startDate = graphene.Date(required=True)
+        endDate = graphene.Date(required=True)
 
     Output = AtObj
 
