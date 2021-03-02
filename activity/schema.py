@@ -16,6 +16,19 @@ class CategoryObj(graphene.ObjectType):
     def resolve_author(self, info):
         return User.objects.values().get(id=self['author_id'])
 
+class CollectionTagObj(graphene.ObjectType):
+    name = graphene.String()
+    author = graphene.Field(UserBasicObj)
+    date = graphene.Date(required=True)
+
+    def resolve_name(self, info):
+        return self['name']
+
+    def resolve_author(self, info):
+        return User.objects.values().get(id=self['author_id'])
+
+    def resolve_date(self, info):
+        return self['date']
 
 class TagObj(graphene.ObjectType):
     name = graphene.String()
@@ -74,6 +87,7 @@ class BlogObj(graphene.ObjectType):
     description = graphene.String(required=True)
     cover = graphene.String(required=True)
     category = graphene.Field(CategoryObj)
+    collection = graphene.Field(CollectionTagObj)
 
     def resolve_title(self, info):
         return self['title']
@@ -107,6 +121,9 @@ class BlogObj(graphene.ObjectType):
 
     def resolve_category(self, info):
         return Category.objects.values().get(id=self['category_id'])
+    
+    def resolve_collection(self, info):
+        return Collection.objects.values().get(id=self['collection_id'])
 
 
 class AchievementObj(graphene.ObjectType):
@@ -171,6 +188,7 @@ class Query(graphene.ObjectType):
     getNews = graphene.Field(NewsObj, slug=graphene.String(required=True))
     tags = graphene.List(TagObj)
     categories = graphene.List(CategoryObj)
+    collections = graphene.List(CollectionTagObj)
     blogs = graphene.List(BlogObj)
     blog = graphene.Field(BlogObj, slug=graphene.String(required=True))
     achievements = graphene.List(AchievementObj, category=graphene.String(), username=graphene.String())
@@ -191,6 +209,9 @@ class Query(graphene.ObjectType):
 
     def resolve_categories(self, info):
         return Category.objects.values().all()
+
+    def resolve_collections(self, info):
+        return Collection.objects.values().all()
 
     def resolve_blogs(self, info):
         return reversed(Blog.objects.values().filter(featured=True).order_by('date'))

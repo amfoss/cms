@@ -18,6 +18,17 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+class Collection(models.Model):
+    name = models.CharField(max_length=100)
+    author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='Collection_Author', blank=True, null=True)
+    date = models.DateField(default=date.today)
+    
+    class Meta:
+        verbose_name_plural = "Collections"
+        verbose_name = "Collection"
+
+    def __str__(self):
+        return self.name    
 
 class Tag(models.Model):
     name = models.CharField(max_length=100)
@@ -69,6 +80,7 @@ class Blog(models.Model):
     cover = ProcessedImageField(default='', verbose_name='Blog Poster', upload_to=get_blog_poster_path, validators=[validate_file_size], **processed_image_field_specs)
     description = RichTextField(null=True, blank=True)
     featured = models.BooleanField(null=True, default=False)
+    collection = models.ForeignKey(Collection, on_delete=models.PROTECT, related_name='blog_collection', blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name='blog_tags')
     draft = models.CharField(max_length=400, verbose_name='Blog Post Draft URL', null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='blog_category', blank=True, null=True)

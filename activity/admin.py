@@ -44,6 +44,16 @@ class CategoryAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin)
         }),
     ]
 
+@admin.register(Collection)
+class CollectionAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
+    fieldsets = [
+        ('Basic Details', {
+            'fields': [
+                ('name', 'author','date'),
+            ]
+        }),
+    ]
+
 
 @admin.register(Blog)
 class BlogAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
@@ -52,7 +62,8 @@ class BlogAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
             'fields': [
                 ('title', 'slug'),
                 ('author', 'date', 'cover'),
-                ('draft', 'featured', 'tags', 'category'),
+                ('draft', 'featured','tags', 'category'),
+                ('collection'),
                 'description'
             ]
         }),
