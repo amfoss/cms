@@ -19,7 +19,7 @@ django-graphql-jwt==0.3.1
 django-imagekit==4.0.2
 django-import-export==1.2.0
 django-js-asset==1.2.2
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 et-xmlfile==1.0.1
 future==0.18.2
 google-api-python-client==1.7.11
