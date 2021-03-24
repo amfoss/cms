@@ -55,7 +55,7 @@ pytz==2019.3
 PyYAML==5.1.2
 regex==2019.11.1
 requests==2.22.0
-rsa==4.0
+rsa==4.1
 Rx==1.6.1
 shellescape==3.4.1
 singledispatch==3.4.0.3
