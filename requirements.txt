@@ -52,7 +52,7 @@ python-dateutil==2.8.0
 python-gitlab==2.1.2
 python-telegram-bot==13.1.0
 pytz==2019.3
-PyYAML==5.1.2
+PyYAML==5.4
 regex==2019.11.1
 requests==2.22.0
 rsa==4.0
