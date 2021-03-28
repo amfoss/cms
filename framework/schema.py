@@ -127,6 +127,7 @@ class userResponseObj(graphene.ObjectType):
 class userStatusObj(graphene.ObjectType):
     status = graphene.String()
 
+
 class ApproveUsers(graphene.Mutation):
     class Arguments:
         usernames = graphene.List(graphene.String)

@@ -22,7 +22,7 @@ class GitLab(UserPlatform):
         gl.auth()
         group = gl.groups.get('amfoss')
         userID = gl.users.list(username=self.username)[0].id
-        group.members.create({'user_id': userID, 'access_level': gitlab.GUEST_ACCESS})
+        group.members.create({'user_id': userID, 'access_level': gitlab.REPORTER_ACCESS})
 
     def checkIfUserExists(self):
         GITLAB_TOKEN = Token.objects.values().get(key='GITLAB_TOKEN')['value']

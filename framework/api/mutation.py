@@ -79,5 +79,33 @@ class ChangeUserPlatform(graphene.Mutation):
                                code='ONLY_SUPERUSER_HAS_ACCESS')
 
 
+class AddToPlatform(graphene.Mutation):
+    class Arguments:
+        usernames = graphene.List(graphene.String)
+        platform = graphene.String()
+
+    Output = statusObj
+
+    def mutate(self, info, usernames, platform):
+        if info.context.user.is_superuser:
+            for username in usernames:
+                profile = Profile.objects.get(user__username=username)
+                if platform is not None:
+                    if platform == "gitlab":
+                        GitLab(profile.gitlabUsername).addUser()
+                    elif platform == "github":
+                        GitHub(profile.githubUsername).addUser()
+                    elif platform == "telegram":
+                        Telegram(profile.telegram_id).addUser()
+                else:
+                    raise APIException('Platform is required to perform this action',
+                                       code='PLATFORM_IS_REQUIRED')
+            return statusObj(status=True)
+        else:
+            raise APIException('Only Superusers have access',
+                               code='ONLY_SUPERUSER_HAS_ACCESS')
+
+
 class Mutation(object):
     change_user_platform = ChangeUserPlatform.Field()
+    addToPlatform = AddToPlatform.Field()
