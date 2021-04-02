@@ -16,6 +16,7 @@ class CategoryObj(graphene.ObjectType):
     def resolve_author(self, info):
         return User.objects.values().get(id=self['author_id'])
 
+
 class CollectionTagObj(graphene.ObjectType):
     name = graphene.String()
     author = graphene.Field(UserBasicObj)
@@ -29,6 +30,7 @@ class CollectionTagObj(graphene.ObjectType):
 
     def resolve_date(self, info):
         return self['date']
+
 
 class TagObj(graphene.ObjectType):
     name = graphene.String()
@@ -76,6 +78,17 @@ class NewsObj(graphene.ObjectType):
         return self['cover']
 
 
+class PaginationObj(graphene.ObjectType):
+    previous = graphene.String()
+    next = graphene.String()
+    
+    def resolve_previous(self, info):
+        return Blog.objects.values().filter(featured=True, date__lt=self['date']).last()['slug']
+    
+    def resolve_next(self, info):
+        return Blog.objects.values().filter(featured=True, date__gt=self['date']).first()['slug']
+
+
 class BlogObj(graphene.ObjectType):
     title = graphene.String(required=True)
     slug = graphene.String(required=True)
@@ -88,6 +101,7 @@ class BlogObj(graphene.ObjectType):
     cover = graphene.String(required=True)
     category = graphene.Field(CategoryObj)
     collection = graphene.Field(CollectionTagObj)
+    pagination = graphene.Field(PaginationObj)
 
     def resolve_title(self, info):
         return self['title']
@@ -124,6 +138,9 @@ class BlogObj(graphene.ObjectType):
     
     def resolve_collection(self, info):
         return Collection.objects.values().get(id=self['collection_id'])
+
+    def resolve_pagination(self, info):
+        return self
 
 
 class AchievementObj(graphene.ObjectType):
