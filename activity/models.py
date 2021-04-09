@@ -19,10 +19,15 @@ class Category(models.Model):
         return self.name
 
 class Collection(models.Model):
+    def get_collection_poster_path(self, filename):
+        ext = filename.split('.')[-1]
+        filename = "%s.%s" % (uuid.uuid4(), ext)
+        return 'static/uploads/collections/cover/' + filename
     name = models.CharField(max_length=100)
     author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='Collection_Author', blank=True, null=True)
     date = models.DateField(default=date.today)
-    
+    cover = ProcessedImageField(default='', verbose_name='Collection Poster', upload_to=get_collection_poster_path, validators=[validate_file_size], **processed_image_field_specs)
+
     class Meta:
         verbose_name_plural = "Collections"
         verbose_name = "Collection"
