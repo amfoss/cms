@@ -50,6 +50,7 @@ class CollectionAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmi
         ('Basic Details', {
             'fields': [
                 ('name', 'author','date'),
+                ('cover')
             ]
         }),
     ]

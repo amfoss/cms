@@ -21,6 +21,7 @@ class CollectionTagObj(graphene.ObjectType):
     name = graphene.String()
     author = graphene.Field(UserBasicObj)
     date = graphene.Date(required=True)
+    cover = graphene.String(required=True)
 
     def resolve_name(self, info):
         return self['name']
@@ -30,6 +31,9 @@ class CollectionTagObj(graphene.ObjectType):
 
     def resolve_date(self, info):
         return self['date']
+    
+    def resolve_cover(self,info):
+        return self['cover']
 
 
 class TagObj(graphene.ObjectType):
