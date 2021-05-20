@@ -228,7 +228,7 @@ class Query(graphene.ObjectType):
         return Category.objects.values().all()
 
     def resolve_collections(self, info):
-        return Collection.objects.values().all()
+        return reversed(Collection.objects.values().all().order_by('date'))
 
     def resolve_blogs(self, info):
         return reversed(Blog.objects.values().filter(featured=True).order_by('date'))
