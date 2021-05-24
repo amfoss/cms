@@ -195,7 +195,7 @@ class GroupAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
             'fields': (('telegramBot', 'telegramGroup'),)
         }),
         ('Discord Integration', {
-            'fields': (('discordBot', 'discordGroup', 'discordChannel'),)
+            'fields': (('discordBot', 'discordGroup', 'discordChannel', 'discordMemberRole'),)
         }),
     )
     search_fields = ['name', 'members']

@@ -117,7 +117,7 @@ def kickMembersFromGroup(thread, telegram_kick=False, discord_kick=False):
     discordAgents = []
     groups = Group.objects.filter(thread_id=thread.id, statusUpdateEnabled=True)
     for group in groups:
-        discord_obj = [group.discordBot, group.discordGroup, group.discordChannel]
+        discord_obj = [group.discordBot, group.discordGroup, group.discordChannel, group.discordMemberRole]
         obj = [group.telegramBot, group.telegramGroup]
         if obj not in telegramAgents:
             telegramAgents.append(obj)
@@ -144,7 +144,7 @@ def kickMembersFromGroup(thread, telegram_kick=False, discord_kick=False):
                 profile = Profile.objects.get(user=user)
                 try:
                     discord_client = Discord(obj=discord_obj, userID=profile.discord_id)
-                    discord_client.kickMember()
+                    discord_client.removeMemberRole()
         
                 except:
                     pass

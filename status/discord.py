@@ -33,6 +33,11 @@ class Discord(object):
         baseURL = "guilds/{}/members/{}".format(self.obj[1], self.userID)
         if self.checkIfUserExists():
             re = fetch(baseURL, token=self.obj[0], delete=True)
+    
+    def removeMemberRole(self):
+        baseURL = "guilds/{}/members/{}/roles/{}".format(self.obj[1], self.userID, self.obj[3])
+        if self.checkIfUserExists():
+            re = fetch(baseURL, token=self.obj[0], delete=True)
 
     def checkIfUserExists(self):
         baseURL = "guilds/{}/members/{}".format(self.obj[1], self.userID)

@@ -244,6 +244,7 @@ class Group(models.Model):
     discordBot = models.CharField(max_length=500, null=True, blank=True, verbose_name="Discord Bot Token")
     discordGroup = models.CharField(max_length=250, null=True, blank=True, verbose_name="Discord Group ID")
     discordChannel = models.CharField(max_length=500, null=True, blank=True, verbose_name="Discord Channel ID")
+    discordMemberRole = models.CharField(max_length=500, null=True, blank=True, verbose_name="Discord Member Role ID")
 
     class Meta:
         verbose_name_plural = "Groups"
