@@ -26,6 +26,7 @@ now = datetime.now().astimezone(to_tz)
 day = now.strftime("%w")
 time = now.strftime("%H%M")
 
+
 def getSubject(thread, d):
     return thread.name + ' [%s]' % d.strftime('%d-%m-%Y')
 
@@ -72,14 +73,14 @@ def sendTelegramReport(thread):
     if thread.generationTime > thread.logTime:
         d = d - timedelta(days=1)
 
-    logs = ReportMaker(d, thread.id, isTelegram = True).message
+    logs = ReportMaker(d, thread.id, isTelegram=True).message
     telegramAgents = []
     groups = Group.objects.filter(thread_id=thread.id, statusUpdateEnabled=True)
     for group in groups:
         obj = [group.telegramBot, group.telegramGroup]
         if obj not in telegramAgents:
             telegramAgents.append(obj)
-    
+
     for agent in telegramAgents:
         bot = telegram.Bot(token=agent[0])
         bot.send_message(
@@ -88,12 +89,13 @@ def sendTelegramReport(thread):
             parse_mode=telegram.ParseMode.HTML
         )
 
+
 def sendDiscordReport(thread):
     d = date.today()
     if thread.generationTime > thread.logTime:
         d = d - timedelta(days=1)
 
-    logs = ReportMaker(d, thread.id, isTelegram = False).message
+    logs = ReportMaker(d, thread.id, isTelegram=False).message
     discordAgents = []
     groups = Group.objects.filter(thread_id=thread.id, statusUpdateEnabled=True)
     for group in groups:
@@ -104,7 +106,6 @@ def sendDiscordReport(thread):
     for agent in discordAgents:
         discord_client = Discord(obj=agent, message=logs)
         discord_client.sendMessage()
-        
 
 
 def kickMembersFromGroup(thread, telegram_kick=False, discord_kick=False):
@@ -112,7 +113,7 @@ def kickMembersFromGroup(thread, telegram_kick=False, discord_kick=False):
     if thread.generationTime > thread.logTime:
         d = d - timedelta(days=1)
 
-    shouldKick = ReportMaker(d, thread.id, isTelegram = True).membersToBeKicked
+    shouldKick = ReportMaker(d, thread.id, isTelegram=True).membersToBeKicked
     telegramAgents = []
     discordAgents = []
     groups = Group.objects.filter(thread_id=thread.id, statusUpdateEnabled=True)
@@ -143,9 +144,8 @@ def kickMembersFromGroup(thread, telegram_kick=False, discord_kick=False):
             for user in shouldKick:
                 profile = Profile.objects.get(user=user)
                 try:
-                    discord_client = Discord(obj=discord_obj, userID=profile.discord_id)
+                    discord_client = Discord(obj=discordAgent, userID=profile.discord_id)
                     discord_client.removeMemberRole()
-        
                 except:
                     pass
 
@@ -177,8 +177,8 @@ class Command(BaseCommand):
                 if thread.enableDiscordGroupNotification:
                     sendDiscordReport(thread)
                 if thread.allowBotToKick:
-                    kickMembersFromGroup(thread, telegram_kick=thread.enableTelegramGroupNotification, 
-                                        discord_kick=thread.enableDiscordGroupNotification)
+                    kickMembersFromGroup(thread, telegram_kick=thread.enableTelegramGroupNotification,
+                                         discord_kick=thread.enableDiscordGroupNotification)
 
         mails = Mailer.objects.all()
         for m in mails:
