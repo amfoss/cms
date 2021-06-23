@@ -1,11 +1,10 @@
 from django.core.exceptions import ObjectDoesNotExist
-from datetime import datetime, date
+from datetime import datetime
 from pytz import timezone
 import telegram
 from status.models import Thread, DailyLog, Message, StatusException
 from members.models import Group
 from members.models import Profile as UserProfile
-from status.discord import Discord
 
 
 class ReportMaker(object):
@@ -66,11 +65,14 @@ class ReportMaker(object):
     def groupMembersByBatch(members, year):
         return UserProfile.objects.filter(user__in=members, batch=year)
 
+    def getActiveStatusUpdateDays(self, last_send, expected_date, member):
+        return DailyLog.objects.filter(thread=self.thread, members=member, date__lte=expected_date,
+                                       date__gt=last_send).count()
+
     @staticmethod
-    def getLastSendStr(last_send, expected_date):
+    def getLastSendStr(diff):
         message = ''
-        diff = abs(expected_date - last_send)
-        diff = diff.days + 1
+        diff = diff + 1
         if diff > 28:
             message += '1M+'
         elif diff > 21:
@@ -84,10 +86,8 @@ class ReportMaker(object):
         return message
 
     @staticmethod
-    def getLastSend(last_send, expected_date):
-        diff = abs(expected_date - last_send)
-        diff = diff.days + 1
-        return diff
+    def getLastSend(diff):
+        return diff + 1
 
     def getMemberLastRequiredDate(self, member):
         return DailyLog.objects.filter(thread=self.thread, members=member, date__lt=self.date).order_by(
@@ -127,8 +127,9 @@ class ReportMaker(object):
                 lastSend = self.getMemberLastSend(member.user)
                 message += str(i) + '. ' + self.getName(member.user)
                 if lastSend:
-                    lastSend = self.getLastSendStr(lastSend.date(),
-                                                   self.getMemberLastRequiredDate(member.user))
+                    expected_date = self.getMemberLastRequiredDate(member.user)
+                    diff = self.getActiveStatusUpdateDays(lastSend.date(), expected_date, member.user)
+                    lastSend = self.getLastSendStr(diff)
                     memberHistory = self.getMemberHistory(member.user)
                     message += ' [ ' + lastSend + ', ' + memberHistory + ']'
                 else:
@@ -214,7 +215,7 @@ class ReportMaker(object):
             sendCount = totalMembers - (didNotSendCount + invalidUpdatesCount)
             if self.isTelegram:
                 message = '<b>Daily Status Update Report</b> \n\n &#128197; ' + date.strftime(
-                '%d %B %Y') + ' | &#128228; ' + str(sendCount) + '/' + str(totalMembers) + ' Members'
+                    '%d %B %Y') + ' | &#128228; ' + str(sendCount) + '/' + str(totalMembers) + ' Members'
 
                 message += '\n\n<b>' + self.getPercentageSummary(sendCount, totalMembers, self.isTelegram) + '</b>'
             else:
@@ -228,17 +229,19 @@ class ReportMaker(object):
             if updates.count() > 0:
                 if self.isTelegram:
                     message += '\n\n<b>&#11088; First : </b>' + first.first_name + ' ' + first.last_name + \
-                           ' (' + updates[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
-                    '%I:%M %p') + ')' + '\n'
+                               ' (' + updates[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
+                        '%I:%M %p') + ')' + '\n'
                     message += '<b>&#128012; Last : </b>' + last.first_name + ' ' + last.last_name + \
-                           ' (' + list(reversed(updates))[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
-                    '%I:%M %p') + ')' + '\n'
+                               ' (' + list(reversed(updates))[0].timestamp.astimezone(
+                        timezone('Asia/Kolkata')).strftime(
+                        '%I:%M %p') + ')' + '\n'
                 else:
                     message += '\n\n**  :star:  First : **' + first.first_name + ' ' + first.last_name + \
-                            ' (' + updates[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
+                               ' (' + updates[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
                         '%I:%M %p') + ')' + '\n'
                     message += '**  :snail:  Last : **' + last.first_name + ' ' + last.last_name + \
-                            ' (' + list(reversed(updates))[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
+                               ' (' + list(reversed(updates))[0].timestamp.astimezone(
+                        timezone('Asia/Kolkata')).strftime(
                         '%I:%M %p') + ')' + '\n'
             message += self.generateDidNotSendReport(log.didNotSend)
             if thread.footerMessage:
@@ -283,29 +286,24 @@ class ReportMaker(object):
                     member = self.checkKickException(member)
                     if member and member not in shouldKick:
                         shouldKick.append(member)
-                
 
         except ObjectDoesNotExist:
-            raise
+            pass
 
         return shouldKick
-    
-    def checkKickException(self, member, bot = None):
+
+    def checkKickException(self, member, bot=None):
         date = self.date
         thread = self.thread
-        userProfile = UserProfile.objects.get(user=member)
         lastSend = self.getMemberLastSend(member)
 
         if lastSend:
-            lastSend = self.getLastSend(lastSend.date(),
-                                        self.getMemberLastRequiredDate(member))
+            diff = self.getActiveStatusUpdateDays(lastSend.date(), self.getMemberLastRequiredDate(member), member)
+            lastSend = self.getLastSend(diff)
         else:
-            lastSend = self.getLastSend(self.date, self.getNSBMemberLastRequiredDate(member))
+            diff = self.getActiveStatusUpdateDays(self.date, self.getNSBMemberLastRequiredDate(member), member)
+            lastSend = self.getLastSend(diff)
         try:
-            if bot:
-                status = bot.getChatMember(chat_id=agent[1], user_id=userProfile.telegram_id).status
-            else:
-                status = "present"
             if lastSend > thread.noOfDays:
                 kick = True
                 exceptions = StatusException.objects.filter(isPaused=True)
@@ -317,9 +315,9 @@ class ReportMaker(object):
                                 break
                             else:
                                 exception.isPaused = False
-                if kick and status != "left":
+                if kick:
                     return member
         except:
             pass
-        
+
         return None
