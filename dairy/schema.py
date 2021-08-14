@@ -50,6 +50,25 @@ class eventObj(graphene.ObjectType):
     id = graphene.String()
 
 
+class CertificateObj(graphene.ObjectType):
+    id = graphene.ID()
+    name = graphene.String()
+    eventName = graphene.String()
+    duration = graphene.Int()  # Duration in days
+    issueDate = graphene.Date()
+
+    def resolve_eventName(self, info):
+        e: Event = Event.objects.get(id=self.event_id)
+        return e.name
+
+    def resolve_duration(self, info):
+        e: Event = Event.objects.get(id=self.event_id)
+        return e.duration_in_days
+
+    def resolve_issueDate(self, info):
+        return self.issue_date
+
+
 class createEvent(graphene.Mutation):
     class Arguments:
         name = graphene.String()
@@ -85,6 +104,14 @@ class Query(object):
         EventObj,
         startDate=graphene.types.datetime.Date(required=True)
     )
+    certVerify = graphene.Field(
+        CertificateObj,
+        id=graphene.ID(required=True)
+    )
+    certificates = graphene.List(
+        CertificateObj,
+        ids=graphene.List(graphene.ID, required=True)
+    )
 
     @login_required
     def resolve_viewEvents(self, info, **kwargs):
@@ -97,6 +124,24 @@ class Query(object):
                 (Q(startTimestamp__gte=startDate) | Q(isAllDay=True))
                 & (Q(isPublic=True) | Q(creator=user) | Q(sharedGroups__members=user) | Q(admins=user))
             )
+
+    def resolve_certVerify(self, info, **kwargs):
+        id = kwargs.get('id')
+        if id is not None:
+            try:
+                c: Certificate = Certificate.objects.get(id=id)
+                return c
+            except Certificate.DoesNotExist:
+                raise APIException('Certificate does not exist', code='INVALID_ID')
+        raise APIException('ID is a required parameter', code='ID_REQUIRED')
+
+    def resolve_certificates(self, info, **kwargs):
+        ids = kwargs.get('ids')
+        if ids is not None:
+            output = Certificate.objects.filter(id__in=ids)
+            if not output:
+                raise APIException('No Certificates Found', 'NOT_FOUND')
+            return output
 
 
 class Mutation(object):

@@ -23,3 +23,13 @@ class EventAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
         obj.lastEditor = request.user
         obj.lastEditTime = datetime.now()
         obj.save()
+
+
+@admin.register(Certificate)
+class CertificateAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdmin):
+    fields = [
+                ('name', 'event'),
+                'issue_date',
+            ]
+
+    list_display = ('name', 'event', 'issue_date')

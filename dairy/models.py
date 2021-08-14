@@ -26,3 +26,20 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def duration_in_days(self):
+        return (self.endTimestamp - self.startTimestamp).days
+
+
+class Certificate(models.Model):
+    name = models.CharField(max_length=100, blank=False, null=False, verbose_name='Name of the Participant')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, null=False)
+    issue_date = models.DateField(null=False)
+
+    class Meta:
+        verbose_name_plural = "Certificates"
+        verbose_name = "Certificate"
+
+    def __str__(self):
+        return self.name
