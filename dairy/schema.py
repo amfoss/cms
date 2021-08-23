@@ -54,16 +54,24 @@ class CertificateObj(graphene.ObjectType):
     id = graphene.ID()
     name = graphene.String()
     eventName = graphene.String()
-    duration = graphene.Int()  # Duration in days
+    fromDate = graphene.Date() 
+    toDate = graphene.Date()
     issueDate = graphene.Date()
 
+    def resolve_id(self, info):
+        return self.uuid
+        
     def resolve_eventName(self, info):
         e: Event = Event.objects.get(id=self.event_id)
         return e.name
 
-    def resolve_duration(self, info):
+    def resolve_fromDate(self, info):
         e: Event = Event.objects.get(id=self.event_id)
-        return e.duration_in_days
+        return e.startTimestamp
+    
+    def resolve_toDate(self, info):
+        e: Event = Event.objects.get(id=self.event_id)
+        return e.endTimestamp
 
     def resolve_issueDate(self, info):
         return self.issue_date
@@ -129,7 +137,7 @@ class Query(object):
         id = kwargs.get('id')
         if id is not None:
             try:
-                c: Certificate = Certificate.objects.get(id=id)
+                c: Certificate = Certificate.objects.get(uuid=id)
                 return c
             except Certificate.DoesNotExist:
                 raise APIException('Certificate does not exist', code='INVALID_ID')

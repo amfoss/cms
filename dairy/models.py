@@ -2,7 +2,7 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
 from members.models import Group
-
+import uuid
 
 class Event(models.Model):
     name = models.CharField(verbose_name='Name', max_length=100)
@@ -27,12 +27,10 @@ class Event(models.Model):
     def __str__(self):
         return self.name
 
-    @property
-    def duration_in_days(self):
-        return (self.endTimestamp - self.startTimestamp).days
 
 
 class Certificate(models.Model):
+    uuid = models.UUIDField(default = uuid.uuid4,unique=True)
     name = models.CharField(max_length=100, blank=False, null=False, verbose_name='Name of the Participant')
     event = models.ForeignKey(Event, on_delete=models.CASCADE, null=False)
     issue_date = models.DateField(null=False)

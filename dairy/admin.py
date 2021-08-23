@@ -32,4 +32,4 @@ class CertificateAdmin(ImportExportModelAdmin, ExportActionMixin, admin.ModelAdm
                 'issue_date',
             ]
 
-    list_display = ('name', 'event', 'issue_date')
+    list_display = ('name', 'event', 'issue_date', 'id', 'uuid')
