@@ -199,6 +199,10 @@ class ReportMaker(object):
                 message += str(i) + '. ' + self.getName(member) + '\n'
         return message
 
+    @staticmethod
+    def getUserName(user):
+        return str(user.first_name or '') + ' ' + str(user.last_name or '')
+
     def generateDailyReport(self):
         date = self.date
         thread = self.thread
@@ -228,18 +232,18 @@ class ReportMaker(object):
                 message += self.getKickMembersReport(self.membersToBeKicked)
             if updates.count() > 0:
                 if self.isTelegram:
-                    message += '\n\n<b>&#11088; First : </b>' + first.first_name + ' ' + first.last_name + \
+                    message += '\n\n<b>&#11088; First : </b>' + self.getUserName(first) + \
                                ' (' + updates[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
                         '%I:%M %p') + ')' + '\n'
-                    message += '<b>&#128012; Last : </b>' + last.first_name + ' ' + last.last_name + \
+                    message += '<b>&#128012; Last : </b>' + self.getUserName(last) + \
                                ' (' + list(reversed(updates))[0].timestamp.astimezone(
                         timezone('Asia/Kolkata')).strftime(
                         '%I:%M %p') + ')' + '\n'
                 else:
-                    message += '\n\n**  :star:  First : **' + first.first_name + ' ' + first.last_name + \
+                    message += '\n\n**  :star:  First : **' + self.getUserName(first) + \
                                ' (' + updates[0].timestamp.astimezone(timezone('Asia/Kolkata')).strftime(
                         '%I:%M %p') + ')' + '\n'
-                    message += '**  :snail:  Last : **' + last.first_name + ' ' + last.last_name + \
+                    message += '**  :snail:  Last : **' + self.getUserName(last) + \
                                ' (' + list(reversed(updates))[0].timestamp.astimezone(
                         timezone('Asia/Kolkata')).strftime(
                         '%I:%M %p') + ')' + '\n'
