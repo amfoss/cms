@@ -44,6 +44,8 @@ class ProfileObj(graphene.ObjectType):
     links = graphene.List(SocialProfileObj)
     githubUsername = graphene.String()
     gitlabUsername = graphene.String()
+    telegramUsername = graphene.String()
+    twitterUsername = graphene.String()
     customEmail = graphene.String()
     displayInWebsite = graphene.Boolean()
     role = graphene.String()
@@ -85,6 +87,12 @@ class ProfileObj(graphene.ObjectType):
 
     def resolve_gitlabUsername(self, info):
         return self['gitlabUsername']
+    
+    def resolve_telegramUsername(self, info):
+        return self['telegramUsername']
+    
+    def resolve_twitterUsername(self, info):
+        return self['twitterUsername']
 
     def resolve_customEmail(self, info):
         return self['customEmail']
