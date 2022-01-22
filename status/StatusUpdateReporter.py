@@ -133,7 +133,8 @@ class ReportMaker(object):
                     memberHistory = self.getMemberHistory(member.user)
                     message += ' [ ' + lastSend + ', ' + memberHistory + ']'
                 else:
-                    lastSend = self.getLastSendStr(self.date, self.getNSBMemberLastRequiredDate(member.user))
+                    diff = self.getActiveStatusUpdateDays(self.date, self.getNSBMemberLastRequiredDate(member.user), member.user)
+                    lastSend = self.getLastSendStr(diff)
                     message += ' [ ' + lastSend + ', NSB ]'
                 message += '\n'
         return message
