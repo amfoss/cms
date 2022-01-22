@@ -10,7 +10,7 @@ def log(data, members, thread_id):
 
     for entry in data:
         try:
-            user = User.objects.get(email=entry['email'])
+            user = User.objects.get(is_staff=True, email=entry['email'])
             timestamp = dateutil.parser.parse(entry['timestamp'])
             logDate = dateutil.parser.parse(entry['date']).date()
 
