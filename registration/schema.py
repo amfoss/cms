@@ -116,7 +116,7 @@ class submitRSVP(graphene.Mutation):
         form = Form.objects.get(id=formID)
         if form:
             formHash = form.formHash
-            application = Application.objects.get(phone=phone, form__id=formID)
+            application = Application.objects.get(hash=hash, form__id=formID)
             if application:
                 hashStr = formHash + application.phone
                 hashStrEncoded = hashlib.md5(hashStr.encode())
