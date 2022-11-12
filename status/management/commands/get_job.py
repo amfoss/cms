@@ -146,6 +146,7 @@ def kickMembersFromGroup(thread, telegram_kick=False, discord_kick=False):
                 try:
                     discord_client = Discord(obj=discordAgent, userID=profile.discord_id)
                     discord_client.removeMemberRole()
+                    discord_client.kickMember()
                 except:
                     pass
 
